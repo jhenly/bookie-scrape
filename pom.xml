@@ -182,17 +182,17 @@
         </plugin>
         
         <plugin>
-	      <groupId>org.codehaus.mojo</groupId>
-	      <artifactId>exec-maven-plugin</artifactId>
-	      <version>3.0.0</version>
-	      <configuration>
-	        <mainClass>com.sportsbookscraper.app.excel.ExcelDriver</mainClass>
-	        <arguments>
-	          <argument>-jar</argument>
-	          <argument>target/sports-book-scraper-1.0-SNAPSHOT.jar</argument>
-	        </arguments>
-	      </configuration>
-	    </plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>3.0.0</version>
+          <configuration>
+            <mainClass>com.sportsbookscraper.app.excel.ExcelDriver</mainClass>
+            <arguments>
+              <argument>-jar</argument>
+              <argument>target/sports-book-scraper-1.0-SNAPSHOT.jar</argument>
+            </arguments>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
