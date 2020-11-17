@@ -3,33 +3,33 @@ package com.sportsbookscraper.app.config;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+
 
 /**
  * Loads {@code config.properties} file and populates global configs and
  * individual Excel workbook, sheet specific configs.
  * <p>
  * Example {@code config.properties} file:
- * 
+ *
  * <pre>
  * # path to Excel file
  * excel.file.path=/absolute/or/relative/path/to/excel/file
- * 
+ *
  * # list of all sheets
  * all.sheets=NFL,NCAAF
  *
  * # properties shared by all sheets
- * 
+ *
  * all.sheets.font=Calibri
  * all.sheets.font.size=11
  * all.sheets.cols.sizetofit=true
  * all.sheets.rows.sizetofit=false
- * 
+ *
  * # individual sheet properties
- * 
+ *
  * # NFL sheet
  * NFL.scrape.url=https\://classic.sportsbookreview.com/betting-odds/nfl-football/money-line/
  * NFL.sheet.title=NFL Football
@@ -40,7 +40,7 @@ import java.util.Properties;
  * NFL.sheet.table.opener=true
  * NFL.sheet.table.opener.col=1
  * NFL.sheet.table.bookie.col=2
- * 
+ *
  * # NCAAF sheet
  * NCAAF.scrape.url=https\://classic.sportsbookreview.com/betting-odds/college-football/money-line/
  * NCAAF.sheet.title=College Football
@@ -52,389 +52,256 @@ import java.util.Properties;
  * NCAAF.sheet.table.opener.col=1
  * NCAAF.sheet.table.bookie.col=2
  * </pre>
- * 
- * 
- * @author Jonathan Henly
  *
+ * @author Jonathan Henly
  */
-public final class WorkbookProperties {
-	
-	// don't subclass this class
-	private WorkbookProperties() {}
-	
-	
-	/* -- Static Properties Section -- */
-	
-	public static final String CONFIG_CLASS_PATH = "./config/config.properties";
-	
-	/*  - properties shared by all sheets -  */
-	public static final String EXCEL_FILE_PATH = "excel.file.path";
-	public static final String ALL_SHEETS = "all.sheets";
-	public static final String SHEET_FONT = ALL_SHEETS + ".font";
-	public static final String SHEET_FONT_SIZE = SHEET_FONT + ".size";
-	public static final String COLS_SIZETOFIT = ALL_SHEETS + ".cols.sizetofit";
-	public static final String ROWS_SIZETOFIT = ALL_SHEETS + ".rows.sizetofit";
-	
-	/*  - individual sheet properties -  */
-	private static final String SCRAPE_URL = ".scrape.url";
-	private static final String SHEET_TITLE = ".sheet.title";
-	private static final String TITLE_ROW = SHEET_TITLE + ".row";
-	private static final String TITLE_COL = SHEET_TITLE + ".row";
-	private static final String SHEET_TABLE = ".sheet.table";
-	private static final String TEAMS_COL = SHEET_TABLE + ".teams.col";
-	private static final String OPENER = SHEET_TABLE + ".opener";
-	private static final String OPENER_COL = SHEET_TABLE + ".opener.col";
-	private static final String BOOKIE_COL = SHEET_TABLE + ".bookie.col";
-	
-	/*  - Begin static load config.properties file section -  */
-	private static final Properties props;
-	private static final String excelFilePath;
-	private static final List<String> allSheets;
-	
-	// properties shared by all sheets
-	private static final String font;
-	private static final String DEF_FONT = "Calibri";
-	private static final int fontSize;
-	private static final int DEF_FONT_SIZE = 11;
-	private static final boolean colSizeToFit;
-	private static final boolean rowSizeToFit;
-	private static final boolean DEF_SIZE_TO_FIT = true;
-	
-	// individual sheet properties holder
-	private static final List<SheetProperties> sheetProps;
-	
-	// TODO refactor this class so it doesn't depend on static blocks
-	
-	// NOTE: do not change the order of calls in the following static block,
-	//       some calls depend on other calls happening prior 
-	static {
-		props = loadProps(CONFIG_CLASS_PATH);
-		
-		// quick fix
-		String tmpExcelFilePath = null;
-		try {
-			tmpExcelFilePath = getRequiredPropertyOrThrow(EXCEL_FILE_PATH);
-		} catch (RequiredPropertyNotFoundException e1) {
-			e1.printStackTrace();
-		}
-		excelFilePath = tmpExcelFilePath; 
-		
-		//quick fix
-		List<String> tmpAllSheets = null;
-		try {
-			 tmpAllSheets = initAllSheets();
-		} catch (RequiredPropertyNotFoundException e) {
-			e.printStackTrace();
-		}
-		allSheets = tmpAllSheets;
-		
-		// init shared properties
-		font = getStrPropOrDefault(SHEET_FONT, DEF_FONT);
-		fontSize = getIntPropOrDefault(SHEET_FONT_SIZE, DEF_FONT_SIZE);
-		colSizeToFit = getBoolPropOrDefault(COLS_SIZETOFIT, DEF_SIZE_TO_FIT);
-		rowSizeToFit = getBoolPropOrDefault(ROWS_SIZETOFIT, DEF_SIZE_TO_FIT);
-		
-		// init all individual sheet properties
-		sheetProps = initSheetProperties(allSheets);
-	}
-	
-	
-	private static Properties loadProps(String filename) {
-		Properties props = new Properties();
+final class WorkbookProperties extends AbstractProperties {
+    // TODO remove CONFIG_CLASS_PATH <- it's just for debugging
+    private final String CONFIG_CLASS_PATH = "./config/config.properties";
 
-		try (InputStream input = WorkbookProperties.class.getClassLoader()
-				.getResourceAsStream(filename))
-		{
-			if (input == null) {
-				System.out.println("Sorry, unable to find " + filename);
-			}
+    /* - Begin static load config.properties file section - */
+    private final Properties props;
+    private final String excelFilePath;
+    private final List<String> allSheets;
+    // individual sheet properties holder
+    private final List<SheetDataStore> sheetProps;
+    
+    
+    // don't subclass this class
+    WorkbookProperties(String propertiesFile)
+    throws RequiredPropertyNotFoundException, IOException
+    {
+        this(propertiesFile, null);
+    }
+    
+    // NOTE: do not change the order of calls in the following constructor, some
+    // calls depend on other calls happening prior
+    WorkbookProperties(String propertiesFile, String pathToExcelFile)
+    throws IOException, RequiredPropertyNotFoundException
+    {
+        props = loadProps(propertiesFile);
 
-			props.load(input);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+        if (pathToExcelFile != null) {
+            excelFilePath = getRequiredPropertyOrThrow(EXCEL_FILE_PATH);
+        } else {
+            excelFilePath = pathToExcelFile;
+        }
 
-		return props;
-	}
-	
-	/* splits comma separated sheet names into an unmodifiable list, or throws*/
-	private static List<String> initAllSheets()
-			throws RequiredPropertyNotFoundException
-	{
-		// will throw if ALL_SHEETS property is not in config.properties
-		String tmpAllSheets = getRequiredPropertyOrThrow(ALL_SHEETS);
-		
-		String[] sheetNames = tmpAllSheets.split(",");
-		List<String> nonEmptySheetNames = new ArrayList<String>(sheetNames.length);
-		
-		// iterate over sheetNames, remove trail/leading whitespace and add to
-		// list if not an empty string
-		for(int i = 0; i < sheetNames.length; i++) {
-			String tmp = sheetNames[i].strip();
-			if(!tmp.isEmpty()) {
-				nonEmptySheetNames.add(tmp);
-			}
-		}
-		
-		// return unmodifiable list, it should not be changed
-		return Collections.unmodifiableList(nonEmptySheetNames);
-	}
-	
-	/* helper method used by methods retrieving required properties */
-	private static String getRequiredPropertyOrThrow(String property)
-			throws RequiredPropertyNotFoundException
-	{
-		String propValue = props.getProperty(property);
-		if(propValue == null) {
-			throw new RequiredPropertyNotFoundException(property,
-					CONFIG_CLASS_PATH);
-		}
-		return propValue;
-	}
-	
-	private static int getIntPropOrDefault(String prop, int def) {
-		String tmp = props.getProperty(prop);
-		if(tmp != null) {
-			int val;
-			try {
-				val = Integer.parseInt(tmp);
-			} catch(NumberFormatException nfe) {
-				return def;
-			}
-			
-			return (val >= 0) ? val : def;
-		}
-		
-		return def; 
-	}
-	
-	private static String getStrPropOrDefault(String prop, String def) {
-		String tmp = props.getProperty(prop);		
-		return (tmp != null) ? tmp : def; 
-	}
-	
-	private static boolean getBoolPropOrDefault(String prop, boolean def) {
-		String tmp = props.getProperty(prop);
-		return (tmp != null) ? Boolean.parseBoolean(tmp) : def; 
-	}
-	/*  - End static load config.properties file section -  */
-	
-	/*  - Static accessors section -  */
-	
-	/**
-	 * @return the path to the Excel file, if set in {@code config.properties}
-	 */
-	public static String getExcelFilePath() {
-		return excelFilePath;
-	}
+        allSheets = initAllSheets();
 
-	/**
-	 * @return returns an {@linkplain Collections#unmodifiableList(List)
-	 * unmodifiable list} containing the Excel workbook's sheet names.
-	 */
-	public static List<String> getAllSheets() {
-		return allSheets;
-	}
-	
-	/**
-	 * @return font name used by all sheets
-	 */
-	public static String getSheetFont() {
-		return font;
-	}
-	
-	/**
-	 * @return font size used by all sheets
-	 */
-	public static int getSheetFontSize() {
-		return fontSize;
-	}
-	
-	/**
-	 * @return {@code true} if Excel column widths should fit their content,
-	 * {@code false}
-	 */
-	public static boolean getColSizeToFit() {
-		return colSizeToFit;
-	}
-	
-	/**
-	 * @return {@code true} if Excel row heights should fit their content,
-	 * otherwise {@code false}
-	 */
-	public static boolean getRowSizeToFit() {
-		return rowSizeToFit;
-	}
-	
-	/*  - End static accessors section -  */
-	
-	/**
-	 * 
-	 * @param index
-	 * @return
-	 */
-	public static SheetProperties getSheetProperties(int index) {
-		if(index < 0 || index > sheetProps.size()) {
-			throw new IndexOutOfBoundsException(index);
-		}
-		
-		return sheetProps.get(index);
-	}
-	
-	/* -- End Static Properties Section -- */
-	
-	
-	/* -- SheetProperties Section -- */
+        // init shared properties
+        font = getStrPropOrDefault(SHEET_FONT, DEF_FONT);
+        fontSize = getIntPropOrDefault(SHEET_FONT_SIZE, DEF_FONT_SIZE);
+        colSizeToFit = getBoolPropOrDefault(COLS_SIZETOFIT, DEF_SIZE_TO_FIT);
+        rowSizeToFit = getBoolPropOrDefault(ROWS_SIZETOFIT, DEF_SIZE_TO_FIT);
 
-	private static List<SheetProperties> initSheetProperties(List<String> sheets) {
-		List<SheetProperties> sprops = new ArrayList<SheetProperties>(sheets.size());
-		
-		// build sheet properties for each sheet
-		for(String sheetName : sheets) {
-			sprops.add(buildSheetProperties(sheetName));
-		}
-		
-		return Collections.unmodifiableList(sprops);
-	}
-	
-	// sheet property defaults
-	private static final int DEF_TITLE_ROW_COL = 0;
-	private static final int DEF_TABLE_ROW = 1;
-	private static final int DEF_TEAMS_COL = 0;
-	private static final boolean DEF_HAS_OPENER = true;
-	private static final int DEF_OPENER_COL = 1;
-	private static final int DEF_BOOKIE_COL = 2;
+        // init all individual sheet properties
+        sheetProps = loadSheetProperties(allSheets);
+    }
+    
+    /* loads properties from a passed in file, or throws IOException */
+    private Properties loadProps(String filename) throws IOException {
+        Properties props = new Properties();
+        
+        try (InputStream input = WorkbookProperties.class.getClassLoader()
+            .getResourceAsStream(filename))
+        {
+            if (input == null) {
+                System.out.println("Sorry, unable to find " + filename);
+            }
+            
+            props.load(input);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+        return props;
+    }
+    
+    /* splits comma separated sheet names to an unmodifiable list, or throws */
+    private List<String> initAllSheets()
+        throws RequiredPropertyNotFoundException
+    {
+        // will throw if ALL_SHEETS property is not in config.properties
+        String tmpAllSheets = getRequiredPropertyOrThrow(ALL_SHEETS);
 
-	private static SheetProperties buildSheetProperties(String sheet) {
-		SheetProperties sp = new SheetProperties();
-		
-		// if no url then default, will be handled later in mediator
-		sp.scrapeUrl = getStrPropOrDefault(sheet + SCRAPE_URL, "");
-		
-		// if no sheet title specified, then set title to sheet name
-		sp.sheetTitle = getStrPropOrDefault(sheet + SHEET_TITLE, sheet);
-		// if no title row specified then use default 
-		sp.titleRow = getIntPropOrDefault(sheet + TITLE_ROW, DEF_TITLE_ROW_COL);
-		// if no title col specified then use default
-		sp.titleCol = getIntPropOrDefault(sheet + TITLE_COL, DEF_TITLE_ROW_COL);
-		// if no opener specified then use default
-		sp.opener = getBoolPropOrDefault(sheet + OPENER, DEF_HAS_OPENER);
-		// if not teams col specified then use default
-		sp.teamsCol = getIntPropOrDefault(sheet + TEAMS_COL, DEF_TEAMS_COL);
-		
-		// now we have to range check any row or column index, for instance
-		// tableRow should be greater than titleRow
-		int tmp;
-		
-		// get tableRow prop, set it to titleRow + 1 if it's less than titleRow
-		tmp = getIntPropOrDefault(sheet + SHEET_TABLE, DEF_TABLE_ROW);
-		sp.tableRow = (tmp > sp.titleRow) ? tmp : sp.titleRow + 1;
-		
-		// get tableRow prop, set it to titleRow + 1 if it's less than titleRow
-		tmp = getIntPropOrDefault(sheet + SHEET_TABLE, DEF_TABLE_ROW);
-		sp.tableRow = (tmp > sp.titleRow) ? tmp : sp.titleRow + 1;
-		
-		// get openerCol prop, set it to teamsCol + 1 if it's less than teamsCol
-		tmp = getIntPropOrDefault(sheet + OPENER_COL, DEF_OPENER_COL);
-		sp.openerCol = (tmp > sp.teamsCol) ? tmp : sp.teamsCol + 1;
-		
-		// get openerCol prop, set it to teamsCol + 1 if it's less than teamsCol
-		tmp = getIntPropOrDefault(sheet + BOOKIE_COL, DEF_BOOKIE_COL);
-		// account for the sheet not having an opener column
-		if(sp.hasOpener()) {
-			sp.bookieCol = (tmp > sp.openerCol) ? tmp : sp.openerCol + 1;
-		} else {
-			sp.bookieCol = (tmp > sp.teamsCol) ? tmp : sp.teamsCol + 1;
-		}
-		
-		
-		return sp;
-	}
-	
-	/**
-	 * Class that wraps individual sheet properties with accessor methods.
-	 * 
-	 * @author Jonathan Henly
-	 */
-	private static final class SheetProperties {	
-		private String scrapeUrl;
-		private String sheetTitle;
-		private int titleRow;
-		private int titleCol;
-		private int tableRow;
-		private int teamsCol;
-		private boolean opener;
-		private int openerCol;
-		private int bookieCol;
-		
-		// don't subclass this class
-		private SheetProperties() {}
+        String[] sheetNames = tmpAllSheets.split(",");
+        List<String> nonEmptySheetNames = new ArrayList<>(sheetNames.length);
 
-		/**
-		 * @return the sheet's url to scrape
-		 */
-		public String getScrapeUrl() {
-			return scrapeUrl;
-		}
+        // iterate over sheetNames, remove trail/leading whitespace and add to
+        // list if not an empty string
+        for (int i = 0; i < sheetNames.length; i++) {
+            String tmp = sheetNames[i].strip();
+            if (!tmp.isEmpty()) {
+                nonEmptySheetNames.add(tmp);
+            }
+        }
 
-		/**
-		 * @return the sheet's title
-		 */
-		public String getSheetTitle() {
-			return sheetTitle;
-		}
+        // return unmodifiable list, it should not be changed
+        return Collections.unmodifiableList(nonEmptySheetNames);
+    }
 
-		/**
-		 * @return the sheet's title row index
-		 */
-		public int getTitleRow() {
-			return titleRow;
-		}
+    /* helper method used by methods retrieving required properties */
+    private String getRequiredPropertyOrThrow(String property)
+        throws RequiredPropertyNotFoundException
+    {
+        String propValue = props.getProperty(property);
+        if (propValue == null) {
+            throw new RequiredPropertyNotFoundException(property,
+                CONFIG_CLASS_PATH);
+        }
+        return propValue;
+    }
 
-		/**
-		 * @return the sheet's title column index
-		 */
-		public int getTitleCol() {
-			return titleCol;
-		}
-		
-		/**
-		 * @return the sheet's table row index
-		 */
-		public int getTableRow() {
-			return tableRow;
-		}
+    /* helper int property getter */
+    private int getIntPropOrDefault(String prop, int def) {
+        String tmp = props.getProperty(prop);
+        if (tmp != null) {
+            int val;
+            try {
+                val = Integer.parseInt(tmp);
+            } catch (NumberFormatException nfe) {
+                return def;
+            }
 
-		/**
-		 * @return the sheet's column index where team are listed
-		 */
-		public int getTeamsCol() {
-			return teamsCol;
-		}
+            return (val >= 0) ? val : def;
+        }
 
-		/**
-		 * @return {@code true} if the sheet has an opener column, otherwise
-		 * {@code false}
-		 */
-		public boolean hasOpener() {
-			return opener;
-		}
+        return def;
+    }
 
-		/**
-		 * @return the sheet's opener column index
-		 */
-		public int getOpenerCol() {
-			return openerCol;
-		}
+    /* helper string property getter */
+    private String getStrPropOrDefault(String prop, String def) {
+        String tmp = props.getProperty(prop);
+        return (tmp != null) ? tmp : def;
+    }
 
-		/**
-		 * @return the sheet's column index where bookies start
-		 */
-		public int getBookieCol() {
-			return bookieCol;
-		}
-		
-	} // private static class SheetProperties
-	
-	
+    /* helper boolean property getter */
+    private boolean getBoolPropOrDefault(String prop, boolean def) {
+        String tmp = props.getProperty(prop);
+        return (tmp != null) ? Boolean.parseBoolean(tmp) : def;
+    }
+
+    /* accessors section */
+    
+    /**
+     * @return the path to the Excel file, if set in {@code config.properties}
+     */
+    @Override
+    public String getExcelFilePath() {
+        return excelFilePath;
+    }
+
+    /**
+     * @return returns an {@linkplain Collections#unmodifiableList(List)
+     *         unmodifiable list} containing the Excel workbook's sheet names.
+     */
+    @Override
+    public List<String> getSheetNames() {
+        return allSheets;
+    }
+
+    /**
+     * @return font name used by all sheets
+     */
+    @Override
+    public String getSheetFont() {
+        return font;
+    }
+
+    /**
+     * @return font size used by all sheets
+     */
+    @Override
+    public int getSheetFontSize() {
+        return fontSize;
+    }
+
+    /**
+     * @return {@code true} if Excel column widths should fit their content,
+     *         {@code false}
+     */
+    @Override
+    public boolean getColSizeToFit() {
+        return colSizeToFit;
+    }
+
+    /**
+     * @return {@code true} if Excel row heights should fit their content,
+     *         otherwise {@code false}
+     */
+    @Override
+    public boolean getRowSizeToFit() {
+        return rowSizeToFit;
+    }
+
+    /**
+     * @param index - which sheet's properties to retrieve
+     * @return the sheet properties associated with sheet index supplied
+     */
+    @Override
+    public SheetDataStore getSheetProperties(int index) {
+        return sheetProps.get(index);
+    }
+
+    /* -- SheetProperties Section -- */
+
+    /* iterates over sheet names and creates sheet properties */
+    private List<SheetDataStore> loadSheetProperties(List<String> sheets) {
+        List<SheetDataStore> sprops = new ArrayList<>(sheets.size());
+
+        // build sheet properties for each sheet
+        for (String sheetName : sheets) {
+            sprops.add(buildSheetProperties(sheetName));
+        }
+
+        return Collections.unmodifiableList(sprops);
+    }
+    
+    /* builds sheet properties using the supplied sheet name */
+    private SheetDataStore buildSheetProperties(String sheet) {
+        SheetProperties sp = new SheetProperties();
+
+        // if no url then default, will be handled later in mediator
+        sp.scrapeUrl = getStrPropOrDefault(sheet + SCRAPE_URL, "");
+
+        // if no sheet title specified, then set title to sheet name
+        sp.sheetTitle = getStrPropOrDefault(sheet + SHEET_TITLE, sheet);
+        // if no title row specified then use default
+        sp.titleRow = getIntPropOrDefault(sheet + TITLE_ROW, DEF_TITLE_ROW_COL);
+        // if no title col specified then use default
+        sp.titleCol = getIntPropOrDefault(sheet + TITLE_COL, DEF_TITLE_ROW_COL);
+        // if no opener specified then use default
+        sp.opener = getBoolPropOrDefault(sheet + OPENER, DEF_HAS_OPENER);
+        // if not teams col specified then use default
+        sp.teamsCol = getIntPropOrDefault(sheet + TEAMS_COL, DEF_TEAMS_COL);
+
+        // now we have to range check any row or column index, for instance
+        // tableRow should be greater than titleRow
+        int tmp;
+
+        // get tableRow prop, set it to titleRow + 1 if it's less than titleRow
+        tmp = getIntPropOrDefault(sheet + SHEET_TABLE, DEF_TABLE_ROW);
+        sp.tableRow = (tmp > sp.titleRow) ? tmp : sp.titleRow + 1;
+
+        // get tableRow prop, set it to titleRow + 1 if it's less than titleRow
+        tmp = getIntPropOrDefault(sheet + SHEET_TABLE, DEF_TABLE_ROW);
+        sp.tableRow = (tmp > sp.titleRow) ? tmp : sp.titleRow + 1;
+
+        // get openerCol prop, set it to teamsCol + 1 if it's less than teamsCol
+        tmp = getIntPropOrDefault(sheet + OPENER_COL, DEF_OPENER_COL);
+        sp.openerCol = (tmp > sp.teamsCol) ? tmp : sp.teamsCol + 1;
+
+        // get openerCol prop, set it to teamsCol + 1 if it's less than teamsCol
+        tmp = getIntPropOrDefault(sheet + BOOKIE_COL, DEF_BOOKIE_COL);
+        // account for a sheet not having an opener column
+        if (sp.hasOpener()) {
+            sp.bookieCol = (tmp > sp.openerCol) ? tmp : sp.openerCol + 1;
+        } else {
+            sp.bookieCol = (tmp > sp.teamsCol) ? tmp : sp.teamsCol + 1;
+        }
+
+        return sp;
+    }
+    
 } // public final class WorkbookProperties
