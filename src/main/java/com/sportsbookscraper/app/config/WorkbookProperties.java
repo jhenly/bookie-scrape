@@ -10,7 +10,7 @@ import java.util.Properties;
 
 /**
  * Loads {@code config.properties} file and populates global configs and
- * individual Excel workbook sheet specific configs.
+ * individual Excel workbook, sheet specific configs.
  * <p>
  * Example {@code config.properties} file:
  * 
@@ -103,12 +103,30 @@ public final class WorkbookProperties {
 	// individual sheet properties holder
 	private static final List<SheetProperties> sheetProps;
 	
-	// NOTE: do not the change the order of calls in the following static block,
+	// TODO refactor this class so it doesn't depend on static blocks
+	
+	// NOTE: do not change the order of calls in the following static block,
 	//       some calls depend on other calls happening prior 
 	static {
-		props = loadProps(WorkbookProperties.CONFIG_CLASS_PATH);
-		excelFilePath = props.getProperty(EXCEL_FILE_PATH);
-		allSheets = initAllSheets();
+		props = loadProps(CONFIG_CLASS_PATH);
+		
+		// quick fix
+		String tmpExcelFilePath = null;
+		try {
+			tmpExcelFilePath = getRequiredPropertyOrThrow(EXCEL_FILE_PATH);
+		} catch (RequiredPropertyNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		excelFilePath = tmpExcelFilePath; 
+		
+		//quick fix
+		List<String> tmpAllSheets = null;
+		try {
+			 tmpAllSheets = initAllSheets();
+		} catch (RequiredPropertyNotFoundException e) {
+			e.printStackTrace();
+		}
+		allSheets = tmpAllSheets;
 		
 		// init shared properties
 		font = getStrPropOrDefault(SHEET_FONT, DEF_FONT);
@@ -119,6 +137,7 @@ public final class WorkbookProperties {
 		// init all individual sheet properties
 		sheetProps = initSheetProperties(allSheets);
 	}
+	
 	
 	private static Properties loadProps(String filename) {
 		Properties props = new Properties();
@@ -138,9 +157,39 @@ public final class WorkbookProperties {
 		return props;
 	}
 	
-	private static List<String> initAllSheets() {
-		return Collections.unmodifiableList(
-				Arrays.asList(props.getProperty(ALL_SHEETS)));
+	/* splits comma separated sheet names into an unmodifiable list, or throws*/
+	private static List<String> initAllSheets()
+			throws RequiredPropertyNotFoundException
+	{
+		// will throw if ALL_SHEETS property is not in config.properties
+		String tmpAllSheets = getRequiredPropertyOrThrow(ALL_SHEETS);
+		
+		String[] sheetNames = tmpAllSheets.split(",");
+		List<String> nonEmptySheetNames = new ArrayList<String>(sheetNames.length);
+		
+		// iterate over sheetNames, remove trail/leading whitespace and add to
+		// list if not an empty string
+		for(int i = 0; i < sheetNames.length; i++) {
+			String tmp = sheetNames[i].strip();
+			if(!tmp.isEmpty()) {
+				nonEmptySheetNames.add(tmp);
+			}
+		}
+		
+		// return unmodifiable list, it should not be changed
+		return Collections.unmodifiableList(nonEmptySheetNames);
+	}
+	
+	/* helper method used by methods retrieving required properties */
+	private static String getRequiredPropertyOrThrow(String property)
+			throws RequiredPropertyNotFoundException
+	{
+		String propValue = props.getProperty(property);
+		if(propValue == null) {
+			throw new RequiredPropertyNotFoundException(property,
+					CONFIG_CLASS_PATH);
+		}
+		return propValue;
 	}
 	
 	private static int getIntPropOrDefault(String prop, int def) {
