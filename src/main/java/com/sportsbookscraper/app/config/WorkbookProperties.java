@@ -1,5 +1,21 @@
 package com.sportsbookscraper.app.config;
 
+import static com.sportsbookscraper.app.config.PropertyKey.ALL_SHEETS;
+import static com.sportsbookscraper.app.config.PropertyKey.BOOKIE_COL;
+import static com.sportsbookscraper.app.config.PropertyKey.COLS_SIZETOFIT;
+import static com.sportsbookscraper.app.config.PropertyKey.EXCEL_FILE_PATH;
+import static com.sportsbookscraper.app.config.PropertyKey.OPENER;
+import static com.sportsbookscraper.app.config.PropertyKey.OPENER_COL;
+import static com.sportsbookscraper.app.config.PropertyKey.ROWS_SIZETOFIT;
+import static com.sportsbookscraper.app.config.PropertyKey.SCRAPE_URL;
+import static com.sportsbookscraper.app.config.PropertyKey.SHEET_FONT;
+import static com.sportsbookscraper.app.config.PropertyKey.SHEET_FONT_SIZE;
+import static com.sportsbookscraper.app.config.PropertyKey.SHEET_TABLE;
+import static com.sportsbookscraper.app.config.PropertyKey.SHEET_TITLE;
+import static com.sportsbookscraper.app.config.PropertyKey.TEAMS_COL;
+import static com.sportsbookscraper.app.config.PropertyKey.TITLE_COL;
+import static com.sportsbookscraper.app.config.PropertyKey.TITLE_ROW;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -59,7 +75,6 @@ final class WorkbookProperties extends AbstractProperties {
     // TODO remove CONFIG_CLASS_PATH <- it's just for debugging
     private final String CONFIG_CLASS_PATH = "./config/config.properties";
 
-    /* - Begin static load config.properties file section - */
     private final Properties props;
     private final String excelFilePath;
     private final List<String> allSheets;
@@ -68,6 +83,11 @@ final class WorkbookProperties extends AbstractProperties {
     
     
     // don't subclass this class
+    @SuppressWarnings("unused")
+    private WorkbookProperties() {
+        throw new UnsupportedOperationException();
+    }
+    
     WorkbookProperties(String propertiesFile)
     throws RequiredPropertyNotFoundException, IOException
     {
@@ -90,10 +110,10 @@ final class WorkbookProperties extends AbstractProperties {
         allSheets = initAllSheets();
 
         // init shared properties
-        font = getStrPropOrDefault(SHEET_FONT, DEF_FONT);
-        fontSize = getIntPropOrDefault(SHEET_FONT_SIZE, DEF_FONT_SIZE);
-        colSizeToFit = getBoolPropOrDefault(COLS_SIZETOFIT, DEF_SIZE_TO_FIT);
-        rowSizeToFit = getBoolPropOrDefault(ROWS_SIZETOFIT, DEF_SIZE_TO_FIT);
+        font = getStrPropOrDefault(SHEET_FONT);
+        fontSize = getIntPropOrDefault(SHEET_FONT_SIZE);
+        colSizeToFit = getBoolPropOrDefault(COLS_SIZETOFIT);
+        rowSizeToFit = getBoolPropOrDefault(ROWS_SIZETOFIT);
 
         // init all individual sheet properties
         sheetProps = loadSheetProperties(allSheets);
@@ -153,6 +173,13 @@ final class WorkbookProperties extends AbstractProperties {
         return propValue;
     }
 
+    /* overloaded helper method */
+    private String getRequiredPropertyOrThrow(PropertyKey pk)
+        throws RequiredPropertyNotFoundException
+    {
+        return getRequiredPropertyOrThrow(pk.key());
+    }
+
     /* helper int property getter */
     private int getIntPropOrDefault(String prop, int def) {
         String tmp = props.getProperty(prop);
@@ -170,10 +197,30 @@ final class WorkbookProperties extends AbstractProperties {
         return def;
     }
 
+    /* helper int property getter */
+    private int getIntPropOrDefault(PropertyKey pk) {
+        return getIntPropOrDefault(pk.key(), pk.idef());
+    }
+    
+    /* helper int property getter */
+    private int getIntPropOrDefault(String sheet, PropertyKey pk) {
+        return getIntPropOrDefault(sheet + pk.key(), pk.idef());
+    }
+    
     /* helper string property getter */
     private String getStrPropOrDefault(String prop, String def) {
         String tmp = props.getProperty(prop);
         return (tmp != null) ? tmp : def;
+    }
+    
+    /* helper string property getter */
+    private String getStrPropOrDefault(PropertyKey pk) {
+        return getStrPropOrDefault(pk.key(), pk.sdef());
+    }
+
+    /* helper string property getter */
+    private String getStrPropOrDefault(String sheet, PropertyKey pk) {
+        return getStrPropOrDefault(sheet + pk.key(), pk.sdef());
     }
 
     /* helper boolean property getter */
@@ -181,59 +228,57 @@ final class WorkbookProperties extends AbstractProperties {
         String tmp = props.getProperty(prop);
         return (tmp != null) ? Boolean.parseBoolean(tmp) : def;
     }
+    
+    /* helper boolean property getter */
+    private boolean getBoolPropOrDefault(PropertyKey pk) {
+        return getBoolPropOrDefault(pk.key(), pk.bdef());
+    }
 
-    /* accessors section */
+    /* helper boolean property getter */
+    private boolean getBoolPropOrDefault(String sheet, PropertyKey pk) {
+        return getBoolPropOrDefault(sheet + pk.key(), pk.bdef());
+    }
+
+    /* --- Public Accessors Section --- */
     
     /**
      * @return the path to the Excel file, if set in {@code config.properties}
      */
     @Override
-    public String getExcelFilePath() {
-        return excelFilePath;
-    }
+    public String getExcelFilePath() { return excelFilePath; }
 
     /**
      * @return returns an {@linkplain Collections#unmodifiableList(List)
      *         unmodifiable list} containing the Excel workbook's sheet names.
      */
     @Override
-    public List<String> getSheetNames() {
-        return allSheets;
-    }
+    public List<String> getSheetNames() { return allSheets; }
 
     /**
      * @return font name used by all sheets
      */
     @Override
-    public String getSheetFont() {
-        return font;
-    }
+    public String getSheetFont() { return font; }
 
     /**
      * @return font size used by all sheets
      */
     @Override
-    public int getSheetFontSize() {
-        return fontSize;
-    }
+    public int getSheetFontSize() { return fontSize; }
 
     /**
      * @return {@code true} if Excel column widths should fit their content,
      *         {@code false}
      */
     @Override
-    public boolean getColSizeToFit() {
-        return colSizeToFit;
-    }
+    public boolean getColSizeToFit() { return colSizeToFit; }
 
     /**
      * @return {@code true} if Excel row heights should fit their content,
      *         otherwise {@code false}
      */
     @Override
-    public boolean getRowSizeToFit() {
-        return rowSizeToFit;
-    }
+    public boolean getRowSizeToFit() { return rowSizeToFit; }
 
     /**
      * @param index - which sheet's properties to retrieve
@@ -261,39 +306,34 @@ final class WorkbookProperties extends AbstractProperties {
     /* builds sheet properties using the supplied sheet name */
     private SheetDataStore buildSheetProperties(String sheet) {
         SheetProperties sp = new SheetProperties();
-
+        
         // if no url then default, will be handled later in mediator
-        sp.scrapeUrl = getStrPropOrDefault(sheet + SCRAPE_URL, "");
-
-        // if no sheet title specified, then set title to sheet name
-        sp.sheetTitle = getStrPropOrDefault(sheet + SHEET_TITLE, sheet);
-        // if no title row specified then use default
-        sp.titleRow = getIntPropOrDefault(sheet + TITLE_ROW, DEF_TITLE_ROW_COL);
-        // if no title col specified then use default
-        sp.titleCol = getIntPropOrDefault(sheet + TITLE_COL, DEF_TITLE_ROW_COL);
-        // if no opener specified then use default
-        sp.opener = getBoolPropOrDefault(sheet + OPENER, DEF_HAS_OPENER);
-        // if not teams col specified then use default
-        sp.teamsCol = getIntPropOrDefault(sheet + TEAMS_COL, DEF_TEAMS_COL);
+        sp.scrapeUrl = getStrPropOrDefault(sheet, SCRAPE_URL);
+        
+        sp.sheetTitle = getStrPropOrDefault(sheet, SHEET_TITLE);
+        sp.titleRow = getIntPropOrDefault(sheet, TITLE_ROW);
+        sp.titleCol = getIntPropOrDefault(sheet, TITLE_COL);
+        sp.opener = getBoolPropOrDefault(sheet, OPENER);
+        sp.teamsCol = getIntPropOrDefault(sheet, TEAMS_COL);
 
         // now we have to range check any row or column index, for instance
         // tableRow should be greater than titleRow
         int tmp;
 
         // get tableRow prop, set it to titleRow + 1 if it's less than titleRow
-        tmp = getIntPropOrDefault(sheet + SHEET_TABLE, DEF_TABLE_ROW);
+        tmp = getIntPropOrDefault(sheet, SHEET_TABLE);
         sp.tableRow = (tmp > sp.titleRow) ? tmp : sp.titleRow + 1;
 
         // get tableRow prop, set it to titleRow + 1 if it's less than titleRow
-        tmp = getIntPropOrDefault(sheet + SHEET_TABLE, DEF_TABLE_ROW);
+        tmp = getIntPropOrDefault(sheet, SHEET_TABLE);
         sp.tableRow = (tmp > sp.titleRow) ? tmp : sp.titleRow + 1;
 
         // get openerCol prop, set it to teamsCol + 1 if it's less than teamsCol
-        tmp = getIntPropOrDefault(sheet + OPENER_COL, DEF_OPENER_COL);
+        tmp = getIntPropOrDefault(sheet, OPENER_COL);
         sp.openerCol = (tmp > sp.teamsCol) ? tmp : sp.teamsCol + 1;
 
         // get openerCol prop, set it to teamsCol + 1 if it's less than teamsCol
-        tmp = getIntPropOrDefault(sheet + BOOKIE_COL, DEF_BOOKIE_COL);
+        tmp = getIntPropOrDefault(sheet, BOOKIE_COL);
         // account for a sheet not having an opener column
         if (sp.hasOpener()) {
             sp.bookieCol = (tmp > sp.openerCol) ? tmp : sp.openerCol + 1;
