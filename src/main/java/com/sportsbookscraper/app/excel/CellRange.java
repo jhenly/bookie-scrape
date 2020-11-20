@@ -31,11 +31,11 @@ public class CellRange {
     public enum RangeType {
         /** Denotes a single cell range. */
         CELL,
-        /** Denotes a range of rows. */
+        /** Denotes a range of cells in a row. */
         ROW,
-        /** Denotes a range of columns. */
+        /** Denotes a range of cells in a column. */
         COL,
-        /** Denotes a rectangular range of rows and columns. */
+        /** Denotes a rectangular range of cells in rows and columns. */
         ROW_COL;
     }
     
@@ -183,111 +183,7 @@ public class CellRange {
                     + " ( %d, %d, %d, %d)", rs, re, cs, ce));
         }
         
-        if ((rs == re) && (cs == ce))
-            return new SingleCellRange(rs, cs);
-        else if (rs == re)
-            return new RowRange(rs, cs, ce);
-        else if (cs == ce)
-            return new ColRange(cs, rs, re);
-        
-        return new RowColRange(rs, re, cs, ce);
-    }
-    
-    /* single cell range implementation */
-    private static class SingleCellRange extends CellRange {
-        SingleCellRange(int row, int col) { super(row, col); }
-        
-        @Override
-        public int rowStart() { return super.rowStart(); }
-        
-        @Override
-        public int rowEnd() { return super.rowStart(); }
-        
-        @Override
-        public int colStart() { return super.rowEnd(); }
-        
-        @Override
-        public int colEnd() { return super.rowEnd(); }
-    }
-    
-    /* row range implementation */
-    private static class RowRange extends CellRange {
-        RowRange(int row, int start, int end) { super(row, start, end, true); }
-        
-        @Override
-        public int rowStart() { return super.rowStart(); }
-        
-        @Override
-        public int rowEnd() { return super.rowStart(); }
-        
-        @Override
-        public int colStart() { return super.rowEnd(); }
-        
-        @Override
-        public int colEnd() { return super.colStart(); }
-    }
-    
-    /* col range implementation */
-    private static class ColRange extends CellRange {
-        ColRange(int col, int start, int end) { super(col, start, end, false); }
-        
-        @Override
-        public int rowStart() { return super.rowEnd(); }
-        
-        @Override
-        public int rowEnd() { return super.colStart(); }
-        
-        @Override
-        public int colStart() { return super.rowStart(); }
-        
-        @Override
-        public int colEnd() { return super.rowStart(); }
-    }
-    
-    /* row_col range implementation */
-    private static class RowColRange extends CellRange {
-        RowColRange(int rs, int re, int cs, int ce) { super(rs, re, cs, ce); }
-    }
-    
-    public static class DirectionalCellRange extends CellRange {
-        /**
-         * Enum specifying the order in which rows and columns should be read.
-         */
-        public enum Order {
-            /** Read the columns in each row. */
-            ROW_THEN_COL,
-            /** Read the rows in each column. */
-            COL_THEN_ROW;
-        }
-        
-        /**
-         * Enum specifying the direction in which rows and columns should be
-         * read.
-         */
-        public enum Direction {
-            /** Read cells in a column from top to bottom. */
-            TOP_TO_BOTTOM,
-            /** Read cells in a column from bottom to top. */
-            BOTTOM_TO_TOP,
-            /** Read cells in a column from left to right. */
-            RIGHT_TO_LEFT,
-            /** Read cells in a column from right to left. */
-            LEFT_TO_RIGHT;
-        }
-        
-        /**
-         * @return whether rows then columns, or columns then rows.
-         */
-        public Order readOrder() { return readOrder; }
-        
-        
-        public Direction rowDirection() { return rowDirection; }
-        
-        public Direction colDirection() { return colDirection; }
-        
-        private Order readOrder;
-        private Direction rowDirection;
-        private Direction colDirection;
+        return new CellRange(rs, re, cs, ce);
     }
     
     
@@ -301,31 +197,34 @@ public class CellRange {
     // for nested subclasses
     private CellRange() {}
     
-    private CellRange(int row, int col) {
-        range = new int[] { row, col };
-        type = RangeType.CELL;
-        numCells = numRows = numCols = 1;
-    }
-    
-    private CellRange(int rc, int start, int end, boolean isRow) {
-        range = new int[] { rc, start, end };
-        type = isRow ? RangeType.ROW : RangeType.COL;
-        
-        numCells = start > end ? start - end + 1 : end - start + 1;
-        numRows = isRow ? 1 : numCells;
-        numCols = isRow ? numCells : 1;
-    }
-    
+    // used by static creators
     private CellRange(int rs, int re, int cs, int ce) {
         range = new int[] { rs, re, cs, ce };
-        type = RangeType.ROW_COL;
+        if ((rs == re) && (cs == ce)) {
+            type = RangeType.CELL;
+        } else if (rs == re) {
+            type = RangeType.ROW;
+        } else if (cs == ce) {
+            type = RangeType.COL;
+        } else {
+            type = RangeType.ROW_COL;
+        }
         
         numRows = rs > re ? rs - re + 1 : re - rs + 1;
         numCols = cs > ce ? cs - ce + 1 : ce - cs + 1;
         numCells = numRows * numCols;
     }
     
-    // ROW_COL type inedexes.START..END....START.....END
+    // used by static creators
+    private CellRange(CellRange copy) {
+        type = copy.type;
+        numCells = copy.numCells;
+        numRows = copy.numRows;
+        numCols = copy.numCols;
+        range = copy.range;
+    }
+    
+    // ROW_COL type indexes..START...END.....START...END
     private static final int RS = 0, RE = 1, CS = 2, CE = 3;
     
     
