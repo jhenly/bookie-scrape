@@ -1,5 +1,8 @@
 package com.sportsbookscraper.app.excel;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -8,40 +11,44 @@ import org.junit.Test;
 
 
 public class CellRangeTest {
-
-
-    @Test(expected = IndexOutOfBoundsException.class) // tests whether the right
-    public void testForConstructorWithNegativeParamsThrowsIAException() {
-        Object o = emptyList.get(0);
-    }
-
-
+    
     /**
      * Runs once before any tests (Called once before anything else)
      */
     @BeforeClass
-    public void setUpOnceFirst() {
-
+    public static void setUpOnceFirst() {
+        
     }
-    
+
     /**
      * Cleans up any other resources. (Called once after evything else)
      */
     @AfterClass
-    public void tearDownOnceLast() {
-
+    public static void tearDownOnceLast() {
+        
     }
     
+    public void testForConstructorWithNegativeParamsThrowsIAException() {
+        
+    }
+
+    List<Object> emptyList;
     
+    // tests whether the right exception is thrown
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testForThrowsIndexOutOfBoundsException() {
+        Object o = emptyList.get(0);
+    }
+
     /**
      * Sets up the test fixture. (Called before every test case method.)
      */
     @Before
     public void setUp() {
-        emptyList = new java.util.ArrayList();
+        emptyList = Collections.emptyList();
     }
-
-
+    
+    
     /**
      * Tears down the test fixture. (Called after every test case method.)
      */
