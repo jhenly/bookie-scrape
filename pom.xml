@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -13,20 +14,20 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>12</maven.compiler.source>
+    <maven.compiler.target>12</maven.compiler.target>
   </properties>
 
   <!-- Good Maven Repository Site -> https://mvnrepository.com -->
   <dependencies>
-    
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>net.sourceforge.htmlunit</groupId>
       <artifactId>htmlunit</artifactId>
@@ -55,21 +56,21 @@
       <version>4.1.2</version>
       <scope>compile</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml-schemas</artifactId>
       <version>4.1.2</version>
       <scope>compile</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-scratchpad</artifactId>
       <version>4.1.2</version>
       <scope>compile</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-excelant</artifactId>
@@ -86,13 +87,20 @@
       <scope>compile</scope>
     </dependency>
     
+    <!-- fontawesomefx -->
+    <dependency>
+      <groupId>de.jensd</groupId>
+      <artifactId>fontawesomefx-fontawesome</artifactId>
+      <version>4.7.0-9.1.2</version>
+    </dependency>
+
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
       <version>16-ea+4</version>
       <scope>compile</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-graphics</artifactId>
@@ -135,11 +143,12 @@
       <scope>compile</scope>
     </dependency>
     <!-- End OpenJFX Dependencies -->
-      
+
   </dependencies>
 
   <build>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven 
+        defaults (may be moved to parent pom) -->
       <plugins>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
         <plugin>
@@ -180,19 +189,30 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
-        
+
+
+        <!-- allows for 'clean javafx:run' -->
         <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>exec-maven-plugin</artifactId>
-          <version>3.0.0</version>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-maven-plugin</artifactId>
+          <version>0.0.5</version>
           <configuration>
-            <mainClass>com.sportsbookscraper.app.sample.Mediator</mainClass>
-            <arguments>
-              <argument>-jar</argument>
-              <argument>target/sports-book-scraper-1.0-SNAPSHOT.jar</argument>
-            </arguments>
+            <!-- Note: I'm on Unix with OpenJDK-14 and my $JAVA_HOME="/home/.../jdk-14.0.1/bin" -->
+	    <executable><!-- PATH TO JDK 'bin' FOLDER --></executable>
+            
+            <!-- used to test different 'public static void main(String[] args)' classes without changing pom.xml -->   
+            <!-- via: 'clean javafx:run "-Dpackage.main=sample.Main"' -->
+            <mainClass>com.sportsbookscraper.app.${foo}</mainClass>
+            
           </configuration>
         </plugin>
+         
+        <!-- allows for 'mvn java:exec' and for 'mvn exec:exec' -->
+        <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>exec-maven-plugin</artifactId> 
+          <version>3.0.0</version> <configuration> <mainClass>com.sportsbookscraper.app.sample.Mediator</mainClass> 
+          <arguments> <argument>-jar</argument> <argument>target/sports-book-scraper-1.0-SNAPSHOT.jar</argument> 
+          </arguments> </configuration> </plugin> -->
+
       </plugins>
     </pluginManagement>
   </build>
