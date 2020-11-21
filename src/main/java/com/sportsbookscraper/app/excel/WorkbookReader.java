@@ -108,7 +108,7 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
         return strings;
     }
     
-    protected class RangeReaderBuilder {
+    public class RangeReaderBuilder {
         private WorkbookReader ref;
         private CellRange range;
         private Sheet sheet;
@@ -126,9 +126,19 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
             this.sheet = sheet;
         }
         
-        public RangeReaderBuilder in(String sheetName) {
-            nameOfSheet = sheetName;
+        /**
+         * 
+         * @param sheetName
+         * @return
+         * @throws SheetNotFoundException
+         */
+        public RangeReaderBuilder in(String sheetName)
+            throws SheetNotFoundException {
             Sheet load = ref.getSheetFromWorkbook(sheetName);
+            
+            if (load == null) { throw new SheetNotFoundException(sheetName); }
+            
+            nameOfSheet = sheetName;
             sheet = load;
             return this;
         }
