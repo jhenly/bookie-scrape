@@ -13,74 +13,80 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbookFactory;
 
 
 /**
+ * Factory class to create instances of Excel workbook readers and writers. Also
+ * contains methods to create Excel workbooks.
+ * 
  * @author Jonathan Henly
  */
-public final class ExcelFactory {
+public final class WorkbookFactory {
     
-    private ExcelFactory() {}
+    // don't subclass this class
+    private WorkbookFactory() {}
     
     /**
-     * Opens an Excel workbook reader with the specified the file path.
+     * Opens an Excel workbook reader with the specified workbook file path.
      *
-     * @param excelFilePath - path to the Excel file
+     * @param workbookFilePath
+     *                         - path to the Excel file
      * @return an new Excel workbook reader instance
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
+     *                     if an I/O error occurs
      */
-    public static ExcelFileReader newExcelFileReader(String excelFilePath)
-        throws IOException
-    {
-        return new ExcelFileReader(excelFilePath);
+    public static WorkbookReader newWorkbookReader(String workbookFilePath)
+        throws IOException {
+        return new WorkbookReader(workbookFilePath);
     }
     
     /**
-     * Opens an Excel workbook writer with the specified the file path.
+     * Opens an Excel workbook writer with the specified file path.
      *
-     * @param excelFilePath - path to the Excel file
+     * @param workbookFilePath
+     *                         - path to the Excel workbook file
      * @return a new Excel workbook writer instance
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
+     *                     if an I/O error occurs
      */
-    public static ExcelFileWriter newExcelFileWriter(String excelFilePath)
-        throws IOException
-    {
-        return new ExcelFileWriter(excelFilePath);
+    public static WorkbookWriter newWorkbookWriter(String workbookFilePath)
+        throws IOException {
+        return new WorkbookWriter(workbookFilePath);
     }
     
     /**
      * Creates a new Excel file at the specified file path and opens an Excel
      * workbook writer with the newly created workbook.
      *
-     * @param newExcelFilePath - path to create the new Excel file.
+     * @param newWorkbookFilePath
+     *                            - path to create the new Excel workbook file.
      * @return an Excel workbook writer instance opened with the newly created
-     *         Excel file
-     * @throws IOException if an I/O error occurs
+     *         Excel workbook
+     * @throws IOException
+     *                     if an I/O error occurs
      */
-    public static ExcelFileWriter createNewExcelFile(String newExcelFilePath)
-        throws IOException
-    {
-        doCreateFileChecks(newExcelFilePath); // throws IOException
-        createWriteAndCloseNewExcelFile(newExcelFilePath);
+    public static WorkbookWriter createNewWorkbookFile(
+        String newWorkbookFilePath) throws IOException {
+        doCreateWorkbookChecks(newWorkbookFilePath); // throws IOException
+        createWriteAndCloseNewWorkbookFile(newWorkbookFilePath);
         
-        return new ExcelFileWriter(newExcelFilePath, true);
+        return new WorkbookWriter(newWorkbookFilePath);
     }
     
     /* checks new Excel file path and throws exceptions accordingly */
-    private static String doCreateFileChecks(String newExcelFilePath)
-        throws IOException
-    {
+    private static String doCreateWorkbookChecks(String newExcelFilePath)
+        throws IOException {
         Objects.requireNonNull(newExcelFilePath);
-
+        
         if (newExcelFilePath.isBlank()) {
             throw new IllegalArgumentException(
                 "cannot create a new Excel file with an empty string");
         }
-
+        
         Path newFilePath = (new File(newExcelFilePath)).toPath().normalize();
-
+        
         if (Files.exists(newFilePath)) {
             /* new file path points to an existing file, so throw */
             throw new FileAlreadyExistsException(newExcelFilePath);
         }
-
+        
         if (!Files.isDirectory(newFilePath.getParent().normalize())) {
             /* new file's parent is not a directory, so throw */
             throw new IOException(String.format(
@@ -88,14 +94,13 @@ public final class ExcelFactory {
                     + "not a directory",
                 newExcelFilePath));
         }
-
+        
         return newExcelFilePath;
     }
-
-    /* function that creates, writes and closes a new Excel file */
-    private static void createWriteAndCloseNewExcelFile(String newExcelFilePath)
-        throws IOException
-    {
+    
+    /* function that creates, writes and closes a new Excel workbook file */
+    private static void createWriteAndCloseNewWorkbookFile(
+        String newExcelFilePath) throws IOException {
         // create new workbook and file output stream
         Workbook wb = XSSFWorkbookFactory.createWorkbook();
         FileOutputStream out = new FileOutputStream(newExcelFilePath);
@@ -107,5 +112,5 @@ public final class ExcelFactory {
         out.close();
         wb.close();
     }
-
+    
 }

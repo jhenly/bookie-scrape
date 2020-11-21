@@ -94,7 +94,7 @@ public class CellRange {
      * 
      * @return a cell range representing only a single cell
      */
-    public static CellRange singleCell(int row, int col) {
+    public static CellRange cell(int row, int col) {
         return range(row, row, col, col);
     }
     
