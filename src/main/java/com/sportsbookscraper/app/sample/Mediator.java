@@ -9,9 +9,9 @@ import java.util.Map;
 import com.sportsbookscraper.app.config.DSProperties;
 import com.sportsbookscraper.app.config.PropertiesFactory;
 import com.sportsbookscraper.app.config.RequiredPropertyNotFoundException;
-import com.sportsbookscraper.app.excel.ExcelFactory;
-import com.sportsbookscraper.app.excel.ExcelFileReader;
-import com.sportsbookscraper.app.excel.ExcelFileWriter;
+import com.sportsbookscraper.app.excel.WorkbookFactory;
+import com.sportsbookscraper.app.excel.WorkbookReader;
+import com.sportsbookscraper.app.excel.WorkbookWriter;
 import com.sportsbookscraper.app.excel.SheetNotFoundException;
 import com.sportsbookscraper.app.scrape.Bookie;
 import com.sportsbookscraper.app.scrape.Scraper;
@@ -31,7 +31,7 @@ public class Mediator {
     // private members
     private String excelFilePath;
     private Map<String, Bookie> existingBookies;
-    private ExcelFileWriter writer;
+    private WorkbookWriter writer;
     private Scraper scraper;
     private DSProperties props;
     
@@ -97,8 +97,8 @@ public class Mediator {
     {
         // read bookies names from Excel sheet
         List<String> bNames = null;
-        try (ExcelFileReader excelReader
-            = ExcelFactory.newExcelFileReader(excelFilePath);)
+        try (WorkbookReader excelReader
+            = WorkbookFactory.newWorkbookReader(excelFilePath);)
         {
             bNames = excelReader.readStringsInRow(sheetName, 1, bRow, bCol);
         } catch (SheetNotFoundException e) {
