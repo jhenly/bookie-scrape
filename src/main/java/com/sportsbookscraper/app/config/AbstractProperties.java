@@ -17,8 +17,8 @@ public abstract class AbstractProperties implements DSProperties {
     protected int fontSize;
     protected boolean colSizeToFit;
     protected boolean rowSizeToFit;
-
-
+    
+    
     // To Allow this class to be subclassed.
     protected AbstractProperties() {}
     
@@ -34,39 +34,48 @@ public abstract class AbstractProperties implements DSProperties {
      */
     @Override
     public abstract List<String> getSheetNames();
-
+    
     /**
      * @return font name used by all sheets
      */
     @Override
     public abstract String getSheetFont();
-
+    
     /**
      * @return font size used by all sheets
      */
     @Override
     public abstract int getSheetFontSize();
-
+    
     /**
      * @return {@code true} if Excel column widths should fit their content,
      *         {@code false}
      */
     @Override
     public abstract boolean getColSizeToFit();
-
+    
     /**
      * @return {@code true} if Excel row heights should fit their content,
      *         otherwise {@code false}
      */
     @Override
     public abstract boolean getRowSizeToFit();
-
+    
     /**
-     * @param index - which sheet's properties to retrieve
+     * @param index
+     *              - which sheet's properties to retrieve
      * @return the sheet properties associated with sheet index supplied
      */
     @Override
     public abstract SheetDataStore getSheetProperties(int index);
+    
+    /**
+     * @param name
+     *             - the name of the sheet's properties to retrieve
+     * @return the sheet properties associated with sheet name supplied
+     */
+    @Override
+    public abstract SheetDataStore getSheetProperties(String name);
     
     
     /**
@@ -75,8 +84,9 @@ public abstract class AbstractProperties implements DSProperties {
      * @author Jonathan Henly
      */
     protected static class SheetProperties
-    implements DSProperties.SheetDataStore
-    {
+        implements DSProperties.SheetDataStore {
+        /** sheet's name */
+        protected String sheetName;
         /** sheet's url to scrape */
         protected String scrapeUrl;
         /** the sheet's title */
@@ -95,67 +105,72 @@ public abstract class AbstractProperties implements DSProperties {
         protected int openerCol;
         /** the sheet's column index to start listing bookie names */
         protected int bookieCol;
-
+        
         // sole purpose is for use by sub classes
         protected SheetProperties() {}
-
+        
+        /**
+         * @return the sheet's name
+         */
+        @Override
+        public String getSheetName() { return sheetName; }
+        
+        
         /**
          * @return the sheet's url to scrape
          */
         @Override
         public String getScrapeUrl() { return scrapeUrl; }
-
+        
         /**
          * @return the sheet's title
          */
         @Override
         public String getSheetTitle() { return sheetTitle; }
-
+        
         /**
          * @return the sheet's title row index
          */
         @Override
         public int getTitleRow() { return titleRow; }
-
+        
         /**
          * @return the sheet's title column index
          */
         @Override
         public int getTitleCol() { return titleCol; }
-
+        
         /**
          * @return the sheet's table row index
          */
         @Override
         public int getTableRow() { return tableRow; }
-
+        
         /**
          * @return the sheet's column index where team are listed
          */
         @Override
         public int getTeamsCol() { return teamsCol; }
-
+        
         /**
          * @return {@code true} if the sheet has an opener column, otherwise
          *         {@code false}
          */
         @Override
-        public boolean hasOpener() {
-            return opener;
-        }
-
+        public boolean hasOpener() { return opener; }
+        
         /**
          * @return the sheet's opener column index
          */
         @Override
         public int getOpenerCol() { return openerCol; }
-
+        
         /**
          * @return the sheet's column index where bookies start
          */
         @Override
         public int getBookieCol() { return bookieCol; }
-
+        
     } // private static class SheetProperties
     
 }

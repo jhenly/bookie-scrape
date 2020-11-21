@@ -49,7 +49,7 @@ public class CellRangeTest {
     
     @Test
     public void testCreateCellRangeWithTwoParamsReturnsCellRangeTypeCell() {
-        assertTrue(CellRange.singleCell(10, 10).type() == RangeType.CELL);
+        assertTrue(CellRange.cell(10, 10).type() == RangeType.CELL);
     }
     
     @Test

@@ -14,30 +14,30 @@ public interface DSProperties {
      * @return the path to the Excel file
      */
     String getExcelFilePath();
-
+    
     /**
      * @return returns an {@linkplain Collections#unmodifiableList(List)
      *         unmodifiable list} containing the Excel workbook's sheet names.
      */
     List<String> getSheetNames();
-
-
+    
+    
     /**
      * @return font name used by all sheets
      */
     String getSheetFont();
-
+    
     /**
      * @return font size used by all sheets
      */
     int getSheetFontSize();
-
+    
     /**
      * @return {@code true} if Excel column widths should fit their content,
      *         {@code false}
      */
     boolean getColSizeToFit();
-
+    
     /**
      * @return {@code true} if Excel row heights should fit their content,
      *         otherwise {@code false}
@@ -45,10 +45,18 @@ public interface DSProperties {
     boolean getRowSizeToFit();
     
     /**
-     * @param index - which sheet's properties to retrieve
+     * @param index
+     *              - which sheet's properties to retrieve
      * @return the sheet properties associated with sheet index supplied
      */
     SheetDataStore getSheetProperties(int index);
+    
+    /**
+     * @param name
+     *             - the name of the sheet's properties to retrieve
+     * @return the sheet properties associated with sheet name supplied
+     */
+    public SheetDataStore getSheetProperties(String name);
     
     /**
      * Class that wraps individual sheet properties with accessor methods.
@@ -56,6 +64,11 @@ public interface DSProperties {
      * @author Jonathan Henly
      */
     interface SheetDataStore {
+        /**
+         * @return the sheet's name
+         */
+        String getSheetName();
+        
         /**
          * @return the sheet's url to scrape
          */
@@ -102,5 +115,5 @@ public interface DSProperties {
          */
         int getBookieCol();
     }
-
+    
 }
