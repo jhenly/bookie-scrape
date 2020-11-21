@@ -111,14 +111,16 @@ public class Scraper {
         
         bookies = scrapeBookies(getCarouselBooksList(page));
         
+        
+        page = selectUserSettingsOddsFormatDec(page);
+        page = clickNumberSortRotText(page);
+        
         try {
-            scrapeMatches(site, bookies.size());
+            scrapeMatches(page, bookies.size());
         } catch (IOException e) {
             e.printStackTrace();
         }
         
-        page = selectUserSettingsOddsFormatDec(page);
-        page = clickNumberSortRotText(page);
         // one = getOddsGridContainer(page).outerHtml();
         // two = clickCarouselNextAndGetOddsGridContainer(page).outerHtml();
         
@@ -219,6 +221,10 @@ public class Scraper {
         HtmlPage newPage = userSettingsOddsFormatSelect
             .setSelectedAttribute(option, true);
         
+        option = userSettingsOddsFormatSelect.getOptionByValue("1");
+        newPage = userSettingsOddsFormatSelect.setSelectedAttribute(option,
+            false);
+        
         client.waitForBackgroundJavaScript(1000);
         
         return newPage;
@@ -232,12 +238,9 @@ public class Scraper {
             System.out.println("No matches being displayed at this time.");
             return null;
         }
-        
-        System.out.println(divSortLink.get(0).asXml());
         DomElement first = divSortLink.get(0);
         
         HtmlAnchor sortAnchor = (HtmlAnchor) first.getFirstElementChild();
-        System.out.println(sortAnchor.asXml());
         
         HtmlPage newPage = null;
         
@@ -256,12 +259,14 @@ public class Scraper {
             .parse(page.getHtmlElementById("oddsGridContainer").asXml());
     }
     
+    
     /* */
-    private List<MatchGroup> scrapeMatches(String site, int numBookies)
+    private List<MatchGroup> scrapeMatches(HtmlPage page, int numBookies)
         throws IOException {
-        Document doc = Jsoup.connect(site).timeout(DEFAULT_TIMEOUT).get();
+        Document doc = Jsoup.parse(page.asXml());
         
         List<MatchGroup> tmpMatches = new ArrayList<MatchGroup>();
+        
         Element prev = doc.selectFirst(".carousel-control.prev");
         Element next = doc.selectFirst(".carousel-control.next");
         
@@ -273,9 +278,45 @@ public class Scraper {
             MatchGroup mg = new MatchGroup(date);
             
             System.out.println(date);
-            
+            parseEventLine(group);
         }
         return null;
+    }
+    
+    private List<MatchGroup> parseEventLine(Element dateGroup) {
+        List<MatchGroup> tmpMatches = new ArrayList<MatchGroup>();
+        
+        Element eventLines = dateGroup.getElementsByClass("eventLines").first();
+        Element contentScheduled = eventLines
+            .getElementsByClass("content-scheduled").first();
+        
+        for (Element game : contentScheduled.children()) {
+            Element data = game.children().first();
+            
+            Elements teamNames = getTeamNames(data);
+            String home = teamNames.first().child(0).text();
+            String away = teamNames.last().child(0).text();
+            String url = teamNames.first().child(0).attr("href");
+            
+            Element opener = getOpener(data);
+            String over = opener.child(0).text();
+            String under = opener.child(1).text();
+            
+            System.out.printf("home: %s  away: %s%n over: %s  under: %s%n",
+                home, away, over, under);
+        }
+        
+        return null;
+    }
+    
+    /* */
+    private Elements getTeamNames(Element cs) {
+        return cs.getElementsByClass("team-name");
+    }
+    
+    /* */
+    private Element getOpener(Element cs) {
+        return cs.getElementsByClass("eventLine-opener").first();
     }
     
 }
