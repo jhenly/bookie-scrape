@@ -74,7 +74,7 @@ import java.util.Properties;
 final class WorkbookProperties extends AbstractProperties {
     // TODO remove CONFIG_CLASS_PATH <- it's just for debugging
     private final String CONFIG_CLASS_PATH = "./config/config.properties";
-
+    
     private final Properties props;
     private final String excelFilePath;
     private final List<String> allSheets;
@@ -84,37 +84,33 @@ final class WorkbookProperties extends AbstractProperties {
     
     // don't subclass this class
     @SuppressWarnings("unused")
-    private WorkbookProperties() {
-        throw new UnsupportedOperationException();
-    }
+    private WorkbookProperties() { throw new UnsupportedOperationException(); }
     
     WorkbookProperties(String propertiesFile)
-    throws RequiredPropertyNotFoundException, IOException
-    {
+        throws RequiredPropertyNotFoundException, IOException {
         this(propertiesFile, null);
     }
     
     // NOTE: do not change the order of calls in the following constructor, some
     // calls depend on other calls happening prior
     WorkbookProperties(String propertiesFile, String pathToExcelFile)
-    throws IOException, RequiredPropertyNotFoundException
-    {
+        throws IOException, RequiredPropertyNotFoundException {
         props = loadProps(propertiesFile);
-
+        
         if (pathToExcelFile != null) {
             excelFilePath = getRequiredPropertyOrThrow(EXCEL_FILE_PATH);
         } else {
             excelFilePath = pathToExcelFile;
         }
-
+        
         allSheets = initAllSheets();
-
+        
         // init shared properties
         font = getStrPropOrDefault(SHEET_FONT);
         fontSize = getIntPropOrDefault(SHEET_FONT_SIZE);
         colSizeToFit = getBoolPropOrDefault(COLS_SIZETOFIT);
         rowSizeToFit = getBoolPropOrDefault(ROWS_SIZETOFIT);
-
+        
         // init all individual sheet properties
         sheetProps = loadSheetProperties(allSheets);
     }
@@ -124,8 +120,7 @@ final class WorkbookProperties extends AbstractProperties {
         Properties props = new Properties();
         
         try (InputStream input = WorkbookProperties.class.getClassLoader()
-            .getResourceAsStream(filename))
-        {
+            .getResourceAsStream(filename)) {
             if (input == null) {
                 System.out.println("Sorry, unable to find " + filename);
             }
@@ -140,14 +135,13 @@ final class WorkbookProperties extends AbstractProperties {
     
     /* splits comma separated sheet names to an unmodifiable list, or throws */
     private List<String> initAllSheets()
-        throws RequiredPropertyNotFoundException
-    {
+        throws RequiredPropertyNotFoundException {
         // will throw if ALL_SHEETS property is not in config.properties
         String tmpAllSheets = getRequiredPropertyOrThrow(ALL_SHEETS);
-
+        
         String[] sheetNames = tmpAllSheets.split(",");
         List<String> nonEmptySheetNames = new ArrayList<>(sheetNames.length);
-
+        
         // iterate over sheetNames, remove trail/leading whitespace and add to
         // list if not an empty string
         for (int i = 0; i < sheetNames.length; i++) {
@@ -156,15 +150,14 @@ final class WorkbookProperties extends AbstractProperties {
                 nonEmptySheetNames.add(tmp);
             }
         }
-
+        
         // return unmodifiable list, it should not be changed
         return Collections.unmodifiableList(nonEmptySheetNames);
     }
-
+    
     /* helper method used by methods retrieving required properties */
     private String getRequiredPropertyOrThrow(String property)
-        throws RequiredPropertyNotFoundException
-    {
+        throws RequiredPropertyNotFoundException {
         String propValue = props.getProperty(property);
         if (propValue == null) {
             throw new RequiredPropertyNotFoundException(property,
@@ -172,14 +165,13 @@ final class WorkbookProperties extends AbstractProperties {
         }
         return propValue;
     }
-
+    
     /* overloaded helper method */
     private String getRequiredPropertyOrThrow(PropertyKey pk)
-        throws RequiredPropertyNotFoundException
-    {
+        throws RequiredPropertyNotFoundException {
         return getRequiredPropertyOrThrow(pk.key());
     }
-
+    
     /* helper int property getter */
     private int getIntPropOrDefault(String prop, int def) {
         String tmp = props.getProperty(prop);
@@ -190,13 +182,13 @@ final class WorkbookProperties extends AbstractProperties {
             } catch (NumberFormatException nfe) {
                 return def;
             }
-
+            
             return (val >= 0) ? val : def;
         }
-
+        
         return def;
     }
-
+    
     /* helper int property getter */
     private int getIntPropOrDefault(PropertyKey pk) {
         return getIntPropOrDefault(pk.key(), pk.idef());
@@ -217,12 +209,12 @@ final class WorkbookProperties extends AbstractProperties {
     private String getStrPropOrDefault(PropertyKey pk) {
         return getStrPropOrDefault(pk.key(), pk.sdef());
     }
-
+    
     /* helper string property getter */
     private String getStrPropOrDefault(String sheet, PropertyKey pk) {
         return getStrPropOrDefault(sheet + pk.key(), pk.sdef());
     }
-
+    
     /* helper boolean property getter */
     private boolean getBoolPropOrDefault(String prop, boolean def) {
         String tmp = props.getProperty(prop);
@@ -233,12 +225,12 @@ final class WorkbookProperties extends AbstractProperties {
     private boolean getBoolPropOrDefault(PropertyKey pk) {
         return getBoolPropOrDefault(pk.key(), pk.bdef());
     }
-
+    
     /* helper boolean property getter */
     private boolean getBoolPropOrDefault(String sheet, PropertyKey pk) {
         return getBoolPropOrDefault(sheet + pk.key(), pk.bdef());
     }
-
+    
     /* --- Public Accessors Section --- */
     
     /**
@@ -246,66 +238,84 @@ final class WorkbookProperties extends AbstractProperties {
      */
     @Override
     public String getExcelFilePath() { return excelFilePath; }
-
+    
     /**
      * @return returns an {@linkplain Collections#unmodifiableList(List)
      *         unmodifiable list} containing the Excel workbook's sheet names.
      */
     @Override
     public List<String> getSheetNames() { return allSheets; }
-
+    
     /**
      * @return font name used by all sheets
      */
     @Override
     public String getSheetFont() { return font; }
-
+    
     /**
      * @return font size used by all sheets
      */
     @Override
     public int getSheetFontSize() { return fontSize; }
-
+    
     /**
      * @return {@code true} if Excel column widths should fit their content,
      *         {@code false}
      */
     @Override
     public boolean getColSizeToFit() { return colSizeToFit; }
-
+    
     /**
      * @return {@code true} if Excel row heights should fit their content,
      *         otherwise {@code false}
      */
     @Override
     public boolean getRowSizeToFit() { return rowSizeToFit; }
-
+    
     /**
-     * @param index - which sheet's properties to retrieve
+     * @param index
+     *              - which sheet's properties to retrieve
      * @return the sheet properties associated with sheet index supplied
      */
     @Override
     public SheetDataStore getSheetProperties(int index) {
         return sheetProps.get(index);
     }
-
+    
+    /**
+     * @param name
+     *             - the name of the sheet's properties to retrieve
+     * @return the sheet properties associated with sheet name supplied
+     */
+    @Override
+    public SheetDataStore getSheetProperties(String name) {
+        for (SheetDataStore sds : sheetProps) {
+            if (sds.getSheetName().equals(name)) { return sds; }
+        }
+        
+        return null;
+    }
+    
     /* -- SheetProperties Section -- */
-
+    
     /* iterates over sheet names and creates sheet properties */
     private List<SheetDataStore> loadSheetProperties(List<String> sheets) {
         List<SheetDataStore> sprops = new ArrayList<>(sheets.size());
-
+        
         // build sheet properties for each sheet
         for (String sheetName : sheets) {
             sprops.add(buildSheetProperties(sheetName));
         }
-
+        
         return Collections.unmodifiableList(sprops);
     }
     
     /* builds sheet properties using the supplied sheet name */
     private SheetDataStore buildSheetProperties(String sheet) {
         SheetProperties sp = new SheetProperties();
+        
+        // set this sheet's sheet name
+        sp.sheetName = sheet;
         
         // if no url then default, will be handled later in mediator
         sp.scrapeUrl = getStrPropOrDefault(sheet, SCRAPE_URL);
@@ -315,23 +325,19 @@ final class WorkbookProperties extends AbstractProperties {
         sp.titleCol = getIntPropOrDefault(sheet, TITLE_COL);
         sp.opener = getBoolPropOrDefault(sheet, OPENER);
         sp.teamsCol = getIntPropOrDefault(sheet, TEAMS_COL);
-
+        
         // now we have to range check any row or column index, for instance
         // tableRow should be greater than titleRow
         int tmp;
-
+        
         // get tableRow prop, set it to titleRow + 1 if it's less than titleRow
         tmp = getIntPropOrDefault(sheet, SHEET_TABLE);
         sp.tableRow = (tmp > sp.titleRow) ? tmp : sp.titleRow + 1;
-
-        // get tableRow prop, set it to titleRow + 1 if it's less than titleRow
-        tmp = getIntPropOrDefault(sheet, SHEET_TABLE);
-        sp.tableRow = (tmp > sp.titleRow) ? tmp : sp.titleRow + 1;
-
+        
         // get openerCol prop, set it to teamsCol + 1 if it's less than teamsCol
         tmp = getIntPropOrDefault(sheet, OPENER_COL);
         sp.openerCol = (tmp > sp.teamsCol) ? tmp : sp.teamsCol + 1;
-
+        
         // get openerCol prop, set it to teamsCol + 1 if it's less than teamsCol
         tmp = getIntPropOrDefault(sheet, BOOKIE_COL);
         // account for a sheet not having an opener column
@@ -340,7 +346,7 @@ final class WorkbookProperties extends AbstractProperties {
         } else {
             sp.bookieCol = (tmp > sp.teamsCol) ? tmp : sp.teamsCol + 1;
         }
-
+        
         return sp;
     }
     
