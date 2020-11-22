@@ -19,7 +19,10 @@ public class Match {
         private Odds opener;
         private Odds[] odds;
         
-        MatchBuilder(int numBookies) { odds = new Odds[numBookies]; }
+        MatchBuilder(String date, int numBookies) {
+            this.date = date;
+            odds = new Odds[numBookies];
+        }
         
         public MatchBuilder date(String date) {
             this.date = date;
@@ -41,7 +44,7 @@ public class Match {
             return this;
         }
         
-        public MatchBuilder opener(int over, int under) {
+        public MatchBuilder opener(double over, double under) {
             this.opener = new Odds(over, under);
             return this;
         }
@@ -92,8 +95,8 @@ public class Match {
      * @param numBookies
      * @return
      */
-    public MatchBuilder createMatch(int numBookies) {
-        return new MatchBuilder(numBookies);
+    public static MatchBuilder createMatch(String date, int numBookies) {
+        return new MatchBuilder(date, numBookies);
     }
     
     /**
@@ -118,5 +121,16 @@ public class Match {
     public String getDate() { return date; }
     
     public String getUrl() { return url; }
+    
+    @Override
+    public String toString() {
+        String s = "";
+        
+        s = String.format(
+            "home: %s  away: %s  o-over: %.2f  o-under: %.2f  date: %s  url:  %s",
+            home, away, opener.getOver(), opener.getUnder(), date, url);
+        
+        return s;
+    }
     
 }
