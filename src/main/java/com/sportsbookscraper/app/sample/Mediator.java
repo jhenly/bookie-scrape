@@ -126,20 +126,28 @@ public class Mediator {
         
         scraper = new Scraper();
         for (String sheet : sheetNames) {
+            
+            // TODO remove this debugging conditional
+            if (!sheet.equals("NFL")) {
+                continue;
+            }
+            
             SheetDataStore sds = props.getSheetProperties(sheet);
             
             System.out.println("Scraping bookies for sheet: " + sheet);
             SheetData curSheetData = sheetData.get(sheet);
             curSheetData.setScrapedBookies(
-                getCurrentBookies(scraper, sds.getScrapeUrl()));
+                getCurrentBookies(scraper, sds.getScrapeUrl(), sheet));
         }
         
-        outputBookiesFromSheets(sheetData);
+        // outputBookiesFromSheets(sheetData);
     }
     
     
-    private List<Bookie> getCurrentBookies(Scraper scraper, String url) {
-        scraper.scrape(url);
+    private List<Bookie> getCurrentBookies(Scraper scraper, String url,
+        String sheetName) {
+        // TODO change this from debugging
+        scraper.debugScrape(url, sheetName);
         return scraper.getBookies();
     }
     
