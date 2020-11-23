@@ -75,4 +75,18 @@ public class DateGroup implements Iterable<Match> {
      */
     @Override
     public Iterator<Match> iterator() { return matches.iterator(); }
+    
+    /**
+     * A geniric {@code toString()} method.
+     * 
+     * @return a generic {@code toString()} of this object
+     */
+    @Override
+    public String toString() {
+        String s = "";
+        for (Match m : this) {
+            s += m.toString();
+        }
+        return s;
+    }
 }

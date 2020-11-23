@@ -13,10 +13,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 import org.apache.commons.logging.LogFactory;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -227,7 +223,7 @@ public class Scraper {
             HtmlPage page = openHtmlPage(site, timeout);
             
             // get list of all bookies
-            bookies = scrapeBookies(getCarouselBooksList(page));
+            bookies = scrapeBookies(page);
             
             // set page up for scraping
             // try {
@@ -247,7 +243,7 @@ public class Scraper {
             
             // try {
             // scrapeMatches(page, bookies.size());
-            scrapeMatchesHU(page, bookies.size());
+            scrapeMatches(page, bookies.size());
             // } catch (IOException ioe) {
             // ioe.printStackTrace();
             // }
@@ -333,54 +329,24 @@ public class Scraper {
     }
     
     /* */
-    private Document getCarouselBooksList(HtmlPage page) {
-        HtmlElement carouselBooksList = page
-            .getFirstByXPath("//div[@class='carousel-bookslist']");
-        
-        return Jsoup.parse(carouselBooksList.asXml());
-    }
-    
-    /* */
-    private List<Bookie> scrapeBookies(Document document) {
+    private List<Bookie> scrapeBookies(HtmlPage page) {
         List<Bookie> tmpBookies = new ArrayList<Bookie>();
-        Elements divElementsColumn = document.select("ul#booksCarousel");
+        DomElement divElementsColumn = page.getElementById("booksCarousel");
         
         int index = 0;
-        for (Element e : divElementsColumn.select("a#bookName")) {
-            if (e.text().strip().isEmpty())
+        for (DomNode node : divElementsColumn.getChildren()) {
+            String bookie = node.getTextContent().strip();
+            if (bookie.isEmpty())
                 continue;
             
-            tmpBookies.add(new Bookie(e.text().strip(), index));
+            tmpBookies.add(new Bookie(bookie, index));
             
             index += 1;
         }
+        tmpBookies.add(new Bookie("DUMMY", 30));
         
+        System.out.println("Num Bookies = " + index);
         return tmpBookies;
-    }
-    
-    /* */
-    private Document clickCarouselNextAndGetOddsGridContainer(HtmlPage page) {
-        HtmlElement carouselNext = page.getFirstByXPath(
-            "//div[@class='carousel-control']/a[@class='next']");
-        
-        if (carouselNext == null) {
-            log("[ERROR] carouselNext is null!", true);
-        }
-        
-        if (carouselNext instanceof HtmlAnchor) {
-            try {
-                page = ((HtmlAnchor) carouselNext).click();
-            } catch (IOException e) {
-                // TODO handle this exception
-                e.printStackTrace();
-            }
-            
-            client.waitForBackgroundJavaScript(1000);
-        } else {
-            log("[ERROR] carouselNext is not an HtmlAnchor!", true);
-        }
-        
-        return getOddsGridContainer(page);
     }
     
     /* */
@@ -433,13 +399,7 @@ public class Scraper {
     }
     
     /* */
-    private Document getOddsGridContainer(HtmlPage page) {
-        return Jsoup
-            .parse(page.getHtmlElementById("oddsGridContainer").asXml());
-    }
-    
-    /* */
-    private List<DateGroup> scrapeMatchesHU(HtmlPage page, int numBookies)
+    private List<DateGroup> scrapeMatches(HtmlPage page, int numBookies)
         throws IOException {
         if (page == null) {
             log("scrapeMatchesHU: page is null", true);
@@ -449,42 +409,43 @@ public class Scraper {
         HtmlDivision divSport4 = (HtmlDivision) page.getElementById("sport-4");
         String dateGroupsXPath = "./div[1]/div[@class='dateGroup']";
         
-        List<HtmlElement> dateGroups = divSport4.getByXPath(dateGroupsXPath);
+        List<HtmlElement> dateGroupDivs = divSport4.getByXPath(dateGroupsXPath);
         
-        log("dateGroups.size() =", dateGroups.size());
+        log("dateGroups.size() =", dateGroupDivs.size());
         
-        List<Match> matches = new ArrayList<Match>();
+        List<DateGroup> dateGroups = new ArrayList<DateGroup>();
         
-        for (HtmlElement dateGroup : dateGroups) {
-            HtmlDivision dateDiv = (HtmlDivision) dateGroup
+        for (HtmlElement dateGroupDiv : dateGroupDivs) {
+            HtmlDivision dateDiv = (HtmlDivision) dateGroupDiv
                 .getFirstByXPath(".//div[@class='date']");
             String date = dateDiv.asText().strip();
             
             log("dateGroup date: " + date);
             
-            matches.addAll(getAllMatchInfo(dateGroup, date));
+            dateGroups.add(getAllMatchInfo(page, dateGroupDiv, date));
         }
         
-        for (Match m : matches) {
-            log("logging match", m.toString());
+        for (DateGroup dg : dateGroups) {
+            log("logging match", dg.toString());
         }
         
         return null;
     }
     
-    private List<Match> getAllMatchInfo(HtmlElement dateGroup, String date) {
+    private DateGroup getAllMatchInfo(HtmlPage dom, HtmlElement dateGroupDiv,
+        String date) {
         String conSchedXpath = ".//div[@class='content-scheduled content-pre-game ']";
-        HtmlElement conSched = dateGroup.getFirstByXPath(conSchedXpath);
+        HtmlElement conSched = dateGroupDiv.getFirstByXPath(conSchedXpath);
         
-        List<Match> dateMatches = new ArrayList<Match>();
+        DateGroup dateGroup = new DateGroup(date);
         for (DomNode match : conSched.getChildren()) {
-            dateMatches.add(getMatchInfo(match, date));
+            dateGroup.addMatch(getMatchInfo(dom, match));
         }
         
-        return dateMatches;
+        return dateGroup;
     }
     
-    private Match getMatchInfo(DomNode matchDiv, String date) {
+    private Match getMatchInfo(HtmlPage dom, DomNode matchDiv) {
         MatchBuilder mb = Match.createMatch(getBookies().size());
         
         DomNode holder = matchDiv.getFirstChild();
@@ -492,7 +453,7 @@ public class Scraper {
         scrapeOpener(holder, mb);
         
         Match m = mb.build();
-        scrapeBookieOverUnders(matchDiv, m);
+        scrapeBookieOverUnders(dom, matchDiv, m);
         
         return m;
     }
@@ -516,47 +477,127 @@ public class Scraper {
         HtmlElement eOver = opener.getFirstByXPath("./div[1]");
         HtmlElement eUnder = opener.getFirstByXPath("./div[2]");
         
-        double over = domNodeTextToDouble(eOver);
-        double under = domNodeTextToDouble(eUnder);
+        String over = eOver.getTextContent().strip();
+        String under = eUnder.getTextContent().strip();
         
         mb.opener(over, under);
     }
     
-    private void scrapeBookieOverUnders(DomNode matchNode, Match match) {
+    private void scrapeBookieOverUnders(HtmlPage dom, DomNode matchNode,
+        Match match) {
         matchNode = matchNode.getFirstChild();
-        List<DomNode> bookieOverUnders = matchNode
-            .getByXPath("./div[@class='el-div eventLine-book']");
         
-        int i = 0;
-        for (DomNode overUnder : bookieOverUnders) {
-            DomNode eover = overUnder.getFirstByXPath("./div[1]");
-            DomNode eunder = overUnder.getFirstByXPath("./div[2]");
+        int bookiesSize = getBookies().size();
+        int skipCount = 10 - (bookiesSize % 10);
+        
+        // integer division means (29/10 == 2)
+        int needSkip = (bookiesSize / 10) * 10;
+        int prevCount = bookiesSize / 10;
+        
+        int bIndex = 0; // bookie index
+        while (bIndex < getBookies().size()) {
+            List<DomNode> bookieOverUnders = matchNode
+                .getByXPath("./div[@class='el-div eventLine-book']");
             
-            double over = domNodeTextToDouble(eover);
-            double under = domNodeTextToDouble(eunder);
+            for (DomNode overUnder : bookieOverUnders) {
+                if (bIndex > needSkip && skipCount > 0) {
+                    // skip already seen bookies on last carousel click
+                    skipCount -= 1;
+                    continue;
+                }
+                scrapeSingleBookieOdds(overUnder, match, bIndex);
+                bIndex += 1;
+            }
             
-            match.setBookieOdds(i, over, under);
+            try {
+                logger.flush();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             
-            i += 1;
+            clickCarouselNextAndGetContentScheduled(dom);
         }
         
+        for (int p = 0; p < prevCount; p++) {
+            clickCarouselPrevNTimes(dom);
+        }
+    }
+    
+    /* helper function used to scrape a single bookie odds */
+    private void scrapeSingleBookieOdds(DomNode overUnder, Match match,
+        int bIndex) {
+        DomNode eOver = overUnder.getFirstByXPath("./div[1]");
+        DomNode eUnder = overUnder.getFirstByXPath("./div[2]");
         
+        String over = eOver.getTextContent().strip();
+        String under = eUnder.getTextContent().strip();
+        
+        match.setBookieOdds(bIndex, over, under);
+    }
+    
+    /* */
+    private HtmlElement clickCarouselNextAndGetContentScheduled(HtmlPage page) {
+        DomElement carouselNext = page.getElementById("feedHeaderCarousel")
+            .getFirstElementChild().getFirstByXPath("./a[2]");
+        
+        if (carouselNext == null) {
+            log("[ERROR] carouselNext is null!", true);
+        } else {
+            log("carouselNext is not null");
+        }
+        
+        if (carouselNext instanceof HtmlAnchor) {
+            try {
+                page = ((HtmlAnchor) carouselNext).click();
+            } catch (IOException e) {
+                // TODO handle this exception
+                e.printStackTrace();
+            }
+            
+            client.waitForBackgroundJavaScript(1000);
+        } else {
+            log("[ERROR] carouselNext is not an HtmlAnchor!", true);
+        }
+        
+        String conSchedXpath = "//div[@class='content-scheduled content-pre-game ']";
+        
+        return page.getFirstByXPath(conSchedXpath);
+    }
+    
+    /* */
+    private HtmlElement clickCarouselPrevNTimes(HtmlPage page) {
+        DomElement carouselPrev = page.getElementById("feedHeaderCarousel")
+            .getFirstElementChild().getFirstByXPath("./a[1]");
+        
+        if (carouselPrev == null) {
+            log("[ERROR] carouselPrev is null!", true);
+        } else {
+            log("carouselPrev is not null");
+        }
+        
+        if (carouselPrev instanceof HtmlAnchor) {
+            try {
+                page = ((HtmlAnchor) carouselPrev).click();
+            } catch (IOException e) {
+                // TODO handle this exception
+                e.printStackTrace();
+            }
+            
+            client.waitForBackgroundJavaScript(1000);
+        } else {
+            log("[ERROR] carouselPrev is not an HtmlAnchor!", true);
+        }
+        
+        String conSchedXpath = "//div[@class='content-scheduled content-pre-game ']";
+        
+        return page.getFirstByXPath(conSchedXpath);
     }
     
     /* returns a DomNode's text content as a double, or 0.0 if no text */
     private double domNodeTextToDouble(DomNode node) {
         String nodeText = node.getTextContent().strip();
         return nodeText.isEmpty() ? 0.0 : Double.parseDouble(nodeText);
-    }
-    
-    /* */
-    private Elements getTeamNames(Element cs) {
-        return cs.getElementsByClass("team-name");
-    }
-    
-    /* */
-    private Element getOpener(Element cs) {
-        return cs.getElementsByClass("eventLine-opener").first();
     }
     
 }

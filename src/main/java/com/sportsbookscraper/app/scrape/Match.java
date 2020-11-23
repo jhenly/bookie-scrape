@@ -99,7 +99,7 @@ public class Match {
          *              - the opener's under odds
          * @return {@code this}, to allow for method chaining
          */
-        public MatchBuilder opener(double over, double under) {
+        public MatchBuilder opener(String over, String under) {
             this.opener = new Odds(over, under);
             return this;
         }
@@ -206,7 +206,7 @@ public class Match {
      * @param under
      *                    - the bookie's under odds
      */
-    public void setBookieOdds(int bookieIndex, double over, double under) {
+    public void setBookieOdds(int bookieIndex, String over, String under) {
         odds[bookieIndex] = new Odds(over, under);
     }
     
@@ -214,25 +214,24 @@ public class Match {
     
     
     /**
-     * Bla bla bla
+     * Mainly used for debugging.
      * 
      * @return a textual representation of the data that makes up this match
      *         instance
-     * @summary Bla bla bla
      */
     @Override
     public String toString() {
         String s = "";
         
         s = String.format(
-            "rot: %d  home: %s  away: %s  o-over: %.2f  o-under: %.2f  date: %s  url:  %s%n",
-            home, away, opener.getOver(), opener.getUnder(), time, url);
+            "rot: %d  home: %s  away: %s  o-over: %s  o-under: %s  time: %s  url:  %s%n",
+            rot, home, away, opener.getOver(), opener.getUnder(), time, url);
         
         
         for (int i = 0; i < odds.length; i++) {
             if (odds[i] == null) { break; }
             
-            s += String.format("  book[%d]: %.2f %.2f ", i, odds[i].getOver(),
+            s += String.format("  book[%d]: %s %s ", i, odds[i].getOver(),
                 odds[i].getUnder());
         }
         
@@ -250,7 +249,7 @@ public class Match {
      * @author Jonathan Henly
      */
     public static class Odds {
-        private double over, under;
+        private String over, under;
         
         /**
          * Constructs a new {@code Odds} instance.
@@ -260,7 +259,7 @@ public class Match {
          * @param under
          *              - the under odds
          */
-        private Odds(double over, double under) {
+        private Odds(String over, String under) {
             this.over = over;
             this.under = under;
         }
@@ -268,12 +267,12 @@ public class Match {
         /**
          * @return the over odds
          */
-        public double getOver() { return over; }
+        public String getOver() { return over; }
         
         /**
          * @return the under odds
          */
-        public double getUnder() { return under; }
+        public String getUnder() { return under; }
     }
     
     
