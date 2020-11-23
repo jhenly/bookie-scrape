@@ -13,9 +13,11 @@ public class Match {
      * @author Jonathan Henly
      */
     public static class MatchBuilder {
-        private int rot;
+        // private MatchBuilder members
         private String time;
+        private int homeRot;
         private String home;
+        private int awayRot;
         private String away;
         private String url;
         private Odds opener;
@@ -28,17 +30,21 @@ public class Match {
          * @param numBookies
          *                   - the number of bookies to be scraped
          */
-        private MatchBuilder(int numBookies) { odds = new Odds[numBookies]; }
+        private MatchBuilder(int numBookies) {
+            odds = new Odds[numBookies];
+            homeRot = -1;
+            awayRot = -1;
+        }
         
         /**
-         * Sets the match's ROT number.
+         * Sets the home team's ROT number.
          * 
          * @param rot
-         *            - the match's rot number
+         *            - the home team's rot number
          * @return {@code this}, to allow for method chaining
          */
-        public MatchBuilder rot(int rot) {
-            this.rot = rot;
+        public MatchBuilder homeRot(int rot) {
+            this.homeRot = rot;
             return this;
         }
         
@@ -63,6 +69,18 @@ public class Match {
          */
         public MatchBuilder home(String home) {
             this.home = home;
+            return this;
+        }
+        
+        /**
+         * Sets the away team's ROT number.
+         * 
+         * @param rot
+         *            - the away team's rot number
+         * @return {@code this}, to allow for method chaining
+         */
+        public MatchBuilder awayRot(int rot) {
+            this.homeRot = rot;
             return this;
         }
         
@@ -114,11 +132,10 @@ public class Match {
         public Match build() { return new Match(this); }
     }
     
-    // private members
-    private int rot;
+    // private Match members
     private String time;
-    private String home;
-    private String away;
+    private Team home;
+    private Team away;
     private String url;
     private Odds opener;
     private Odds[] odds;
@@ -126,10 +143,9 @@ public class Match {
     
     /* constructs a match from a passed in builder */
     private Match(MatchBuilder builder) {
-        rot = builder.rot;
         time = builder.time;
-        home = builder.home;
-        away = builder.away;
+        home = new Team(builder.homeRot, builder.home);
+        away = new Team(builder.awayRot, builder.away);
         url = builder.url;
         opener = builder.opener;
         odds = builder.odds;
@@ -158,35 +174,43 @@ public class Match {
      * 
      * @return this match's starting time
      */
-    public String getTime() { return time; }
+    public String time() { return time; }
     
     /**
      * Gets the match's ROT number.
      * 
      * @return this match's ROT number
      */
-    public int getRot() { return rot; }
+    public int homeRot() { return home.rot(); }
     
     /**
      * Gets the team name of this match's home team.
      * 
      * @return the home team's name
      */
-    public String getHome() { return home; }
+    public String home() { return home.name(); }
     
     /**
-     * Gets the team name of this match's away team.
+     * Gets the match's ROT number.
+     * 
+     * @return this match's ROT number
+     */
+    public int awayRot() { return away.rot(); }
+    
+    /**
+     * Gets the {@code Team} instance associated with the away team.
      * 
      * @return the away team's name
+     * @see Match.Team
      */
-    public String getAway() { return away; }
+    public String away() { return away.name(); }
     
     /**
      * Gets this match's url link.
      * 
      * @return this match's url link
      */
-    public String getUrl() { return url; }
+    public String url() { return url; }
     
     /**
      * Gets this match opener's over-under odds.
@@ -194,7 +218,7 @@ public class Match {
      * @return an {@linkplain Odds} instance containing the opener's over-under
      *         odds
      */
-    public Odds getOpener() { return opener; }
+    public Odds opener() { return opener; }
     
     /**
      * Sets a specified bookie's odds for this match.
@@ -210,6 +234,13 @@ public class Match {
         odds[bookieIndex] = new Odds(over, under);
     }
     
+    /**
+     * Gets the odds associated with a passed in bookie index.
+     * 
+     * @param bookieIndex
+     *                    - which bookie's odds to get
+     * @return the odds associated with the specified bookie index
+     */
     public Odds getBookieOdds(int bookieIndex) { return odds[bookieIndex]; }
     
     
@@ -224,27 +255,68 @@ public class Match {
         String s = "";
         
         s = String.format(
-            "rot: %d  home: %s  away: %s  o-over: %s  o-under: %s  time: %s  url:  %s%n",
-            rot, home, away, opener.getOver(), opener.getUnder(), time, url);
+            "home: [%d] %s  away: [%d] %s  o-over: %s  o-under: %s  time: %s  url:  %s%n",
+            home.rot(), home.name(), away.rot(), away.name(), opener.over(),
+            opener.under(), time, url);
         
         
         for (int i = 0; i < odds.length; i++) {
             if (odds[i] == null) { break; }
             
-            s += String.format("  book[%d]: %s %s ", i, odds[i].getOver(),
-                odds[i].getUnder());
+            s += String.format("  book[%d]: %s %s ", i, odds[i].over(),
+                odds[i].under());
         }
         
         return s;
     }
     
+    /**
+     * Class that represents a team.
+     * <p>
+     * This class contains two methods {@linkplain Team#rot() rot()} and
+     * {@linkplain Team#name() name()}, which return the team's ROT number and
+     * the team's name respectively.
+     * 
+     * @author Jonathan Henly
+     */
+    private static class Team {
+        private String name;
+        private int rot;
+        
+        /**
+         * Constructs a new {@code Team} instance.
+         * 
+         * @param rot
+         *             - the team's ROT number
+         * @param name
+         *             - the name of the team
+         */
+        private Team(int rot, String name) {
+            this.rot = rot;
+            this.name = name;
+        }
+        
+        /**
+         * Gets this {@code Team} instance's ROT number.
+         * 
+         * @return this team's ROT number
+         */
+        private int rot() { return rot; }
+        
+        /**
+         * Gets this {@code Team} instance's name.
+         * 
+         * @return this team's name
+         */
+        private String name() { return name; }
+    }
     
     /**
      * Class that represents the over under odds.
      * <p>
-     * This class contains two methods {@linkplain Odds#getOver() getOver()} and
-     * {@linkplain Odds#getOver() getUnder()}, which return the over and under
-     * odds respectively.
+     * This class contains two methods {@linkplain Odds#over() over()} and
+     * {@linkplain Odds#under() under()}, which return the over and under odds
+     * respectively.
      * 
      * @author Jonathan Henly
      */
@@ -265,14 +337,18 @@ public class Match {
         }
         
         /**
-         * @return the over odds
+         * Gets this {@code Odds} instance's over.
+         * 
+         * @return this {@code Odds} instance's over
          */
-        public String getOver() { return over; }
+        public String over() { return over; }
         
         /**
-         * @return the under odds
+         * Gets this {@code Odds} instance's under.
+         * 
+         * @return this {@code Odds} instance's under
          */
-        public String getUnder() { return under; }
+        public String under() { return under; }
     }
     
     
