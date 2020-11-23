@@ -438,36 +438,6 @@ public class Scraper {
             .parse(page.getHtmlElementById("oddsGridContainer").asXml());
     }
     
-    
-    /* */
-    private List<DateGroup> scrapeMatches(HtmlPage page, int numBookies)
-        throws IOException {
-        if (page == null) {
-            log("scrapeMatches: page is null", true);
-        } else {
-            
-        }
-        
-        Document doc = Jsoup.parse(page.asXml());
-        
-        List<DateGroup> tmpMatches = new ArrayList<DateGroup>();
-        
-        Element prev = doc.selectFirst(".carousel-control.prev");
-        Element next = doc.selectFirst(".carousel-control.next");
-        
-        Elements dateGroup = doc.select(".data .dateGroup");
-        log("dataGroup.size() =", dateGroup.size());
-        
-        for (Element group : dateGroup) {
-            String date = group.select(".date").text().trim();
-            DateGroup mg = new DateGroup(date);
-            
-            System.out.println(date);
-            parseEventLine(group);
-        }
-        return null;
-    }
-    
     /* */
     private List<DateGroup> scrapeMatchesHU(HtmlPage page, int numBookies)
         throws IOException {
@@ -476,18 +446,8 @@ public class Scraper {
             return null;
         }
         
-        // Document doc = Jsoup.parse(page.asXml());
-        
-        List<DateGroup> tmpMatches = new ArrayList<DateGroup>();
-        
-        // Elements dateGroup = doc.select(".data .dateGroup");
-        // HtmlElement data = page.getFirstByXPath("//div[@class='data']");
-        // log("data.asXml() = \n", data.asXml());
-        
         HtmlDivision divSport4 = (HtmlDivision) page.getElementById("sport-4");
         String dateGroupsXPath = "./div[1]/div[@class='dateGroup']";
-        
-        // log("divSport4.asXml() = \n", divSport4.asXml());
         
         List<HtmlElement> dateGroups = divSport4.getByXPath(dateGroupsXPath);
         
@@ -496,14 +456,11 @@ public class Scraper {
         List<Match> matches = new ArrayList<Match>();
         
         for (HtmlElement dateGroup : dateGroups) {
-            
-            // String date = group.select(".date").text().trim();
             HtmlDivision dateDiv = (HtmlDivision) dateGroup
                 .getFirstByXPath(".//div[@class='date']");
             String date = dateDiv.asText().strip();
             
             log("dateGroup date: " + date);
-            // parseEventLine(group);
             
             matches.addAll(getAllMatchInfo(dateGroup, date));
         }
@@ -521,74 +478,75 @@ public class Scraper {
         
         List<Match> dateMatches = new ArrayList<Match>();
         for (DomNode match : conSched.getChildren()) {
-            DomNode holder = match.getFirstChild();
-            
-            dateMatches.add(getMatchInfo(holder, date));
+            dateMatches.add(getMatchInfo(match, date));
         }
         
         return dateMatches;
     }
     
-    private Match getMatchInfo(DomNode holder, String date) {
-        MatchBuilder mb = Match.createMatch(date, getBookies().size());
+    private Match getMatchInfo(DomNode matchDiv, String date) {
+        MatchBuilder mb = Match.createMatch(getBookies().size());
         
+        DomNode holder = matchDiv.getFirstChild();
         scrapeTeamsAndUrl(holder, mb);
         scrapeOpener(holder, mb);
         
-        return mb.build();
+        Match m = mb.build();
+        scrapeBookieOverUnders(matchDiv, m);
+        
+        return m;
     }
     
     private void scrapeTeamsAndUrl(DomNode holder, MatchBuilder mb) {
         HtmlElement teams = holder
             .getFirstByXPath("./div[@class='el-div eventLine-team']");
+        
         HtmlAnchor home = (HtmlAnchor) teams.getFirstByXPath("./div[1]/span/a");
         HtmlAnchor away = (HtmlAnchor) teams.getFirstByXPath("./div[2]/span/a");
         
-        mb.home(home.getTextContent().strip())
-            .away(away.getTextContent().strip()).url(home.getHrefAttribute());
+        mb.home(home.getTextContent().strip());
+        mb.away(away.getTextContent().strip());
+        mb.url(home.getHrefAttribute());
         
     }
     
     private void scrapeOpener(DomNode holder, MatchBuilder mb) {
         HtmlElement opener = holder
             .getFirstByXPath("./div[@class='el-div eventLine-opener']");
-        HtmlElement overEle = opener.getFirstByXPath("./div[1]");
-        HtmlElement underEle = opener.getFirstByXPath("./div[2]");
+        HtmlElement eOver = opener.getFirstByXPath("./div[1]");
+        HtmlElement eUnder = opener.getFirstByXPath("./div[2]");
         
-        String sover = overEle.getTextContent().strip();
-        String sunder = underEle.getTextContent().strip();
-        
-        double over = (sover.isEmpty()) ? 0.0 : Double.parseDouble(sover);
-        double under = (sunder.isEmpty()) ? 0.0 : Double.parseDouble(sunder);
+        double over = domNodeTextToDouble(eOver);
+        double under = domNodeTextToDouble(eUnder);
         
         mb.opener(over, under);
     }
     
-    private List<DateGroup> parseEventLine(Element dateGroup) {
-        List<DateGroup> tmpMatches = new ArrayList<DateGroup>();
+    private void scrapeBookieOverUnders(DomNode matchNode, Match match) {
+        matchNode = matchNode.getFirstChild();
+        List<DomNode> bookieOverUnders = matchNode
+            .getByXPath("./div[@class='el-div eventLine-book']");
         
-        Element eventLines = dateGroup.getElementsByClass("eventLines").first();
-        Element contentScheduled = eventLines
-            .getElementsByClass("content-scheduled").first();
-        
-        for (Element game : contentScheduled.children()) {
-            Element data = game.children().first();
+        int i = 0;
+        for (DomNode overUnder : bookieOverUnders) {
+            DomNode eover = overUnder.getFirstByXPath("./div[1]");
+            DomNode eunder = overUnder.getFirstByXPath("./div[2]");
             
-            Elements teamNames = getTeamNames(data);
-            String home = teamNames.first().child(0).text();
-            String away = teamNames.last().child(0).text();
-            String url = teamNames.first().child(0).attr("href");
+            double over = domNodeTextToDouble(eover);
+            double under = domNodeTextToDouble(eunder);
             
-            Element opener = getOpener(data);
-            String over = opener.child(0).text();
-            String under = opener.child(1).text();
+            match.setBookieOdds(i, over, under);
             
-            log("teams and opener",
-                String.format("home: %s  away: %s%n over: %s  under: %s%n",
-                    home, away, over, under));
+            i += 1;
         }
         
-        return null;
+        
+    }
+    
+    /* returns a DomNode's text content as a double, or 0.0 if no text */
+    private double domNodeTextToDouble(DomNode node) {
+        String nodeText = node.getTextContent().strip();
+        return nodeText.isEmpty() ? 0.0 : Double.parseDouble(nodeText);
     }
     
     /* */

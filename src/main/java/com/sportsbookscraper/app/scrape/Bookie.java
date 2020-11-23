@@ -1,9 +1,10 @@
 package com.sportsbookscraper.app.scrape;
 
 /**
+ * Class that represents a bookie with a position index used when writing to an
+ * Excel sheet.
  * 
  * @author Jonathan Henly
- *
  */
 public class Bookie {
     private String name;

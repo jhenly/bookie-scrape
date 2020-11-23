@@ -1,30 +1,78 @@
 package com.sportsbookscraper.app.scrape;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
-public class DateGroup {
-	private String date;
-	private List<Match> matches;
-	
-	public DateGroup(String date) {
-		this.date = date;
-		matches = new ArrayList<Match>();
-	}
-	
-	public String getDate() {
-		return date;
-	}
-	
-	public List<Match> getMatches() {
-		return matches;
-	}
-	
-	public void addMatch(Match match) {
-		matches.add(match);
-	}
-	
-	public int size() {
-		return matches.size();
-	}
+/**
+ * Class to contain the matches scraped from a date group.
+ * <p>
+ * This class has a {@linkplain #listIterator()} and an {@linkplain #iterator()}
+ * method to allow for iterating over the list of scraped matches.
+ * 
+ * @author Jonathan Henly
+ */
+public class DateGroup implements Iterable<Match> {
+    private String date;
+    private List<Match> matches;
+    
+    /**
+     * Constructs a new {@code DateGroup} instance associated with the passed in
+     * date.
+     * 
+     * @param date
+     *             - the date of this date group
+     */
+    public DateGroup(String date) {
+        this.date = date;
+        matches = new ArrayList<Match>();
+    }
+    
+    /**
+     * @return the date associated with this {@code DateGroup} instance
+     */
+    public String getDate() { return date; }
+    
+    /**
+     * @return a list of the matches associated with this {@code DateGroup}
+     *         instance
+     */
+    public List<Match> getMatches() { return matches; }
+    
+    /**
+     * Adds a {@code Match} instance to the end of the matches list in this
+     * {@code DateGroup} instance.
+     * 
+     * @param match
+     *              the match to add
+     */
+    public void addMatch(Match match) { matches.add(match); }
+    
+    /**
+     * @return the size of the list of matches in this {@code DateGroup}
+     *         instance
+     */
+    public int size() { return matches.size(); }
+    
+    /**
+     * Returns a {@code ListIterator<Match>} over the matches in this
+     * {@code DateGroup} instance.
+     * 
+     * @return a list iterator over the matches in this date group
+     * @see ListIterator
+     */
+    public ListIterator<Match> listIterator() {
+        return matches.listIterator();
+    }
+    
+    /**
+     * Returns an {@code Iterator<Match>} over the matches in this
+     * {@code DateGroup} instance.
+     * 
+     * @return an iterator over the matches in this date group
+     * @see Iterator
+     */
+    @Override
+    public Iterator<Match> iterator() { return matches.iterator(); }
 }
