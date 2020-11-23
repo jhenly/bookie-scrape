@@ -3,11 +3,11 @@ package com.sportsbookscraper.app.scrape;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MatchGroup {
+public class DateGroup {
 	private String date;
 	private List<Match> matches;
 	
-	public MatchGroup(String date) {
+	public DateGroup(String date) {
 		this.date = date;
 		matches = new ArrayList<Match>();
 	}

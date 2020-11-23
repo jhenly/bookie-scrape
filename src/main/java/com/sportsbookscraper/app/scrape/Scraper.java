@@ -138,7 +138,7 @@ public class Scraper {
     private WebClient client;
     private boolean closed;
     private List<Bookie> bookies;
-    private List<MatchGroup> matchGroups;
+    private List<DateGroup> matchGroups;
     
     /**
      * Creates a {@code Scraper} instance backed by a {@code WebClient} using
@@ -440,7 +440,7 @@ public class Scraper {
     
     
     /* */
-    private List<MatchGroup> scrapeMatches(HtmlPage page, int numBookies)
+    private List<DateGroup> scrapeMatches(HtmlPage page, int numBookies)
         throws IOException {
         if (page == null) {
             log("scrapeMatches: page is null", true);
@@ -450,7 +450,7 @@ public class Scraper {
         
         Document doc = Jsoup.parse(page.asXml());
         
-        List<MatchGroup> tmpMatches = new ArrayList<MatchGroup>();
+        List<DateGroup> tmpMatches = new ArrayList<DateGroup>();
         
         Element prev = doc.selectFirst(".carousel-control.prev");
         Element next = doc.selectFirst(".carousel-control.next");
@@ -460,7 +460,7 @@ public class Scraper {
         
         for (Element group : dateGroup) {
             String date = group.select(".date").text().trim();
-            MatchGroup mg = new MatchGroup(date);
+            DateGroup mg = new DateGroup(date);
             
             System.out.println(date);
             parseEventLine(group);
@@ -469,7 +469,7 @@ public class Scraper {
     }
     
     /* */
-    private List<MatchGroup> scrapeMatchesHU(HtmlPage page, int numBookies)
+    private List<DateGroup> scrapeMatchesHU(HtmlPage page, int numBookies)
         throws IOException {
         if (page == null) {
             log("scrapeMatchesHU: page is null", true);
@@ -478,7 +478,7 @@ public class Scraper {
         
         // Document doc = Jsoup.parse(page.asXml());
         
-        List<MatchGroup> tmpMatches = new ArrayList<MatchGroup>();
+        List<DateGroup> tmpMatches = new ArrayList<DateGroup>();
         
         // Elements dateGroup = doc.select(".data .dateGroup");
         // HtmlElement data = page.getFirstByXPath("//div[@class='data']");
@@ -564,8 +564,8 @@ public class Scraper {
         mb.opener(over, under);
     }
     
-    private List<MatchGroup> parseEventLine(Element dateGroup) {
-        List<MatchGroup> tmpMatches = new ArrayList<MatchGroup>();
+    private List<DateGroup> parseEventLine(Element dateGroup) {
+        List<DateGroup> tmpMatches = new ArrayList<DateGroup>();
         
         Element eventLines = dateGroup.getElementsByClass("eventLines").first();
         Element contentScheduled = eventLines
