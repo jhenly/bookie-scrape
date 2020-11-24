@@ -3,6 +3,7 @@ package com.sportsbookscraper.app.excel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -108,11 +109,28 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
         return strings;
     }
     
+    /**
+     * Used to tell the reader when to stop reading.
+     * 
+     * @author Jonathan Henly
+     */
+    public enum StopOn {
+        /** stop reading when a blank cell is encountered */
+        BLANK,
+        /** stop reading when a null cell is encountered */
+        NULL,
+        /** stop reading when a numeric cell is encountered */
+        NUMBER,
+        /** stop reading when a string cell is encountered */
+        STRING;
+    }
+    
     public class RangeReaderBuilder {
         private WorkbookReader ref;
         private CellRange range;
         private Sheet sheet;
         private String nameOfSheet;
+        private StopOn stopOn;
         
         protected RangeReaderBuilder(WorkbookReader ref, CellRange range) {
             this.ref = ref;
@@ -121,8 +139,7 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
         
         protected RangeReaderBuilder(WorkbookReader ref, Sheet sheet,
             CellRange range) {
-            this.ref = ref;
-            this.range = range;
+            this(ref, range);
             this.sheet = sheet;
         }
         
@@ -134,12 +151,9 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
          */
         public RangeReaderBuilder in(String sheetName)
             throws SheetNotFoundException {
-            Sheet load = ref.getSheetFromWorkbook(sheetName);
             
-            if (load == null) { throw new SheetNotFoundException(sheetName); }
-            
+            sheet = ref.getSheetFromWorkbook(sheetName);
             nameOfSheet = sheetName;
-            sheet = load;
             return this;
         }
         
@@ -162,7 +176,7 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
                             + "'");
                 }
             }
-            return (new RangeReader(sheet, range)).readRange();
+            return (new RangeReader(this)).readRange();
         }
         
     }
@@ -175,17 +189,12 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
     public class RangeReader {
         private Sheet sheet;
         private CellRange range;
+        private StopOn stopOn;
         
-        private int row; // current row in range
-        private int col; // current column in range
-        
-        
-        protected RangeReader(Sheet sht, CellRange rng) {
-            sheet = sht;
-            range = rng;
-            
-            row = range.rowStart();
-            col = range.colStart();
+        protected RangeReader(RangeReaderBuilder builder) {
+            sheet = builder.sheet;
+            range = builder.range;
+            stopOn = builder.stopOn;
         }
         
         protected List<String> readRange() {
@@ -197,8 +206,14 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
                 case ROW:
                     return readRowRange();
                 
+                case OPEN_ROW:
+                    return readOpenRowRange();
+                
                 case COL:
                     return readColRange();
+                
+                case OPEN_COL:
+                    return readOpenColRange();
                 
                 case ROW_COL:
                     return readRowColRange();
@@ -211,8 +226,9 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
         /* returns a list containing the value of a single cell */
         private List<String> readCellRange() {
             List<String> list = new ArrayList<String>(1);
-            Row rs = sheet.getRow(row);
-            Cell cell = rs.getCell(col);
+            Row rs = sheet.getRow(range.rowStart());
+            Cell cell = rs.getCell(range.colStart());
+            
             list.add(getCellValueAsString(cell));
             
             return list;
@@ -231,6 +247,21 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
             return list;
         }
         
+        /* returns a list containing the values of cells in a open row range */
+        private List<String> readOpenRowRange() {
+            List<String> list = new ArrayList<String>();
+            
+            Row rs = sheet.getRow(range.rowStart());
+            int end = rs.getLastCellNum();
+            
+            for (int c = range.colStart(); c <= end; c++) {
+                Cell cell = rs.getCell(c);
+                list.add(getCellValueAsString(cell));
+            }
+            
+            return list;
+        }
+        
         /* returns a list containing the values of cells in a col range */
         private List<String> readColRange() {
             List<String> list = new ArrayList<String>();
@@ -240,6 +271,25 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
                 Row curRow = sheet.getRow(r);
                 Cell cell = curRow.getCell(column);
                 list.add(getCellValueAsString(cell));
+            }
+            
+            return list;
+        }
+        
+        /* returns a list containing the values of cells in an open col range */
+        private List<String> readOpenColRange() {
+            List<String> list = new ArrayList<String>();
+            
+            int column = range.colStart();
+            Iterator<Row> ri = sheet.iterator();
+            // iterate to starting row
+            for (int count = 0; count < range.rowStart(); count++) {
+                ri.next();
+            }
+            // read column from each row, until no more rows
+            while (ri.hasNext()) {
+                Row cur = ri.next();
+                list.add(cur.getCell(column).getStringCellValue());
             }
             
             return list;
@@ -309,6 +359,14 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
         } else {
             return new RangeReaderBuilder(this, currentSheet, range);
         }
+    }
+    
+    public RangeReaderBuilder forOpenRowRange(int row, int start) {
+        return forRange(CellRange.openRowRange(row, start));
+    }
+    
+    public RangeReaderBuilder forOpenColRange(int row, int start) {
+        return forRange(CellRange.openRowRange(row, start));
     }
     
     

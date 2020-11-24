@@ -82,13 +82,20 @@ public abstract class AbstractWorkbook implements AutoCloseable {
      * @return the specified sheet from the workbook if it exists, otherwise
      *         {@code null}
      * @throws NullPointerException
-     *                              if {@link #close()} has been called on this
-     *                              workbook
+     *                                if {@link #close()} has been called on
+     *                                this workbook
+     * @throws SheetNotFoundException
+     *                                if the workbook does not contain the
+     *                                specified sheet name
      */
     protected Sheet getSheetFromWorkbook(String sheetName) {
         throwIfClosed(); // throw NPE if close() has been called
+        Sheet ret = workbook.getSheet(sheetName);
         
-        return workbook.getSheet(sheetName);
+        // if ret is null then the workbook does not contain the sheet
+        if (ret == null) { throw new SheetNotFoundException(sheetName); }
+        
+        return ret;
     }
     
     

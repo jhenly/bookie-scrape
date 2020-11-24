@@ -33,8 +33,12 @@ public class CellRange {
         CELL,
         /** Denotes a range of cells in a row. */
         ROW,
+        /** Denotes an open ended range of cells in a row. */
+        OPEN_ROW,
         /** Denotes a range of cells in a column. */
         COL,
+        /** Denotes an open ended range of cells in a col. */
+        OPEN_COL,
         /** Denotes a rectangular range of cells in rows and columns. */
         ROW_COL;
     }
@@ -98,6 +102,7 @@ public class CellRange {
         return range(row, row, col, col);
     }
     
+    
     /**
      * Creates a cell range from a row index and the starting and ending column
      * indexes, representing a range of cells in a row.
@@ -121,6 +126,26 @@ public class CellRange {
         return range(row, row, start, end);
     }
     
+    
+    /**
+     * Creates an open ended cell range from a row index and a starting column
+     * index, representing an open ended range of cells in a row.
+     * <p>
+     * <b>Note:</b> in Excel row and column indexes start at 1, but this class
+     * starts row and column indexes at 0 (i.e. they are zero-indexed).
+     *
+     * @param row
+     *              - the row index
+     * @param start
+     *              - the starting column index
+     * 
+     * @return an open ended range of cells in a specified row
+     */
+    static CellRange openRowRange(int row, int start) {
+        return range(row, row, start, Integer.MIN_VALUE);
+    }
+    
+    
     /**
      * Creates a cell range from a column index and the starting and ending row
      * indexes, representing a range of cells in a column.
@@ -143,6 +168,26 @@ public class CellRange {
     public static CellRange colRange(int col, int start, int end) {
         return range(start, end, col, col);
     }
+    
+    
+    /**
+     * Creates an open ended cell range from a column index and a starting row
+     * index, representing an open ended range of cells in a column.
+     * <p>
+     * <b>Note:</b> in Excel row and column indexes start at 1, but this class
+     * starts row and column indexes at 0 (i.e. they are zero-indexed).
+     *
+     * @param col
+     *              - the row index
+     * @param start
+     *              - the starting column index
+     * 
+     * @return an open ended range of cells in a specified row
+     */
+    static CellRange openColRange(int col, int start) {
+        return range(start, Integer.MIN_VALUE, col, col);
+    }
+    
     
     /**
      * Creates a cell range from a starting and ending column index, and a row
@@ -175,12 +220,12 @@ public class CellRange {
      * @return a rectangular range of cells
      */
     public static CellRange range(int rs, int re, int cs, int ce) {
-        try {
+        // handle open ended ranges negative checks separately
+        if ((rs == re && ce == Integer.MIN_VALUE)
+            || (cs == ce && re == Integer.MIN_VALUE)) {
+            throwIfNegativeRange(rs, cs);
+        } else {
             throwIfNegativeRange(rs, re, cs, ce);
-        } catch (IllegalArgumentException iae) {
-            throw new IllegalArgumentException(String
-                .format("range indexes are not allowed to be negative, received"
-                    + " ( %d, %d, %d, %d)", rs, re, cs, ce));
         }
         
         return new CellRange(rs, re, cs, ce);
@@ -200,12 +245,22 @@ public class CellRange {
     // used by static creators
     private CellRange(int rs, int re, int cs, int ce) {
         range = new int[] { rs, re, cs, ce };
+        
+        // assign correct RangeType based on equality of parameters
         if ((rs == re) && (cs == ce)) {
             type = RangeType.CELL;
         } else if (rs == re) {
             type = RangeType.ROW;
+            
+            if (ce == Integer.MIN_VALUE) {
+                type = RangeType.OPEN_ROW;
+            }
         } else if (cs == ce) {
             type = RangeType.COL;
+            
+            if (re == Integer.MIN_VALUE) {
+                type = RangeType.OPEN_COL;
+            }
         } else {
             type = RangeType.ROW_COL;
         }
@@ -230,9 +285,29 @@ public class CellRange {
     
     /* throws IAE if negative */
     private static void throwIfNegativeRange(int... idxs) {
-        for (int i = 0; i < idxs.length; i++) {
-            // this IAE will *probably* be caught and re-thrown
-            if (idxs[i] < 0) { throw new IllegalArgumentException(); }
+        boolean pass = true;
+        int i;
+        for (i = 0; i < idxs.length; i++) {
+            if (idxs[i] < 0) {
+                pass = false;
+                break;
+            }
+            
+        }
+        if (!pass) {
+            throw new IllegalArgumentException(String
+                .format("range indexes are not allowed to be negative, recieved"
+                    + " paramater " + i + "=" + idxs[i]));
+        }
+    }
+    
+    /* throws IAE if row or column is negative or start is negative */
+    private static void throwIfNegativeRange(int rc, int start) {
+        // this IAE will *probably* be caught and re-thrown
+        if (rc < 0 || start < 0) {
+            throw new IllegalArgumentException(
+                "range indexes are not allowed to be negative, recieved" + rc
+                    + " & " + start);
         }
     }
     
