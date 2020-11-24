@@ -35,13 +35,6 @@
       <scope>compile</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.jsoup</groupId>
-      <artifactId>jsoup</artifactId>
-      <version>1.13.1</version>
-      <scope>compile</scope>
-    </dependency>
-
     <!-- Begin Apache POI Dependencies -->
     <dependency>
       <groupId>org.apache.poi</groupId>
@@ -199,7 +192,6 @@
           <configuration>
             <!-- Note: I'm on Unix with OpenJDK-14 and my $JAVA_HOME="/home/.../jdk-14.0.1/bin" -->
 	    <executable><!-- PATH TO JDK 'bin' FOLDER --></executable>
-            
             <!-- used to test different 'public static void main(String[] args)' classes without changing pom.xml -->   
             <!-- via: 'clean javafx:run "-Dpackage.main=sample.Main"' -->
             <mainClass>com.sportsbookscraper.app.${foo}</mainClass>
