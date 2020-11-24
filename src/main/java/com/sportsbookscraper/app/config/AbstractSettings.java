@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Jonathan Henly
  */
-public abstract class AbstractProperties implements DSProperties {
+public abstract class AbstractSettings implements Settings {
     
     /* end of constants */
     
@@ -20,7 +20,7 @@ public abstract class AbstractProperties implements DSProperties {
     
     
     // To Allow this class to be subclassed.
-    protected AbstractProperties() {}
+    protected AbstractSettings() {}
     
     /**
      * @return the path to the Excel file
@@ -67,7 +67,7 @@ public abstract class AbstractProperties implements DSProperties {
      * @return the sheet properties associated with sheet index supplied
      */
     @Override
-    public abstract SheetDataStore getSheetProperties(int index);
+    public abstract SheetSettings getSheetProperties(int index);
     
     /**
      * @param name
@@ -75,7 +75,7 @@ public abstract class AbstractProperties implements DSProperties {
      * @return the sheet properties associated with sheet name supplied
      */
     @Override
-    public abstract SheetDataStore getSheetProperties(String name);
+    public abstract SheetSettings getSheetProperties(String name);
     
     
     /**
@@ -83,8 +83,7 @@ public abstract class AbstractProperties implements DSProperties {
      *
      * @author Jonathan Henly
      */
-    protected static class SheetProperties
-        implements DSProperties.SheetDataStore {
+    protected static class SheetProperties implements Settings.SheetSettings {
         /** sheet's name */
         protected String sheetName;
         /** sheet's url to scrape */
@@ -105,6 +104,8 @@ public abstract class AbstractProperties implements DSProperties {
         protected int openerCol;
         /** the sheet's column index to start listing bookie names */
         protected int bookieCol;
+        /** whether or not the existing order of bookies should be kept */
+        protected boolean keepExisting;
         
         // sole purpose is for use by sub classes
         protected SheetProperties() {}
@@ -170,6 +171,15 @@ public abstract class AbstractProperties implements DSProperties {
          */
         @Override
         public int getBookieCol() { return bookieCol; }
+        
+        /**
+         * Gets whether the existing order of bookies should be kept.
+         * 
+         * @return {@code true} if the existing order of bookies should be kept,
+         *         otherwise {@code false}
+         */
+        @Override
+        public boolean keepOrder() { return keepExisting; }
         
     } // private static class SheetProperties
     

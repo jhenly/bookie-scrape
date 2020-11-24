@@ -9,7 +9,7 @@ import java.nio.file.Path;
  * 
  * @author Jonathan Henly
  */
-public class RequiredPropertyNotFoundException extends Exception {
+public class RequiredSettingNotFoundException extends Exception {
 	private static final long serialVersionUID = -1207032861834691318L;
 
 	/**
@@ -21,7 +21,7 @@ public class RequiredPropertyNotFoundException extends Exception {
 	 * @param propsFilePath the {@code .properties} file path
 	 */
 	public
-	RequiredPropertyNotFoundException(String property, String propsFilePath)
+	RequiredSettingNotFoundException(String property, String propsFilePath)
 	{
 		super(combineIntoMessage(property, propsFilePath));
 	}
@@ -48,7 +48,7 @@ public class RequiredPropertyNotFoundException extends Exception {
 	 *                   this(String, String)}
 	 */
 	public
-	RequiredPropertyNotFoundException(String property, File propertiesFile)
+	RequiredSettingNotFoundException(String property, File propertiesFile)
 	{
 		this(property, propertiesFile.getAbsolutePath());
 	}
@@ -70,7 +70,7 @@ public class RequiredPropertyNotFoundException extends Exception {
 	 *                   this(String, String)}
 	 */
 	public
-	RequiredPropertyNotFoundException(String property, Path propertiesPath)
+	RequiredSettingNotFoundException(String property, Path propertiesPath)
 	{
 		this(property, propertiesPath.toFile());
 	}

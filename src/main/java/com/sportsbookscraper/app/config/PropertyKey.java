@@ -23,7 +23,8 @@ enum PropertyKey {
     SHEET_TABLE(".sheet.table", 1), TEAMS_COL(SHEET_TABLE + ".teams.col", 0),
     OPENER(SHEET_TABLE + ".opener", true),
     OPENER_COL(SHEET_TABLE + ".opener.col", 1),
-    BOOKIE_COL(SHEET_TABLE + ".bookie.col", 2);
+    BOOKIE_COL(SHEET_TABLE + ".bookie.col", 2),
+    KEEP_ORDER(SHEET_TABLE + ".bookie.keep.order", true);
     
     /* enum members */
     private String key; // the key in the properties file

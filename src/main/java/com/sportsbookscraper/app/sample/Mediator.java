@@ -7,16 +7,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.sportsbookscraper.app.config.DSProperties;
-import com.sportsbookscraper.app.config.DSProperties.SheetDataStore;
-import com.sportsbookscraper.app.config.PropertiesFactory;
-import com.sportsbookscraper.app.config.RequiredPropertyNotFoundException;
+import com.sportsbookscraper.app.config.RequiredSettingNotFoundException;
+import com.sportsbookscraper.app.config.Settings;
+import com.sportsbookscraper.app.config.Settings.SheetSettings;
+import com.sportsbookscraper.app.config.SettingsFactory;
 import com.sportsbookscraper.app.excel.CellRange;
 import com.sportsbookscraper.app.excel.SheetNotFoundException;
 import com.sportsbookscraper.app.excel.WorkbookFactory;
 import com.sportsbookscraper.app.excel.WorkbookReader;
-import com.sportsbookscraper.app.excel.WorkbookWriter;
 import com.sportsbookscraper.app.scrape.Bookie;
+import com.sportsbookscraper.app.scrape.DateGroup;
 import com.sportsbookscraper.app.scrape.Scraper;
 
 
@@ -33,6 +33,7 @@ public class Mediator {
         private String sheetName;
         private Map<String, Bookie> existingBookies;
         private List<Bookie> scrapedBookies;
+        private List<DateGroup> scrapedMatches;
         
         SheetData(String sheetName) { this.sheetName = sheetName; }
         
@@ -55,15 +56,21 @@ public class Mediator {
             return existingBookies;
         }
         
-        public void setExistingBookies(Map<String, Bookie> map) {
+        private void setExistingBookies(Map<String, Bookie> map) {
             existingBookies = map;
         }
         
-        public void setScrapedBookies(List<Bookie> scraped) {
+        public List<Bookie> getScrapedBookies() { return scrapedBookies; }
+        
+        private void setScrapedBookies(List<Bookie> scraped) {
             scrapedBookies = scraped;
         }
         
-        public List<Bookie> getScrapedBookies() { return scrapedBookies; }
+        public List<DateGroup> getScrapedMatches() { return scrapedMatches; }
+        
+        private void setScrapedMatches(List<DateGroup> matches) {
+            scrapedMatches = matches;
+        }
         
     } // class SheetData
     
@@ -75,9 +82,8 @@ public class Mediator {
     private String excelFilePath;
     private Map<String, SheetData> sheetData;
     private List<String> sheetNames;
-    private WorkbookWriter writer;
     private Scraper scraper;
-    private DSProperties props;
+    private Settings props;
     
     /**
      * TODO DELETE THIS METHOD AFTER DEBBUGGING
@@ -96,6 +102,11 @@ public class Mediator {
      */
     public Mediator() { this(DEF_PROPS_FILE, DEF_EXCEL_FILE); }
     
+    public Mediator(Settings settings) {
+        excelFilePath = settings.getExcelFilePath();
+        
+    }
+    
     /**
      * Constructor that uses default properties file and default Excel file.
      *
@@ -106,9 +117,8 @@ public class Mediator {
      */
     public Mediator(String propertiesPath, String excelFilePath) {
         try {
-            props = PropertiesFactory.loadProperties(propertiesPath,
-                excelFilePath);
-        } catch (RequiredPropertyNotFoundException | IOException e) {
+            props = SettingsFactory.loadSettings(propertiesPath, excelFilePath);
+        } catch (RequiredSettingNotFoundException | IOException e) {
             e.printStackTrace();
         }
         
@@ -132,7 +142,7 @@ public class Mediator {
                 continue;
             }
             
-            SheetDataStore sds = props.getSheetProperties(sheet);
+            SheetSettings sds = props.getSheetProperties(sheet);
             
             System.out.println("Scraping bookies for sheet: " + sheet);
             SheetData curSheetData = sheetData.get(sheet);
@@ -150,6 +160,7 @@ public class Mediator {
         scraper.debugScrape(url, sheetName);
         return scraper.getBookies();
     }
+    
     
     private void outputBookiesFromSheets(Map<String, SheetData> map) {
         for (String sheet : sheetNames) {
@@ -182,7 +193,7 @@ public class Mediator {
         for (String curSheet : sheetNames) {
             // System.out.println("Reading from sheet: " + curSheet);
             
-            SheetDataStore curProps = props.getSheetProperties(curSheet);
+            SheetSettings curProps = props.getSheetProperties(curSheet);
             
             int brow = curProps.getTableRow();
             int bcol = curProps.getBookieCol();

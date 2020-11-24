@@ -4,6 +4,7 @@ import static com.sportsbookscraper.app.config.PropertyKey.ALL_SHEETS;
 import static com.sportsbookscraper.app.config.PropertyKey.BOOKIE_COL;
 import static com.sportsbookscraper.app.config.PropertyKey.COLS_SIZETOFIT;
 import static com.sportsbookscraper.app.config.PropertyKey.EXCEL_FILE_PATH;
+import static com.sportsbookscraper.app.config.PropertyKey.KEEP_ORDER;
 import static com.sportsbookscraper.app.config.PropertyKey.OPENER;
 import static com.sportsbookscraper.app.config.PropertyKey.OPENER_COL;
 import static com.sportsbookscraper.app.config.PropertyKey.ROWS_SIZETOFIT;
@@ -71,7 +72,7 @@ import java.util.Properties;
  *
  * @author Jonathan Henly
  */
-final class WorkbookProperties extends AbstractProperties {
+final class WorkbookProperties extends AbstractSettings {
     // TODO remove CONFIG_CLASS_PATH <- it's just for debugging
     private final String CONFIG_CLASS_PATH = "./config/config.properties";
     
@@ -79,7 +80,7 @@ final class WorkbookProperties extends AbstractProperties {
     private final String excelFilePath;
     private final List<String> allSheets;
     // individual sheet properties holder
-    private final List<SheetDataStore> sheetProps;
+    private final List<SheetSettings> sheetProps;
     
     
     // don't subclass this class
@@ -87,14 +88,14 @@ final class WorkbookProperties extends AbstractProperties {
     private WorkbookProperties() { throw new UnsupportedOperationException(); }
     
     WorkbookProperties(String propertiesFile)
-        throws RequiredPropertyNotFoundException, IOException {
+        throws RequiredSettingNotFoundException, IOException {
         this(propertiesFile, null);
     }
     
     // NOTE: do not change the order of calls in the following constructor, some
     // calls depend on other calls happening prior
     WorkbookProperties(String propertiesFile, String pathToExcelFile)
-        throws IOException, RequiredPropertyNotFoundException {
+        throws IOException, RequiredSettingNotFoundException {
         props = loadProps(propertiesFile);
         
         if (pathToExcelFile != null) {
@@ -135,7 +136,7 @@ final class WorkbookProperties extends AbstractProperties {
     
     /* splits comma separated sheet names to an unmodifiable list, or throws */
     private List<String> initAllSheets()
-        throws RequiredPropertyNotFoundException {
+        throws RequiredSettingNotFoundException {
         // will throw if ALL_SHEETS property is not in config.properties
         String tmpAllSheets = getRequiredPropertyOrThrow(ALL_SHEETS);
         
@@ -157,10 +158,10 @@ final class WorkbookProperties extends AbstractProperties {
     
     /* helper method used by methods retrieving required properties */
     private String getRequiredPropertyOrThrow(String property)
-        throws RequiredPropertyNotFoundException {
+        throws RequiredSettingNotFoundException {
         String propValue = props.getProperty(property);
         if (propValue == null) {
-            throw new RequiredPropertyNotFoundException(property,
+            throw new RequiredSettingNotFoundException(property,
                 CONFIG_CLASS_PATH);
         }
         return propValue;
@@ -168,7 +169,7 @@ final class WorkbookProperties extends AbstractProperties {
     
     /* overloaded helper method */
     private String getRequiredPropertyOrThrow(PropertyKey pk)
-        throws RequiredPropertyNotFoundException {
+        throws RequiredSettingNotFoundException {
         return getRequiredPropertyOrThrow(pk.key());
     }
     
@@ -278,7 +279,7 @@ final class WorkbookProperties extends AbstractProperties {
      * @return the sheet properties associated with sheet index supplied
      */
     @Override
-    public SheetDataStore getSheetProperties(int index) {
+    public SheetSettings getSheetProperties(int index) {
         return sheetProps.get(index);
     }
     
@@ -288,8 +289,8 @@ final class WorkbookProperties extends AbstractProperties {
      * @return the sheet properties associated with sheet name supplied
      */
     @Override
-    public SheetDataStore getSheetProperties(String name) {
-        for (SheetDataStore sds : sheetProps) {
+    public SheetSettings getSheetProperties(String name) {
+        for (SheetSettings sds : sheetProps) {
             if (sds.getSheetName().equals(name)) { return sds; }
         }
         
@@ -299,8 +300,8 @@ final class WorkbookProperties extends AbstractProperties {
     /* -- SheetProperties Section -- */
     
     /* iterates over sheet names and creates sheet properties */
-    private List<SheetDataStore> loadSheetProperties(List<String> sheets) {
-        List<SheetDataStore> sprops = new ArrayList<>(sheets.size());
+    private List<SheetSettings> loadSheetProperties(List<String> sheets) {
+        List<SheetSettings> sprops = new ArrayList<>(sheets.size());
         
         // build sheet properties for each sheet
         for (String sheetName : sheets) {
@@ -311,7 +312,7 @@ final class WorkbookProperties extends AbstractProperties {
     }
     
     /* builds sheet properties using the supplied sheet name */
-    private SheetDataStore buildSheetProperties(String sheet) {
+    private SheetSettings buildSheetProperties(String sheet) {
         SheetProperties sp = new SheetProperties();
         
         // set this sheet's sheet name
@@ -325,6 +326,7 @@ final class WorkbookProperties extends AbstractProperties {
         sp.titleCol = getIntPropOrDefault(sheet, TITLE_COL);
         sp.opener = getBoolPropOrDefault(sheet, OPENER);
         sp.teamsCol = getIntPropOrDefault(sheet, TEAMS_COL);
+        sp.keepExisting = getBoolPropOrDefault(sheet, KEEP_ORDER);
         
         // now we have to range check any row or column index, for instance
         // tableRow should be greater than titleRow
