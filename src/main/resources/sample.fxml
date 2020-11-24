@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -10,24 +9,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="132.0" prefWidth="359.0"
-  xmlns="http://javafx.com/javafx/8.0.171"
-  xmlns:fx="http://javafx.com/fxml/1"
-  fx:controller="com.sportsbookscraper.app.sample.Controller">
+<AnchorPane prefHeight="600.0" prefWidth="478.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sportsbookscraper.app.sample.Controller">
   <children>
   
-    <HBox alignment="CENTER" layoutX="14.0" layoutY="59.0"
-      prefHeight="33.0" prefWidth="464.0" spacing="10.0">
+    <HBox alignment="CENTER" layoutX="452.0" layoutY="258.0" prefHeight="33.0" prefWidth="32.0" spacing="10.0">
       <children>
-  
-        <TextField fx:id="outputExcelFilePathFeild"
-          prefHeight="25.0" prefWidth="417.0"
-          promptText="Select Output File Path where you want to store scrapped Data" />
         
-        <JFXButton text="Open"
-          onAction="#selectOutputExcelFilePath" prefHeight="33.0"
-          prefWidth="17.0">
+        <JFXButton onAction="#selectOutputExcelFilePath" prefHeight="33.0" prefWidth="17.0" text="Open">
           <cursor>
             <Cursor fx:constant="HAND" />
           </cursor>
@@ -36,15 +24,15 @@
       </children>
     </HBox>
   
-    <Label layoutX="14.0" layoutY="24.0" text="Select Output File">
+    <Label layoutX="14.0" layoutY="228.0" text="Select Output File">
       <font>
         <Font name="System Bold Italic" size="18.0" />
       </font>
     </Label>
     
-    <Button layoutX="196.0" layoutY="97.0"
-      mnemonicParsing="false" onAction="#startWebScrapping"
-      text="Start Scrapping " />
+    <Button layoutX="189.0" layoutY="305.0" mnemonicParsing="false" onAction="#startWebScrapping" text="Start Scrapping " />
+
+    <TextField fx:id="outputExcelFilePathFeild" layoutX="31.0" layoutY="262.0" prefHeight="25.0" prefWidth="417.0" promptText="Select Output File Path where you want to store scrapped Data" />
   
   </children>
 </AnchorPane>
