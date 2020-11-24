@@ -140,7 +140,7 @@ public class Mediator {
     private void addSheetSettingsToEachSheetData() {
         for (String sheetName : sheetNames) {
             SheetData sd = SheetData.getSheetData(sheetName);
-            sd.setSheetSettings(settings.getSheetProperties(sheetName));
+            sd.setSheetSettings(settings.getSheetSettings(sheetName));
         }
     }
     
