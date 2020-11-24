@@ -8,9 +8,13 @@ package com.sportsbookscraper.app.config;
 
 enum PropertyKey {
     
-    /* - keys of properties shared by all sheets - */
+    /* application settings */
+    SCRAPE_INTERVAL("app.auto.scrape.interval", 0), // def 0 means no autoscrape
+    LAUNCH_ON_START("app.launch.on.start", false),
     EXCEL_FILE_PATH("excel.file.path"), // no default
     ALL_SHEETS("all.sheets"), // no default, throw exception if not found
+    
+    /* - keys of properties shared by all sheets - */
     SHEET_FONT(ALL_SHEETS + ".font", "Calibri"),
     SHEET_FONT_SIZE(SHEET_FONT + ".size", 11),
     COLS_SIZETOFIT(ALL_SHEETS + ".cols.sizetofit", true),
@@ -19,8 +23,10 @@ enum PropertyKey {
     /* - individual sheet property keys - */
     SCRAPE_URL(".scrape.url"), // no default, throw exception if not found
     SHEET_TITLE(".sheet.title"), // no default
-    TITLE_ROW(SHEET_TITLE + ".row", 0), TITLE_COL(SHEET_TITLE + ".col", 0),
-    SHEET_TABLE(".sheet.table", 1), TEAMS_COL(SHEET_TABLE + ".teams.col", 0),
+    TITLE_ROW(SHEET_TITLE + ".row", 0), //
+    TITLE_COL(SHEET_TITLE + ".col", 0), //
+    SHEET_TABLE(".sheet.table", 1), //
+    TEAMS_COL(SHEET_TABLE + ".teams.col", 0),
     OPENER(SHEET_TABLE + ".opener", true),
     OPENER_COL(SHEET_TABLE + ".opener.col", 1),
     BOOKIE_COL(SHEET_TABLE + ".bookie.col", 2),

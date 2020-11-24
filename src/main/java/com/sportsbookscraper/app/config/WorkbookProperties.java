@@ -5,9 +5,11 @@ import static com.sportsbookscraper.app.config.PropertyKey.BOOKIE_COL;
 import static com.sportsbookscraper.app.config.PropertyKey.COLS_SIZETOFIT;
 import static com.sportsbookscraper.app.config.PropertyKey.EXCEL_FILE_PATH;
 import static com.sportsbookscraper.app.config.PropertyKey.KEEP_ORDER;
+import static com.sportsbookscraper.app.config.PropertyKey.LAUNCH_ON_START;
 import static com.sportsbookscraper.app.config.PropertyKey.OPENER;
 import static com.sportsbookscraper.app.config.PropertyKey.OPENER_COL;
 import static com.sportsbookscraper.app.config.PropertyKey.ROWS_SIZETOFIT;
+import static com.sportsbookscraper.app.config.PropertyKey.SCRAPE_INTERVAL;
 import static com.sportsbookscraper.app.config.PropertyKey.SCRAPE_URL;
 import static com.sportsbookscraper.app.config.PropertyKey.SHEET_FONT;
 import static com.sportsbookscraper.app.config.PropertyKey.SHEET_FONT_SIZE;
@@ -82,11 +84,6 @@ final class WorkbookProperties extends AbstractSettings {
     // individual sheet properties holder
     private final List<SheetSettings> sheetProps;
     
-    
-    // don't subclass this class
-    @SuppressWarnings("unused")
-    private WorkbookProperties() { throw new UnsupportedOperationException(); }
-    
     WorkbookProperties(String propertiesFile)
         throws RequiredSettingNotFoundException, IOException {
         this(propertiesFile, null);
@@ -96,6 +93,7 @@ final class WorkbookProperties extends AbstractSettings {
     // calls depend on other calls happening prior
     WorkbookProperties(String propertiesFile, String pathToExcelFile)
         throws IOException, RequiredSettingNotFoundException {
+        // load user settings from config.properties file
         props = loadProps(propertiesFile);
         
         if (pathToExcelFile != null) {
@@ -104,15 +102,13 @@ final class WorkbookProperties extends AbstractSettings {
             excelFilePath = pathToExcelFile;
         }
         
+        // initialize application specific properties, i.e. launchOnStart, etc.
+        initApplicationProperties();
+        // create unmodifiable list of sheet names
         allSheets = initAllSheets();
-        
-        // init shared properties
-        font = getStrPropOrDefault(SHEET_FONT);
-        fontSize = getIntPropOrDefault(SHEET_FONT_SIZE);
-        colSizeToFit = getBoolPropOrDefault(COLS_SIZETOFIT);
-        rowSizeToFit = getBoolPropOrDefault(ROWS_SIZETOFIT);
-        
-        // init all individual sheet properties
+        // initialize properties shared across all sheets, i.e. font, etc.
+        initSharedProperties();
+        // create list of all individual sheet properties
         sheetProps = loadSheetProperties(allSheets);
     }
     
@@ -132,6 +128,12 @@ final class WorkbookProperties extends AbstractSettings {
         }
         
         return props;
+    }
+    
+    /* initialize application specific properties */
+    private void initApplicationProperties() {
+        launchOnStart = getBoolPropOrDefault(LAUNCH_ON_START);
+        scrapeInterval = getIntPropOrDefault(SCRAPE_INTERVAL);
     }
     
     /* splits comma separated sheet names to an unmodifiable list, or throws */
@@ -154,6 +156,14 @@ final class WorkbookProperties extends AbstractSettings {
         
         // return unmodifiable list, it should not be changed
         return Collections.unmodifiableList(nonEmptySheetNames);
+    }
+    
+    /* initialize properties shared across all sheets */
+    private void initSharedProperties() {
+        font = getStrPropOrDefault(SHEET_FONT);
+        fontSize = getIntPropOrDefault(SHEET_FONT_SIZE);
+        colSizeToFit = getBoolPropOrDefault(COLS_SIZETOFIT);
+        rowSizeToFit = getBoolPropOrDefault(ROWS_SIZETOFIT);
     }
     
     /* helper method used by methods retrieving required properties */
@@ -234,62 +244,40 @@ final class WorkbookProperties extends AbstractSettings {
     
     /* --- Public Accessors Section --- */
     
+    @Override
+    public int getAutoScrapeInterval() { return scrapeInterval; }
+    
+    @Override
+    public boolean launchOnStart() { return launchOnStart; }
+    
     /**
      * @return the path to the Excel file, if set in {@code config.properties}
      */
     @Override
     public String getExcelFilePath() { return excelFilePath; }
     
-    /**
-     * @return returns an {@linkplain Collections#unmodifiableList(List)
-     *         unmodifiable list} containing the Excel workbook's sheet names.
-     */
     @Override
     public List<String> getSheetNames() { return allSheets; }
     
-    /**
-     * @return font name used by all sheets
-     */
     @Override
     public String getSheetFont() { return font; }
     
-    /**
-     * @return font size used by all sheets
-     */
     @Override
     public int getSheetFontSize() { return fontSize; }
     
-    /**
-     * @return {@code true} if Excel column widths should fit their content,
-     *         {@code false}
-     */
     @Override
-    public boolean getColSizeToFit() { return colSizeToFit; }
+    public boolean colsAreSizedToFit() { return colSizeToFit; }
     
-    /**
-     * @return {@code true} if Excel row heights should fit their content,
-     *         otherwise {@code false}
-     */
     @Override
-    public boolean getRowSizeToFit() { return rowSizeToFit; }
+    public boolean rowsAreSizedToFit() { return rowSizeToFit; }
     
-    /**
-     * @param index
-     *              - which sheet's properties to retrieve
-     * @return the sheet properties associated with sheet index supplied
-     */
     @Override
-    public SheetSettings getSheetProperties(int index) {
+    public SheetSettings getSheetSettings(int index) {
         return sheetProps.get(index);
     }
     
-    /**
-     * @param name
-     *             - the name of the sheet's properties to retrieve
-     * @return the sheet properties associated with sheet name supplied
-     */
     @Override
-    public SheetSettings getSheetProperties(String name) {
+    public SheetSettings getSheetSettings(String name) {
         for (SheetSettings sds : sheetProps) {
             if (sds.getSheetName().equals(name)) { return sds; }
         }
@@ -313,7 +301,7 @@ final class WorkbookProperties extends AbstractSettings {
     
     /* builds sheet properties using the supplied sheet name */
     private SheetSettings buildSheetProperties(String sheet) {
-        SheetProperties sp = new SheetProperties();
+        AbstractSheetSettings sp = new AbstractSheetSettings();
         
         // set this sheet's sheet name
         sp.sheetName = sheet;
@@ -351,5 +339,6 @@ final class WorkbookProperties extends AbstractSettings {
         
         return sp;
     }
+    
     
 } // public final class WorkbookProperties

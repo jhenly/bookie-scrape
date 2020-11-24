@@ -13,6 +13,8 @@ public abstract class AbstractSettings implements Settings {
     
     /* end of constants */
     
+    protected int scrapeInterval;
+    protected boolean launchOnStart;
     protected String font;
     protected int fontSize;
     protected boolean colSizeToFit;
@@ -52,14 +54,14 @@ public abstract class AbstractSettings implements Settings {
      *         {@code false}
      */
     @Override
-    public abstract boolean getColSizeToFit();
+    public abstract boolean colsAreSizedToFit();
     
     /**
      * @return {@code true} if Excel row heights should fit their content,
      *         otherwise {@code false}
      */
     @Override
-    public abstract boolean getRowSizeToFit();
+    public abstract boolean rowsAreSizedToFit();
     
     /**
      * @param index
@@ -67,7 +69,7 @@ public abstract class AbstractSettings implements Settings {
      * @return the sheet properties associated with sheet index supplied
      */
     @Override
-    public abstract SheetSettings getSheetProperties(int index);
+    public abstract SheetSettings getSheetSettings(int index);
     
     /**
      * @param name
@@ -75,7 +77,7 @@ public abstract class AbstractSettings implements Settings {
      * @return the sheet properties associated with sheet name supplied
      */
     @Override
-    public abstract SheetSettings getSheetProperties(String name);
+    public abstract SheetSettings getSheetSettings(String name);
     
     
     /**
@@ -83,7 +85,7 @@ public abstract class AbstractSettings implements Settings {
      *
      * @author Jonathan Henly
      */
-    protected static class SheetProperties implements Settings.SheetSettings {
+    protected static class AbstractSheetSettings implements Settings.SheetSettings {
         /** sheet's name */
         protected String sheetName;
         /** sheet's url to scrape */
@@ -108,7 +110,7 @@ public abstract class AbstractSettings implements Settings {
         protected boolean keepExisting;
         
         // sole purpose is for use by sub classes
-        protected SheetProperties() {}
+        protected AbstractSheetSettings() {}
         
         /**
          * @return the sheet's name

@@ -11,52 +11,93 @@ import java.util.List;
  */
 public interface Settings {
     /**
-     * @return the path to the Excel file
+     * Gets the path to the Excel file as a string.
+     * 
+     * @return the Excel file path
      */
     String getExcelFilePath();
     
     /**
-     * @return returns an {@linkplain Collections#unmodifiableList(List)
+     * Gets the auto scrape time interval in minutes.
+     * <p>
+     * <b>Note:</b> a time interval of {@code 0} minutes can be taken to mean
+     * multiple things:
+     * <ul>
+     * <li>do not auto scrape</li>
+     * <li>never stop scraping</li>
+     * </ul>
+     * <p>
+     * It is not up to implementations of this interface to distinguish between
+     * the two.
+     * 
+     * @return the number of minutes to wait before scraping again
+     */
+    int getAutoScrapeInterval();
+    
+    /**
+     * Gets whether the application should launch when the computer starts or
+     * not.
+     * 
+     * @return {@code true} if the application should launch when the computer
+     *         starts, otherwise {@code false}
+     */
+    boolean launchOnStart();
+    
+    /**
+     * Gets an unmodifiable list containing the sheet names loaded from the
+     * user's settings.
+     * 
+     * @return returns a {@linkplain Collections#unmodifiableList(List)
      *         unmodifiable list} containing the Excel workbook's sheet names.
      */
     List<String> getSheetNames();
     
     
     /**
-     * @return font name used by all sheets
+     * Gets the font name used by all sheets.
+     * 
+     * @return the name of the font
      */
     String getSheetFont();
     
     /**
-     * @return font size used by all sheets
+     * Gets the font size used by all sheets.
+     * 
+     * @return the font size
      */
     int getSheetFontSize();
     
     /**
+     * Gets whether Excel sheet columns should be sized to fit their content.
+     * 
      * @return {@code true} if Excel column widths should fit their content,
      *         {@code false}
      */
-    boolean getColSizeToFit();
+    boolean colsAreSizedToFit();
     
     /**
+     * Gets whether Excel sheet rows should be sized to fit their content.
+     * 
      * @return {@code true} if Excel row heights should fit their content,
      *         otherwise {@code false}
      */
-    boolean getRowSizeToFit();
+    boolean rowsAreSizedToFit();
     
     /**
      * @param index
-     *              - which sheet's properties to retrieve
-     * @return the sheet properties associated with sheet index supplied
+     *              - the index of the sheet for which settings are to be
+     *              retrieved
+     * @return the sheet settings associated with the sheet index supplied
      */
-    SheetSettings getSheetProperties(int index);
+    SheetSettings getSheetSettings(int index);
     
     /**
      * @param name
-     *             - the name of the sheet's properties to retrieve
-     * @return the sheet properties associated with sheet name supplied
+     *             - the name of the sheet for which settings are to be
+     *             retrieved
+     * @return the sheet settings associated with the sheet name supplied
      */
-    public SheetSettings getSheetProperties(String name);
+    public SheetSettings getSheetSettings(String name);
     
     /**
      * Class that wraps individual sheet properties with accessor methods.
