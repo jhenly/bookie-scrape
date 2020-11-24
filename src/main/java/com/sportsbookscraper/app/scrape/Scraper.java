@@ -19,6 +19,7 @@ import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
@@ -222,9 +223,6 @@ public class Scraper {
             
             HtmlPage page = openHtmlPage(site, timeout);
             
-            // get list of all bookies
-            bookies = scrapeBookies(page);
-            
             // set page up for scraping
             // try {
             log("scrape: enabling correct options", true);
@@ -232,6 +230,9 @@ public class Scraper {
             // } catch (IOException e) {
             // e.printStackTrace();
             // }
+            
+            // get list of all bookies
+            bookies = scrapeBookies(page);
             
             
             if (page == null) {
@@ -333,19 +334,18 @@ public class Scraper {
         List<Bookie> tmpBookies = new ArrayList<Bookie>();
         DomElement divElementsColumn = page.getElementById("booksCarousel");
         
+        
         int index = 0;
         for (DomNode node : divElementsColumn.getChildren()) {
-            String bookie = node.getTextContent().strip();
-            if (bookie.isEmpty())
+            String bookieName = node.getTextContent().strip();
+            if (bookieName.isEmpty())
                 continue;
             
-            tmpBookies.add(new Bookie(bookie, index));
+            tmpBookies.add(new Bookie(bookieName, index));
             
             index += 1;
         }
-        tmpBookies.add(new Bookie("DUMMY", 30));
         
-        System.out.println("Num Bookies = " + index);
         return tmpBookies;
     }
     
@@ -402,62 +402,230 @@ public class Scraper {
     private List<DateGroup> scrapeMatches(HtmlPage page, int numBookies)
         throws IOException {
         if (page == null) {
-            log("scrapeMatchesHU: page is null", true);
+            log("scrapeMatches: page is null", true);
             return null;
         }
-        
-        HtmlDivision divSport4 = (HtmlDivision) page.getElementById("sport-4");
-        String dateGroupsXPath = "./div[1]/div[@class='dateGroup']";
-        
-        List<HtmlElement> dateGroupDivs = divSport4.getByXPath(dateGroupsXPath);
-        
-        log("dateGroups.size() =", dateGroupDivs.size());
+        DomNodeList<DomNode> dateGroupDivs = getDateGroupDivs(page);
+        log("dateGroupDivs.size() =" + dateGroupDivs.size(), true);
         
         List<DateGroup> dateGroups = new ArrayList<DateGroup>();
         
-        for (HtmlElement dateGroupDiv : dateGroupDivs) {
-            HtmlDivision dateDiv = (HtmlDivision) dateGroupDiv
-                .getFirstByXPath(".//div[@class='date']");
-            String date = dateDiv.asText().strip();
+        // create date groups with initial matches, not containing bookie odds
+        for (DomNode dateGroupDiv : dateGroupDivs) {
+            String date = scrapeDateFromDateGroupsDateDiv(dateGroupDiv);
             
-            log("dateGroup date: " + date);
+            log("dateGroup date: " + date, true);
             
-            dateGroups.add(getAllMatchInfo(page, dateGroupDiv, date));
+            // create and add a date group with initial matches
+            dateGroups.add(createAllDateGroupMatches(dateGroupDiv, date));
         }
         
+        log("Created initial matches, now scraping bookie odds", true);
+        
+        // now we scrape each bookies shown odds, then click next and repeat
+        scrapeBookieOverUnders(page, dateGroups);
+        
         for (DateGroup dg : dateGroups) {
-            log("logging match", dg.toString());
+            log("logging date group\n", dg.toString());
         }
         
         return null;
     }
     
-    private DateGroup getAllMatchInfo(HtmlPage dom, HtmlElement dateGroupDiv,
-        String date) {
-        String conSchedXpath = ".//div[@class='content-scheduled content-pre-game ']";
-        HtmlElement conSched = dateGroupDiv.getFirstByXPath(conSchedXpath);
+    /* the number of bookies listed per next click */
+    private static final int BOOKIES_PER_NEXT_CLICK = 10;
+    
+    /* */
+    private void scrapeBookieOverUnders(HtmlPage page,
+        List<DateGroup> dateGroups) {
         
+        int bookiesSize = getBookies().size();
+        int skipCount = BOOKIES_PER_NEXT_CLICK
+            - (bookiesSize % BOOKIES_PER_NEXT_CLICK);
+        
+        // integer division means ((29/10 == 2) * 10) == 20
+        int needSkip = ((bookiesSize / BOOKIES_PER_NEXT_CLICK)
+            * BOOKIES_PER_NEXT_CLICK) - 1;
+        int prevCount = bookiesSize / BOOKIES_PER_NEXT_CLICK;
+        
+        log(String.format(
+            "scrapeBookieOverUnders: bsize=%d  skipCount=%d  needSkip=%d  prevCount=%d",
+            bookiesSize, skipCount, needSkip, prevCount), true);
+        
+        DomNodeList<DomNode> dateGroupDivs = getDateGroupDivs(page);
+        
+        int whileRuns = 0;
+        int bIndex = 0; // bookie index
+        while (bIndex < bookiesSize) {
+            whileRuns += 1;
+            log("Scraping batch " + whileRuns + " of bookies", true);
+            
+            int bScraped = 0; // number of bookies scraped
+            for (int dgi = 0, n = dateGroupDivs.size(); dgi < n; dgi++) {
+                DomNode dgdiv = dateGroupDivs.get(dgi);
+                DateGroup dg = dateGroups.get(dgi);
+                
+                // don't skip unless bIndex is to the last next carousel page
+                int skip = (bIndex >= needSkip) ? skipCount : 0;
+                
+                bScraped = scrapeOddsFromDateGroupDiv(dgdiv, dg, bIndex, skip);
+            }
+            
+            log("Scraped " + bScraped + " bookies this batch, total scraped is "
+                + bIndex, true);
+            
+            bIndex += bScraped;
+            
+            try {
+                logger.flush();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
+            dateGroupDivs = clickCarouselNextAndGetDateGroupDivs(page);
+        }
+        
+    }
+    
+    /* */
+    private int scrapeOddsFromDateGroupDiv(DomNode dgdiv, DateGroup dg,
+        int bindex, int skipCount) {
+        DomNodeList<DomNode> matchHolders = getContentScheduledDiv(dgdiv)
+            .getChildNodes();
+        
+        if (matchHolders.size() != dg.size()) {
+            log("[ERROR] matchHolders.size() != dg.size()", true);
+        }
+        
+        int oddsScraped = 0;
+        // 'mi' is match index
+        for (int mi = 0; mi < matchHolders.size(); mi++) {
+            DomNode matchDiv = matchHolders.get(mi).getFirstChild();
+            List<HtmlDivision> odds = matchDiv
+                .getByXPath("./div[@class='el-div eventLine-book']");
+            // log(" ODDS DIV SIZE = " + odds.size(), true);
+            Match match = dg.getMatch(mi);
+            
+            oddsScraped = scrapeOddsToMatch(odds, match, bindex, skipCount);
+            
+        }
+        
+        return oddsScraped;
+    }
+    
+    /* */
+    private int scrapeOddsToMatch(List<HtmlDivision> odds, Match match,
+        int bindex, int skipCount) {
+        
+        int oddsScraped = 0;
+        // 'oi' is odds index
+        for (int oi = 0, n = odds.size(); oi < n; oi++) {
+            // skip already seen bookies on last next click
+            if (skipCount > 0) {
+                log("skipping bookie " + skipCount, true);
+                skipCount -= 1;
+                continue;
+            }
+            
+            scrapeSingleBookieOdds(odds.get(oi), match, bindex + oddsScraped);
+            oddsScraped += 1;
+        }
+        
+        return oddsScraped;
+    }
+    
+    /* helper function used to scrape a single bookie odds */
+    private void scrapeSingleBookieOdds(HtmlDivision overUnder, Match match,
+        int bIndex) {
+        DomNode eOver = overUnder.getFirstChild();
+        DomNode eUnder = overUnder.getLastChild();
+        
+        String over = eOver.getTextContent().strip();
+        String under = eUnder.getTextContent().strip();
+        
+        match.setBookieOdds(bIndex, over, under);
+    }
+    
+    private String scrapeDateFromDateGroupsDateDiv(DomNode dateGroupDiv) {
+        DomNode dateDiv = dateGroupDiv.getFirstByXPath(".//div[@class='date']");
+        
+        return dateDiv.getTextContent().strip();
+    }
+    
+    /* gets the date group divs from the <div id='sport-4'> div */
+    private DomNodeList<DomNode> getDateGroupDivs(HtmlPage page) {
+        return page.getElementById("sport-4").getFirstChild().getChildNodes();
+    }
+    
+    /* gets the content scheduled div where all of the matches are */
+    private DomNode getContentScheduledDiv(DomNode dateGroupDiv) {
+        String conSchedXpath = ".//div[@class='content-scheduled content-pre-game ']";
+        return dateGroupDiv.getFirstByXPath(conSchedXpath);
+    }
+    
+    /* */
+    private DateGroup createAllDateGroupMatches(DomNode dateGroupDiv,
+        String date) {
+        DomNode conSched = getContentScheduledDiv(dateGroupDiv);
+        
+        // create a new date group to store matches in
         DateGroup dateGroup = new DateGroup(date);
         for (DomNode match : conSched.getChildren()) {
-            dateGroup.addMatch(getMatchInfo(dom, match));
+            // scrape each match in the date group div and add it
+            dateGroup.addMatch(scrapeAllButBookieOddsAndCreateMatch(match));
         }
         
         return dateGroup;
     }
     
-    private Match getMatchInfo(HtmlPage dom, DomNode matchDiv) {
+    /* scrapes and creates a match from everything but bookie odds */
+    private Match scrapeAllButBookieOddsAndCreateMatch(DomNode matchDiv) {
         MatchBuilder mb = Match.createMatch(getBookies().size());
         
         DomNode holder = matchDiv.getFirstChild();
+        scrapeRotNumbers(holder, mb);
+        scrapeMatchTime(holder, mb);
         scrapeTeamsAndUrl(holder, mb);
         scrapeOpener(holder, mb);
         
-        Match m = mb.build();
-        scrapeBookieOverUnders(dom, matchDiv, m);
-        
-        return m;
+        return mb.build();
     }
     
+    /* scrapes and sets the home and away ROT numbers */
+    private void scrapeRotNumbers(DomNode holder, MatchBuilder mb) {
+        HtmlDivision rots = holder
+            .getFirstByXPath("./div[@class='el-div eventLine-rotation']");
+        
+        
+        // HtmlDivision homeRot = rot.getFirstByXPath("./div[1]");
+        String homeRot = rots.getChildNodes().get(1).getTextContent().strip();
+        // HtmlDivision awayRot = teams.getFirstByXPath("./div[2]");
+        String awayRot = rots.getChildNodes().get(2).getTextContent().strip();
+        
+        int hrot = 0;
+        try {
+            hrot = Integer.parseInt(homeRot);
+        } catch (NumberFormatException e) {}
+        
+        int arot = 0;
+        try {
+            arot = Integer.parseInt(homeRot);
+        } catch (NumberFormatException e) {}
+        
+        mb.homeRot(hrot).awayRot(arot);
+    }
+    
+    /* scrapes and set the match time */
+    private void scrapeMatchTime(DomNode holder, MatchBuilder mb) {
+        HtmlDivision matchTime = holder
+            .getFirstByXPath("./div[@class='el-div eventLine-time']");
+        String time = matchTime.getFirstChild().getTextContent().strip();
+        
+        mb.time(time);
+    }
+    
+    /* scrapes and sets the team names as well as the match's URL */
     private void scrapeTeamsAndUrl(DomNode holder, MatchBuilder mb) {
         HtmlElement teams = holder
             .getFirstByXPath("./div[@class='el-div eventLine-team']");
@@ -471,6 +639,7 @@ public class Scraper {
         
     }
     
+    /* scrapes and sets the opener's over-under odds */
     private void scrapeOpener(DomNode holder, MatchBuilder mb) {
         HtmlElement opener = holder
             .getFirstByXPath("./div[@class='el-div eventLine-opener']");
@@ -483,68 +652,14 @@ public class Scraper {
         mb.opener(over, under);
     }
     
-    private void scrapeBookieOverUnders(HtmlPage dom, DomNode matchNode,
-        Match match) {
-        matchNode = matchNode.getFirstChild();
-        
-        int bookiesSize = getBookies().size();
-        int skipCount = 10 - (bookiesSize % 10);
-        
-        // integer division means (29/10 == 2)
-        int needSkip = (bookiesSize / 10) * 10;
-        int prevCount = bookiesSize / 10;
-        
-        int bIndex = 0; // bookie index
-        while (bIndex < getBookies().size()) {
-            List<DomNode> bookieOverUnders = matchNode
-                .getByXPath("./div[@class='el-div eventLine-book']");
-            
-            for (DomNode overUnder : bookieOverUnders) {
-                if (bIndex > needSkip && skipCount > 0) {
-                    // skip already seen bookies on last carousel click
-                    skipCount -= 1;
-                    continue;
-                }
-                scrapeSingleBookieOdds(overUnder, match, bIndex);
-                bIndex += 1;
-            }
-            
-            try {
-                logger.flush();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            
-            clickCarouselNextAndGetContentScheduled(dom);
-        }
-        
-        for (int p = 0; p < prevCount; p++) {
-            clickCarouselPrevNTimes(dom);
-        }
-    }
-    
-    /* helper function used to scrape a single bookie odds */
-    private void scrapeSingleBookieOdds(DomNode overUnder, Match match,
-        int bIndex) {
-        DomNode eOver = overUnder.getFirstByXPath("./div[1]");
-        DomNode eUnder = overUnder.getFirstByXPath("./div[2]");
-        
-        String over = eOver.getTextContent().strip();
-        String under = eUnder.getTextContent().strip();
-        
-        match.setBookieOdds(bIndex, over, under);
-    }
-    
     /* */
-    private HtmlElement clickCarouselNextAndGetContentScheduled(HtmlPage page) {
+    private DomNodeList<DomNode> clickCarouselNextAndGetDateGroupDivs(
+        HtmlPage page) {
         DomElement carouselNext = page.getElementById("feedHeaderCarousel")
             .getFirstElementChild().getFirstByXPath("./a[2]");
         
         if (carouselNext == null) {
             log("[ERROR] carouselNext is null!", true);
-        } else {
-            log("carouselNext is not null");
         }
         
         if (carouselNext instanceof HtmlAnchor) {
@@ -560,20 +675,16 @@ public class Scraper {
             log("[ERROR] carouselNext is not an HtmlAnchor!", true);
         }
         
-        String conSchedXpath = "//div[@class='content-scheduled content-pre-game ']";
-        
-        return page.getFirstByXPath(conSchedXpath);
+        return getDateGroupDivs(page);
     }
     
     /* */
-    private HtmlElement clickCarouselPrevNTimes(HtmlPage page) {
+    private HtmlElement clickCarouselPrev(HtmlPage page) {
         DomElement carouselPrev = page.getElementById("feedHeaderCarousel")
             .getFirstElementChild().getFirstByXPath("./a[1]");
         
         if (carouselPrev == null) {
             log("[ERROR] carouselPrev is null!", true);
-        } else {
-            log("carouselPrev is not null");
         }
         
         if (carouselPrev instanceof HtmlAnchor) {
@@ -589,9 +700,11 @@ public class Scraper {
             log("[ERROR] carouselPrev is not an HtmlAnchor!", true);
         }
         
-        String conSchedXpath = "//div[@class='content-scheduled content-pre-game ']";
+        // String conSchedXpath = "//div[@class='content-scheduled
+        // content-pre-game ']";
         
-        return page.getFirstByXPath(conSchedXpath);
+        // return page.getFirstByXPath(conSchedXpath);
+        return null;
     }
     
     /* returns a DomNode's text content as a double, or 0.0 if no text */

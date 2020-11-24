@@ -41,6 +41,12 @@ public class DateGroup implements Iterable<Match> {
     public List<Match> getMatches() { return matches; }
     
     /**
+     * @return a list of the matches associated with this {@code DateGroup}
+     *         instance
+     */
+    public Match getMatch(int index) { return matches.get(index); }
+    
+    /**
      * Adds a {@code Match} instance to the end of the matches list in this
      * {@code DateGroup} instance.
      * 
@@ -48,6 +54,20 @@ public class DateGroup implements Iterable<Match> {
      *              the match to add
      */
     public void addMatch(Match match) { matches.add(match); }
+    
+    /**
+     * Swaps all match odds between two different bookies.
+     * 
+     * @param one
+     *            - the bookie to swap indexes with the other
+     * @param two
+     *            - the other bookie to swap indexes with
+     */
+    public void swapBookieIndexes(Bookie one, Bookie two) {
+        for (Match m : this) {
+            m.swapBookieOdds(one.index(), two.index());
+        }
+    }
     
     /**
      * @return the size of the list of matches in this {@code DateGroup}
@@ -85,7 +105,7 @@ public class DateGroup implements Iterable<Match> {
     public String toString() {
         String s = "";
         for (Match m : this) {
-            s += m.toString();
+            s += m.toString() + "\n";
         }
         return s;
     }

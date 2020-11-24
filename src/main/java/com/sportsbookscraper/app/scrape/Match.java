@@ -221,6 +221,19 @@ public class Match {
     public Odds opener() { return opener; }
     
     /**
+     * Swaps one bookie's odds with another, this method is useful when
+     * switching the ordering of bookies.
+     * 
+     * @param one
+     * @param two
+     */
+    void swapBookieOdds(int one, int two) {
+        Odds tmp = odds[one];
+        odds[one] = odds[two];
+        odds[two] = tmp;
+    }
+    
+    /**
      * Sets a specified bookie's odds for this match.
      * 
      * @param bookieIndex
