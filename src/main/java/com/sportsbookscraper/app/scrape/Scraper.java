@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNode;
@@ -169,6 +170,7 @@ public class Scraper {
         
         // DON'T DISABLE THE FOLLOWING
         client.getCookieManager().setCookiesEnabled(true);
+        client.setAjaxController(new NicelyResynchronizingAjaxController());
         // client.getOptions().setRedirectEnabled(false);
     }
     
@@ -226,7 +228,7 @@ public class Scraper {
             // set page up for scraping
             // try {
             log("scrape: enabling correct options", true);
-            page = enableCorrectOptionsOnPage(page);
+            page = enableCorrectOptionsOnPage(page, true);
             // } catch (IOException e) {
             // e.printStackTrace();
             // }
@@ -280,12 +282,13 @@ public class Scraper {
     }
     
     /* scrape helper that enables all needed options on page before scraping */
-    private HtmlPage enableCorrectOptionsOnPage(HtmlPage page)
+    private HtmlPage enableCorrectOptionsOnPage(HtmlPage page, boolean refresh)
         throws IOException {
         // check the 'ROT #' checkbox so we can sort teams on their ROT's
         page = checkShowRotationsCheckBox(page);
         // need a page reload after checking this box
-        page.refresh();
+        if (refresh)
+            page.refresh();
         
         // click on far most '#' icon to sort teams by ROT
         page = clickNumberSortRotText(page);
@@ -293,7 +296,8 @@ public class Scraper {
         // choose DEC from odds format drop down menu
         page = selectUserSettingsOddsFormatDec(page);
         // for some reason select won't take effect without a page refresh
-        page.refresh();
+        if (refresh)
+            page.refresh();
         
         // all done setting options on page, time to scrape
         return page;
@@ -673,6 +677,13 @@ public class Scraper {
             client.waitForBackgroundJavaScript(1000);
         } else {
             log("[ERROR] carouselNext is not an HtmlAnchor!", true);
+        }
+        
+        try {
+            page = enableCorrectOptionsOnPage(page, false);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         
         return getDateGroupDivs(page);
