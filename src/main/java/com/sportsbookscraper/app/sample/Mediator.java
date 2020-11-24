@@ -11,12 +11,10 @@ import com.sportsbookscraper.app.config.RequiredSettingNotFoundException;
 import com.sportsbookscraper.app.config.Settings;
 import com.sportsbookscraper.app.config.Settings.SheetSettings;
 import com.sportsbookscraper.app.config.SettingsFactory;
-import com.sportsbookscraper.app.excel.CellRange;
 import com.sportsbookscraper.app.excel.SheetNotFoundException;
 import com.sportsbookscraper.app.excel.WorkbookFactory;
 import com.sportsbookscraper.app.excel.WorkbookReader;
 import com.sportsbookscraper.app.scrape.Bookie;
-import com.sportsbookscraper.app.scrape.DateGroup;
 import com.sportsbookscraper.app.scrape.Scraper;
 
 
@@ -28,51 +26,6 @@ import com.sportsbookscraper.app.scrape.Scraper;
  */
 public class Mediator {
     
-    // data store for sheets
-    private static class SheetData {
-        private String sheetName;
-        private Map<String, Bookie> existingBookies;
-        private List<Bookie> scrapedBookies;
-        private List<DateGroup> scrapedMatches;
-        
-        SheetData(String sheetName) { this.sheetName = sheetName; }
-        
-        @Override
-        public int hashCode() { return sheetName.hashCode(); }
-        
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == null)
-                return false;
-            
-            if (!(obj instanceof SheetData))
-                return false;
-            
-            SheetData that = (SheetData) obj;
-            return this.sheetName.equals(that.sheetName);
-        }
-        
-        public Map<String, Bookie> getExistingBookies() {
-            return existingBookies;
-        }
-        
-        private void setExistingBookies(Map<String, Bookie> map) {
-            existingBookies = map;
-        }
-        
-        public List<Bookie> getScrapedBookies() { return scrapedBookies; }
-        
-        private void setScrapedBookies(List<Bookie> scraped) {
-            scrapedBookies = scraped;
-        }
-        
-        public List<DateGroup> getScrapedMatches() { return scrapedMatches; }
-        
-        private void setScrapedMatches(List<DateGroup> matches) {
-            scrapedMatches = matches;
-        }
-        
-    } // class SheetData
     
     // private constants
     private static final String DEF_PROPS_FILE = "config.properties";
@@ -80,10 +33,9 @@ public class Mediator {
     
     // private members
     private String excelFilePath;
-    private Map<String, SheetData> sheetData;
     private List<String> sheetNames;
     private Scraper scraper;
-    private Settings props;
+    private Settings settings;
     
     /**
      * TODO DELETE THIS METHOD AFTER DEBBUGGING
@@ -117,22 +69,22 @@ public class Mediator {
      */
     public Mediator(String propertiesPath, String excelFilePath) {
         try {
-            props = SettingsFactory.loadSettings(propertiesPath, excelFilePath);
+            settings = SettingsFactory.loadSettings(propertiesPath,
+                excelFilePath);
         } catch (RequiredSettingNotFoundException | IOException e) {
             e.printStackTrace();
         }
         
         System.out.println("ExcelFilePath: " + excelFilePath);
         
-        sheetNames = props.getSheetNames();
+        sheetNames = settings.getSheetNames();
         
-        try (WorkbookReader reader = WorkbookFactory
-            .newWorkbookReader(excelFilePath)) {
-            sheetData = initSheetDataMap(reader, sheetNames);
-            System.out.println("Loaded existing bookies");
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+        // create data store for each sheet
+        createSheetDataForEachSheet();
+        // add sheet settings to sheet data stores
+        addSheetSettingsToEachSheetData();
+        // add existing bookies to sheet data if keep order is true
+        addExistingBookiesFromSheetToSheetData();
         
         scraper = new Scraper();
         for (String sheet : sheetNames) {
@@ -142,15 +94,54 @@ public class Mediator {
                 continue;
             }
             
-            SheetSettings sds = props.getSheetProperties(sheet);
+            SheetData sd = SheetData.getSheetData(sheet);
+            SheetSettings ss = sd.getSheetSettings();
             
             System.out.println("Scraping bookies for sheet: " + sheet);
-            SheetData curSheetData = sheetData.get(sheet);
-            curSheetData.setScrapedBookies(
-                getCurrentBookies(scraper, sds.getScrapeUrl(), sheet));
+            sd.setCurrentBookies(
+                getCurrentBookies(scraper, ss.getScrapeUrl(), sheet));
         }
         
         // outputBookiesFromSheets(sheetData);
+    }
+    
+    private void addExistingBookiesFromSheetToSheetData() {
+        for (String sheetName : sheetNames) {
+            SheetData sd = SheetData.getSheetData(sheetName);
+            SheetSettings ss = sd.getSheetSettings();
+            
+            // if keep existing bookie order is false then continue
+            if (!ss.keepOrder()) {
+                continue;
+            }
+            
+            int brow = ss.getTableRow();
+            int bcol = ss.getBookieCol();
+            
+            try (WorkbookReader reader = WorkbookFactory
+                .newWorkbookReader(excelFilePath)) {
+                sd.setExistingBookies(
+                    getBookiesFromSheet(reader, sheetName, brow, bcol));
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+            
+            System.out.println("Added existing bookies for sheet " + sheetName);
+        }
+    }
+    
+    /* creates a sheet data store for each sheet in settings */
+    private void createSheetDataForEachSheet() {
+        for (String sheetName : sheetNames) {
+            SheetData.createSheetData(sheetName);
+        }
+    }
+    
+    private void addSheetSettingsToEachSheetData() {
+        for (String sheetName : sheetNames) {
+            SheetData sd = SheetData.getSheetData(sheetName);
+            sd.setSheetSettings(settings.getSheetProperties(sheetName));
+        }
     }
     
     
@@ -177,38 +168,11 @@ public class Mediator {
             
             System.out.println("Printing current bookies from sheet: " + sheet);
             
-            for (Bookie bookie : cur.getScrapedBookies()) {
+            for (Bookie bookie : cur.getCurrentBookies()) {
                 System.out.print(bookie + "   ");
             }
         }
         
-    }
-    
-    /* build sheet data map for later retrieval of existing bookies */
-    private Map<String, SheetData> initSheetDataMap(WorkbookReader reader,
-        List<String> sheetNames) {
-        Map<String, SheetData> tmpSheetData = new HashMap<String, SheetData>(
-            sheetNames.size());
-        
-        for (String curSheet : sheetNames) {
-            // System.out.println("Reading from sheet: " + curSheet);
-            
-            SheetSettings curProps = props.getSheetProperties(curSheet);
-            
-            int brow = curProps.getTableRow();
-            int bcol = curProps.getBookieCol();
-            Map<String, Bookie> existingBookies = getBookiesFromSheet(reader,
-                curSheet, brow, bcol);
-            
-            // create sheet data for this sheet and add existing bookies
-            SheetData newData = new SheetData(curSheet);
-            newData.setExistingBookies(existingBookies);
-            
-            // load existing bookies into sheet data
-            tmpSheetData.put(curSheet, newData);
-        }
-        
-        return tmpSheetData;
     }
     
     /**
@@ -239,8 +203,7 @@ public class Mediator {
         // read bookies names from Excel sheet
         List<String> bNames = null;
         try {
-            bNames = reader.forRange(CellRange.rowRange(bRow, bCol, 11))
-                .in(sheetName).read();
+            bNames = reader.forOpenRowRange(bRow, bCol).in(sheetName).read();
         } catch (SheetNotFoundException e) {
             // TODO either throw SNFException or return Collections.emptyMap()
             
