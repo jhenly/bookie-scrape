@@ -8,7 +8,7 @@ package com.sportsbookscraper.app.config;
  *
  * @author Jonathan Henly
  */
-enum PropertyKey {
+enum SettingsKey {
     
     /* application settings */
     SCRAPE_INTERVAL("app.auto.scrape.interval", 0), // def 0 means no autoscrape
@@ -41,24 +41,24 @@ enum PropertyKey {
     private boolean bdef; // the key's boolean default
     
     /** key - the property's key in the properties file */
-    private PropertyKey(String key) {
+    private SettingsKey(String key) {
         this.key = key;
     }
     
     /* sdef - this properties string default, if it has one */
-    private PropertyKey(String key, String def) {
+    private SettingsKey(String key, String def) {
         this(key);
         this.def = def;
     }
     
     /* idef - this property's int default, if it has one */
-    private PropertyKey(String key, int idef) {
+    private SettingsKey(String key, int idef) {
         this(key);
         this.idef = idef;
     }
     
     /* bdef - this property's boolean default, if it has one */
-    private PropertyKey(String key, boolean bdef) {
+    private SettingsKey(String key, boolean bdef) {
         this(key);
         this.bdef = bdef;
     }

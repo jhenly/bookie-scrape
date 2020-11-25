@@ -1,23 +1,23 @@
 package com.sportsbookscraper.app.config;
 
-import static com.sportsbookscraper.app.config.PropertyKey.ALL_SHEETS;
-import static com.sportsbookscraper.app.config.PropertyKey.BOOKIE_COL;
-import static com.sportsbookscraper.app.config.PropertyKey.COLS_SIZETOFIT;
-import static com.sportsbookscraper.app.config.PropertyKey.EXCEL_FILE_PATH;
-import static com.sportsbookscraper.app.config.PropertyKey.KEEP_ORDER;
-import static com.sportsbookscraper.app.config.PropertyKey.LAUNCH_ON_START;
-import static com.sportsbookscraper.app.config.PropertyKey.OPENER;
-import static com.sportsbookscraper.app.config.PropertyKey.OPENER_COL;
-import static com.sportsbookscraper.app.config.PropertyKey.ROWS_SIZETOFIT;
-import static com.sportsbookscraper.app.config.PropertyKey.SCRAPE_INTERVAL;
-import static com.sportsbookscraper.app.config.PropertyKey.SCRAPE_URL;
-import static com.sportsbookscraper.app.config.PropertyKey.SHEET_FONT;
-import static com.sportsbookscraper.app.config.PropertyKey.SHEET_FONT_SIZE;
-import static com.sportsbookscraper.app.config.PropertyKey.SHEET_TABLE;
-import static com.sportsbookscraper.app.config.PropertyKey.SHEET_TITLE;
-import static com.sportsbookscraper.app.config.PropertyKey.TEAMS_COL;
-import static com.sportsbookscraper.app.config.PropertyKey.TITLE_COL;
-import static com.sportsbookscraper.app.config.PropertyKey.TITLE_ROW;
+import static com.sportsbookscraper.app.config.SettingsKey.ALL_SHEETS;
+import static com.sportsbookscraper.app.config.SettingsKey.BOOKIE_COL;
+import static com.sportsbookscraper.app.config.SettingsKey.COLS_SIZETOFIT;
+import static com.sportsbookscraper.app.config.SettingsKey.EXCEL_FILE_PATH;
+import static com.sportsbookscraper.app.config.SettingsKey.KEEP_ORDER;
+import static com.sportsbookscraper.app.config.SettingsKey.LAUNCH_ON_START;
+import static com.sportsbookscraper.app.config.SettingsKey.OPENER;
+import static com.sportsbookscraper.app.config.SettingsKey.OPENER_COL;
+import static com.sportsbookscraper.app.config.SettingsKey.ROWS_SIZETOFIT;
+import static com.sportsbookscraper.app.config.SettingsKey.SCRAPE_INTERVAL;
+import static com.sportsbookscraper.app.config.SettingsKey.SCRAPE_URL;
+import static com.sportsbookscraper.app.config.SettingsKey.SHEET_FONT;
+import static com.sportsbookscraper.app.config.SettingsKey.SHEET_FONT_SIZE;
+import static com.sportsbookscraper.app.config.SettingsKey.SHEET_TABLE;
+import static com.sportsbookscraper.app.config.SettingsKey.SHEET_TITLE;
+import static com.sportsbookscraper.app.config.SettingsKey.TEAMS_COL;
+import static com.sportsbookscraper.app.config.SettingsKey.TITLE_COL;
+import static com.sportsbookscraper.app.config.SettingsKey.TITLE_ROW;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -191,7 +191,7 @@ final class UserProperties extends AbstractSettings {
     }
     
     /* overloaded helper method */
-    private String getRequiredPropertyOrThrow(PropertyKey pk)
+    private String getRequiredPropertyOrThrow(SettingsKey pk)
         throws RequiredSettingNotFoundException {
         return getRequiredPropertyOrThrow(pk.key());
     }
@@ -214,12 +214,12 @@ final class UserProperties extends AbstractSettings {
     }
     
     /* helper int property getter */
-    private int getIntPropOrDefault(PropertyKey pk) {
+    private int getIntPropOrDefault(SettingsKey pk) {
         return getIntPropOrDefault(pk.key(), pk.idef());
     }
     
     /* helper int property getter */
-    private int getIntPropOrDefault(String sheet, PropertyKey pk) {
+    private int getIntPropOrDefault(String sheet, SettingsKey pk) {
         return getIntPropOrDefault(sheet + pk.key(), pk.idef());
     }
     
@@ -230,12 +230,12 @@ final class UserProperties extends AbstractSettings {
     }
     
     /* helper string property getter */
-    private String getStrPropOrDefault(PropertyKey pk) {
+    private String getStrPropOrDefault(SettingsKey pk) {
         return getStrPropOrDefault(pk.key(), pk.sdef());
     }
     
     /* helper string property getter */
-    private String getStrPropOrDefault(String sheet, PropertyKey pk) {
+    private String getStrPropOrDefault(String sheet, SettingsKey pk) {
         return getStrPropOrDefault(sheet + pk.key(), pk.sdef());
     }
     
@@ -246,12 +246,12 @@ final class UserProperties extends AbstractSettings {
     }
     
     /* helper boolean property getter */
-    private boolean getBoolPropOrDefault(PropertyKey pk) {
+    private boolean getBoolPropOrDefault(SettingsKey pk) {
         return getBoolPropOrDefault(pk.key(), pk.bdef());
     }
     
     /* helper boolean property getter */
-    private boolean getBoolPropOrDefault(String sheet, PropertyKey pk) {
+    private boolean getBoolPropOrDefault(String sheet, SettingsKey pk) {
         return getBoolPropOrDefault(sheet + pk.key(), pk.bdef());
     }
     
