@@ -24,8 +24,8 @@ public final class SettingsFactory {
     
     
     /**
-     * Loads user settings from a passed in properties file path into a concrete
-     * {@link Settings} implementation instance.
+     * Loads user settings, from a passed in properties file path, into a
+     * concrete {@link Settings} implementation instance.
      *
      * @param propertiesFile
      *                       - either a resource in the class path or a path to
@@ -42,21 +42,22 @@ public final class SettingsFactory {
      */
     public static Settings loadSettings(String propertiesFile)
         throws RequiredSettingNotFoundException, IOException {
-        return new WorkbookProperties(propertiesFile);
+        return new UserProperties(propertiesFile);
     }
     
     
     /**
-     * Loads user settings from a passed in properties file path into a concrete
-     * {@link Settings} implementation instance. Also tells the data store to
-     * use the supplied Excel file path, rather than the path in the properties.
+     * Loads user settings, from a passed in properties file path, into a
+     * concrete {@link Settings} implementation instance. Also tells the data
+     * store to use the supplied Excel file path, rather than the path in the
+     * properties file.
      *
      * @param propertiesFile
      *                        - either a resource in the class path or a path to
      *                        a file
      * @param pathToExcelFile
      *                        - the path to Excel file to be used, rather than
-     *                        the path loaded from properties
+     *                        the path loaded from the properties file
      * @return a concrete implementation of {@link Settings} which can be used
      *         to retrieve specific properties
      * @throws RequiredSettingNotFoundException
@@ -71,6 +72,6 @@ public final class SettingsFactory {
     public static Settings loadSettings(String propertiesFile,
         String pathToExcelFile)
         throws RequiredSettingNotFoundException, IOException {
-        return new WorkbookProperties(propertiesFile, pathToExcelFile);
+        return new UserProperties(propertiesFile, pathToExcelFile);
     }
 }

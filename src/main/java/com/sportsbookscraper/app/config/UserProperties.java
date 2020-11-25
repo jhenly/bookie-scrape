@@ -74,7 +74,7 @@ import java.util.Properties;
  *
  * @author Jonathan Henly
  */
-final class WorkbookProperties extends AbstractSettings {
+final class UserProperties extends AbstractSettings {
     // TODO remove CONFIG_CLASS_PATH <- it's just for debugging
     private final String CONFIG_CLASS_PATH = "./config/config.properties";
     
@@ -84,14 +84,14 @@ final class WorkbookProperties extends AbstractSettings {
     // individual sheet properties holder
     private final List<SheetSettings> sheetProps;
     
-    WorkbookProperties(String propertiesFile)
+    UserProperties(String propertiesFile)
         throws RequiredSettingNotFoundException, IOException {
         this(propertiesFile, null);
     }
     
     // NOTE: do not change the order of calls in the following constructor, some
     // calls depend on other calls happening prior
-    WorkbookProperties(String propertiesFile, String pathToExcelFile)
+    UserProperties(String propertiesFile, String pathToExcelFile)
         throws IOException, RequiredSettingNotFoundException {
         // load user settings from config.properties file
         props = loadProps(propertiesFile);
@@ -116,7 +116,7 @@ final class WorkbookProperties extends AbstractSettings {
     private Properties loadProps(String filename) throws IOException {
         Properties props = new Properties();
         
-        try (InputStream input = WorkbookProperties.class.getClassLoader()
+        try (InputStream input = UserProperties.class.getClassLoader()
             .getResourceAsStream(filename)) {
             if (input == null) {
                 System.out.println("Sorry, unable to find " + filename);
