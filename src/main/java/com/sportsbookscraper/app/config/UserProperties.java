@@ -5,6 +5,7 @@ import static com.sportsbookscraper.app.config.SettingsKey.BOOKIE_COL;
 import static com.sportsbookscraper.app.config.SettingsKey.COLS_SIZETOFIT;
 import static com.sportsbookscraper.app.config.SettingsKey.EXCEL_FILE_PATH;
 import static com.sportsbookscraper.app.config.SettingsKey.KEEP_ORDER;
+import static com.sportsbookscraper.app.config.SettingsKey.LAST_SCRAPE;
 import static com.sportsbookscraper.app.config.SettingsKey.LAUNCH_ON_START;
 import static com.sportsbookscraper.app.config.SettingsKey.OPENER;
 import static com.sportsbookscraper.app.config.SettingsKey.OPENER_COL;
@@ -92,7 +93,6 @@ final class UserProperties extends AbstractSettings {
     private final String CONFIG_CLASS_PATH = "./config/config.properties";
     
     private final Properties props;
-    private final String excelFilePath;
     private final List<String> allSheets;
     // individual sheet properties holder
     private final List<SheetSettings> sheetProps;
@@ -147,6 +147,7 @@ final class UserProperties extends AbstractSettings {
     private void initApplicationProperties() {
         launchOnStart = getBoolPropOrDefault(LAUNCH_ON_START);
         scrapeInterval = getIntPropOrDefault(SCRAPE_INTERVAL);
+        lastScrape = getLongPropOrDefault(LAST_SCRAPE); // should be 0L
     }
     
     /* splits comma separated sheet names to an unmodifiable list, or throws */
@@ -214,13 +215,40 @@ final class UserProperties extends AbstractSettings {
     }
     
     /* helper int property getter */
-    private int getIntPropOrDefault(SettingsKey pk) {
-        return getIntPropOrDefault(pk.key(), pk.idef());
+    private int getIntPropOrDefault(SettingsKey sk) {
+        return getIntPropOrDefault(sk.key(), sk.idef());
     }
     
     /* helper int property getter */
-    private int getIntPropOrDefault(String sheet, SettingsKey pk) {
-        return getIntPropOrDefault(sheet + pk.key(), pk.idef());
+    private int getIntPropOrDefault(String sheet, SettingsKey sk) {
+        return getIntPropOrDefault(sheet + sk.key(), sk.idef());
+    }
+    
+    /* helper long property getter */
+    private long getLongPropOrDefault(String prop, long def) {
+        String tmp = props.getProperty(prop);
+        if (tmp != null) {
+            long val;
+            try {
+                val = Long.parseLong(tmp);
+            } catch (NumberFormatException nfe) {
+                return def;
+            }
+            
+            return (val >= 0L) ? val : def;
+        }
+        
+        return def;
+    }
+    
+    /* helper long property getter */
+    private long getLongPropOrDefault(SettingsKey sk) {
+        return getLongPropOrDefault(sk.key(), sk.ldef());
+    }
+    
+    /* helper lomg property getter */
+    private long getLongPropOrDefault(String sheet, SettingsKey sk) {
+        return getLongPropOrDefault(sheet + sk.key(), sk.ldef());
     }
     
     /* helper string property getter */
@@ -230,13 +258,13 @@ final class UserProperties extends AbstractSettings {
     }
     
     /* helper string property getter */
-    private String getStrPropOrDefault(SettingsKey pk) {
-        return getStrPropOrDefault(pk.key(), pk.sdef());
+    private String getStrPropOrDefault(SettingsKey sk) {
+        return getStrPropOrDefault(sk.key(), sk.sdef());
     }
     
     /* helper string property getter */
-    private String getStrPropOrDefault(String sheet, SettingsKey pk) {
-        return getStrPropOrDefault(sheet + pk.key(), pk.sdef());
+    private String getStrPropOrDefault(String sheet, SettingsKey sk) {
+        return getStrPropOrDefault(sheet + sk.key(), sk.sdef());
     }
     
     /* helper boolean property getter */
@@ -246,43 +274,19 @@ final class UserProperties extends AbstractSettings {
     }
     
     /* helper boolean property getter */
-    private boolean getBoolPropOrDefault(SettingsKey pk) {
-        return getBoolPropOrDefault(pk.key(), pk.bdef());
+    private boolean getBoolPropOrDefault(SettingsKey sk) {
+        return getBoolPropOrDefault(sk.key(), sk.bdef());
     }
     
     /* helper boolean property getter */
-    private boolean getBoolPropOrDefault(String sheet, SettingsKey pk) {
-        return getBoolPropOrDefault(sheet + pk.key(), pk.bdef());
+    private boolean getBoolPropOrDefault(String sheet, SettingsKey sk) {
+        return getBoolPropOrDefault(sheet + sk.key(), sk.bdef());
     }
     
-    /* --- Public Accessors Section --- */
-    
-    @Override
-    public int getAutoScrapeInterval() { return scrapeInterval; }
-    
-    @Override
-    public boolean launchOnStart() { return launchOnStart; }
-    
-    /**
-     * @return the path to the Excel file, if set in {@code config.properties}
-     */
-    @Override
-    public String getExcelFilePath() { return excelFilePath; }
+    /* --- Interface Methods Not Covered By Abstract Settings --- */
     
     @Override
     public List<String> getSheetNames() { return allSheets; }
-    
-    @Override
-    public String getSheetFont() { return font; }
-    
-    @Override
-    public int getSheetFontSize() { return fontSize; }
-    
-    @Override
-    public boolean colsAreSizedToFit() { return colSizeToFit; }
-    
-    @Override
-    public boolean rowsAreSizedToFit() { return rowSizeToFit; }
     
     @Override
     public SheetSettings getSheetSettings(int index) {

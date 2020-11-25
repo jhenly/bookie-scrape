@@ -1,6 +1,8 @@
 package com.sportsbookscraper.app.config;
 
 import java.io.IOException;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 
 /**
@@ -9,6 +11,17 @@ import java.io.IOException;
  * @author Jonathan Henly
  */
 public final class UserSettings {
+    private static final String PREF_NODE_NAME = "/com/sportsbookscraper/app";
+    private static Preferences userPrefs;
+    
+    /* gets singleton Preferences instance userPrefs */
+    private static Preferences getUserPreferences() {
+        if (userPrefs == null) {
+            userPrefs = Preferences.userRoot().node(PREF_NODE_NAME);
+        }
+        
+        return userPrefs;
+    }
     
     // don't subclass this class
     private UserSettings() {}
@@ -73,5 +86,29 @@ public final class UserSettings {
         String pathToExcelFile)
         throws RequiredSettingNotFoundException, IOException {
         return new UserProperties(propertiesFile, pathToExcelFile);
+    }
+    
+    /* -- Private Static Methods -- */
+    
+    private static final String BACKING_STORE_AVAIL = "BackingStoreAvail";
+    
+    /**
+     * Method that determines whether the backing store is available by
+     * attempting to modify a preference value and flush the result to the
+     * backing store.
+     * 
+     * @return {@code true} if the backing store is available, otherwise
+     *         {@code false}
+     */
+    private static boolean backingStoreAvailable() {
+        Preferences prefs = Preferences.userRoot().node("<temporary>");
+        try {
+            boolean oldValue = prefs.getBoolean(BACKING_STORE_AVAIL, false);
+            prefs.putBoolean(BACKING_STORE_AVAIL, !oldValue);
+            prefs.flush();
+        } catch (BackingStoreException e) {
+            return false;
+        }
+        return true;
     }
 }

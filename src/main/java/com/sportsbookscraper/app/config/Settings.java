@@ -35,6 +35,13 @@ public interface Settings {
     int getAutoScrapeInterval();
     
     /**
+     * Gets the last scrape time in milliseconds.
+     * 
+     * @return the time since last scrape in milliseconds
+     */
+    long getLastScrapeTime();
+    
+    /**
      * Gets whether the application should launch when the computer starts or
      * not.
      * 
@@ -51,7 +58,6 @@ public interface Settings {
      *         unmodifiable list} containing the Excel workbook's sheet names.
      */
     List<String> getSheetNames();
-    
     
     /**
      * Gets the font name used by all sheets.

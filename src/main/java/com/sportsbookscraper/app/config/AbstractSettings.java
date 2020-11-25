@@ -1,9 +1,5 @@
 package com.sportsbookscraper.app.config;
 
-import java.util.Collections;
-import java.util.List;
-
-
 /**
  * Skeleton base class for accessing properties specific to this project.
  *
@@ -12,80 +8,53 @@ import java.util.List;
 public abstract class AbstractSettings implements Settings {
     
     /* end of constants */
-    
+    protected String excelFilePath;
     protected int scrapeInterval;
     protected boolean launchOnStart;
+    protected long lastScrape;
     protected String font;
     protected int fontSize;
     protected boolean colSizeToFit;
     protected boolean rowSizeToFit;
     
     
-    // To Allow this class to be subclassed.
+    // to allow this class to be subclassed.
     protected AbstractSettings() {}
     
-    /**
-     * @return the path to the Excel file
-     */
     @Override
-    public abstract String getExcelFilePath();
+    public int getAutoScrapeInterval() { return scrapeInterval; }
+    
+    @Override
+    public boolean launchOnStart() { return launchOnStart; }
+    
+    @Override
+    public long getLastScrapeTime() { return lastScrape; }
     
     /**
-     * @return returns an {@linkplain Collections#unmodifiableList(List)
-     *         unmodifiable list} containing the Excel workbook's sheet names.
+     * @return the path to the Excel file, if set in {@code config.properties}
      */
     @Override
-    public abstract List<String> getSheetNames();
+    public String getExcelFilePath() { return excelFilePath; }
     
-    /**
-     * @return font name used by all sheets
-     */
     @Override
-    public abstract String getSheetFont();
+    public String getSheetFont() { return font; }
     
-    /**
-     * @return font size used by all sheets
-     */
     @Override
-    public abstract int getSheetFontSize();
+    public int getSheetFontSize() { return fontSize; }
     
-    /**
-     * @return {@code true} if Excel column widths should fit their content,
-     *         {@code false}
-     */
     @Override
-    public abstract boolean colsAreSizedToFit();
+    public boolean colsAreSizedToFit() { return colSizeToFit; }
     
-    /**
-     * @return {@code true} if Excel row heights should fit their content,
-     *         otherwise {@code false}
-     */
     @Override
-    public abstract boolean rowsAreSizedToFit();
-    
-    /**
-     * @param index
-     *              - which sheet's properties to retrieve
-     * @return the sheet properties associated with sheet index supplied
-     */
-    @Override
-    public abstract SheetSettings getSheetSettings(int index);
-    
-    /**
-     * @param name
-     *             - the name of the sheet's properties to retrieve
-     * @return the sheet properties associated with sheet name supplied
-     */
-    @Override
-    public abstract SheetSettings getSheetSettings(String name);
-    
+    public boolean rowsAreSizedToFit() { return rowSizeToFit; }
     
     /**
      * Class that wraps individual sheet properties with accessor methods.
      *
      * @author Jonathan Henly
      */
-    protected static class AbstractSheetSettings implements Settings.SheetSettings {
+    protected static class AbstractSheetSettings
+        implements Settings.SheetSettings {
         /** sheet's name */
         protected String sheetName;
         /** sheet's url to scrape */
