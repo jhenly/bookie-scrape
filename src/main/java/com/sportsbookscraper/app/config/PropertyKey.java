@@ -1,11 +1,13 @@
 package com.sportsbookscraper.app.config;
 
 /**
- * Enum representing the keys in a properties or preference file.
+ * Enum representing the user setting keys.
+ * <p>
+ * These keys are used when storing or loading settings from a properties file
+ * or preferences data store.
  *
  * @author Jonathan Henly
  */
-
 enum PropertyKey {
     
     /* application settings */
@@ -50,13 +52,13 @@ enum PropertyKey {
     }
     
     /* idef - this property's int default, if it has one */
-    PropertyKey(String key, int idef) {
+    private PropertyKey(String key, int idef) {
         this(key);
         this.idef = idef;
     }
     
     /* bdef - this property's boolean default, if it has one */
-    PropertyKey(String key, boolean bdef) {
+    private PropertyKey(String key, boolean bdef) {
         this(key);
         this.bdef = bdef;
     }
