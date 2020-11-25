@@ -28,15 +28,26 @@ import java.util.Properties;
 
 
 /**
- * Loads {@code config.properties} file and populates global configs and
- * individual Excel workbook, sheet specific configs.
+ * This class is used to load user settings from the {@code config.properties}
+ * file, by default.
  * <p>
- * Example {@code config.properties} file:
+ * This class has a constructor that takes a path to a properties file, if a
+ * properties file other than {@code config.properties} is to be used. This
+ * class also contains methods to retrieve application specific settings and
+ * individual settings for sheets in an Excel workbook.
+ * <p>
+ * An example of the {@code config.properties} file follows:
  *
  * <pre>
- * # path to Excel file
- * excel.file.path=/absolute/or/relative/path/to/excel/file
+ * # application settings
  *
+ * # launch application on computer start (default is false)
+ * app.launch.on.start=false
+ * # auto scrape time interval, in minutes (default is 0, meaning no auto scrape)
+ * app.auto.scrape.interval=0
+ *
+ * # path to Excel file
+ * excel.file.path=
  * # list of all sheets
  * all.sheets=NFL,NCAAF
  *
@@ -59,7 +70,8 @@ import java.util.Properties;
  * NFL.sheet.table.opener=true
  * NFL.sheet.table.opener.col=1
  * NFL.sheet.table.bookie.col=2
- *
+ * NFL.sheet.table.bookie.keep.order=true
+ * 
  * # NCAAF sheet
  * NCAAF.scrape.url=https\://classic.sportsbookreview.com/betting-odds/college-football/money-line/
  * NCAAF.sheet.title=College Football
@@ -70,6 +82,7 @@ import java.util.Properties;
  * NCAAF.sheet.table.opener=true
  * NCAAF.sheet.table.opener.col=1
  * NCAAF.sheet.table.bookie.col=2
+ * NCAAF.sheet.table.bookie.keep.order=true
  * </pre>
  *
  * @author Jonathan Henly

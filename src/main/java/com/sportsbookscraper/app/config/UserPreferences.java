@@ -1,10 +1,10 @@
 package com.sportsbookscraper.app.config;
 
 /**
- * Loads user settings from a backing data store that is operating system
- * dependent.
+ * This class is used to load user settings from a backing data store, which is
+ * operating system dependent.
  * <p>
- * This class contains methods to load application specific settings and
+ * This class contains methods to retrieve application specific settings and
  * individual settings for sheets in an Excel workbook.
  * <p>
  * <b>Note:</b> if no user settings can be found via Java's preferences API,
