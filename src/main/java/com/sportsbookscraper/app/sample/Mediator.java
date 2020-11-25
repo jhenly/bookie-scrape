@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import com.sportsbookscraper.app.config.RequiredSettingNotFoundException;
 import com.sportsbookscraper.app.config.Settings;
 import com.sportsbookscraper.app.config.Settings.SheetSettings;
-import com.sportsbookscraper.app.config.SettingsFactory;
+import com.sportsbookscraper.app.config.UserSettings;
 import com.sportsbookscraper.app.excel.SheetNotFoundException;
 import com.sportsbookscraper.app.excel.WorkbookFactory;
 import com.sportsbookscraper.app.excel.WorkbookReader;
@@ -69,7 +69,7 @@ public class Mediator {
      */
     public Mediator(String propertiesPath, String excelFilePath) {
         try {
-            settings = SettingsFactory.loadSettings(propertiesPath,
+            settings = UserSettings.loadSettings(propertiesPath,
                 excelFilePath);
         } catch (RequiredSettingNotFoundException | IOException e) {
             e.printStackTrace();

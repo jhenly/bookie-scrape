@@ -8,10 +8,10 @@ import java.io.IOException;
  *
  * @author Jonathan Henly
  */
-public final class SettingsFactory {
+public final class UserSettings {
     
     // don't subclass this class
-    private SettingsFactory() {}
+    private UserSettings() {}
     
     /**
      * Loads user settings from an OS specific data store rather than a file
