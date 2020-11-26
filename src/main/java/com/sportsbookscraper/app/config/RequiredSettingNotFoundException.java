@@ -11,16 +11,46 @@ import java.nio.file.Path;
  */
 public class RequiredSettingNotFoundException extends Exception {
     private static final long serialVersionUID = -1207032861834691318L;
+    private String propFilePath;
+    private String settingKey;
     private boolean inPropertiesFile;
+    private boolean inUserPreferences;
     
     /**
-     * Returns whether or not the required setting was not be found in a
-     * properties file or in user preferences.
+     * Returns whether or not the required setting was not found in a properties
+     * file.
      * 
      * @return {@code true} if the required setting was not found in a
      *         properties file, otherwise {@code false}
      */
     public boolean notFoundInPropertiesFile() { return inPropertiesFile; }
+    
+    /**
+     * Returns whether or not the required setting was not found in the user's
+     * backing preferences data store.
+     * 
+     * @return {@code true} if the required setting was not found in the user's
+     *         backing preferences data store, otherwise {@code false}
+     */
+    public boolean notFoundInUserPreferences() { return inUserPreferences; }
+    
+    /**
+     * Returns a string representing the properties file path used, or
+     * {@code null} if this exception is not related to a setting not being
+     * found in a properties file.
+     * 
+     * @return the properties file path where the setting was not found, or
+     *         {@code null}
+     */
+    public String propertiesFilePath() { return propFilePath; }
+    
+    /**
+     * Returns the setting's key that was not found in either a properties file
+     * or a user's backing preferences data store.
+     * 
+     * @return the setting's key that was not found.
+     */
+    public String requiredSettingKey() { return settingKey; }
     
     /**
      * Constructs a {@code RequiredPropertyNotFoundException}, combining the
@@ -34,7 +64,7 @@ public class RequiredSettingNotFoundException extends Exception {
      */
     public RequiredSettingNotFoundException(SettingsKey key) {
         super(combineIntoPreferenceMessage(key));
-        inPropertiesFile = false;
+        inUserPreferences = true;
     }
     
     /* helper method to combine strings in constructor call to super() */
@@ -57,7 +87,10 @@ public class RequiredSettingNotFoundException extends Exception {
      */
     public RequiredSettingNotFoundException(String property,
         String propsFilePath) {
+        // call Exception(String) with detailed message
         super(combineIntoPropertyMessage(property, propsFilePath));
+        
+        settingKey = property;
         inPropertiesFile = true;
     }
     
@@ -67,6 +100,43 @@ public class RequiredSettingNotFoundException extends Exception {
         final String frmtstr = "the required property '%s' was not found in the"
             + " properties file '%s'";
         return String.format(frmtstr, prop, filepath);
+    }
+    
+    /**
+     * Constructs a {@code RequiredPropertyNotFoundException} from an exception
+     * thrown when a required property was not found in the user's preferences.
+     * <p>
+     * This exception signals a fatal error, that a required property could not
+     * be found in the user's backing preferences store or a specified
+     * properties file.
+     * 
+     * @param propertiesFilePath
+     *                           the path to the properties file
+     * @param rsnfe
+     *                           the exception that was thrown when a required
+     *                           setting was not found in the user's backing
+     *                           preferences store
+     */
+    public RequiredSettingNotFoundException(SettingsKey key,
+        String propertiesFilePath, RequiredSettingNotFoundException rsnfe) {
+        // call Exception(String) with detail message
+        super(getCombinedNotFoundMsg(key, propertiesFilePath));
+        super.initCause(rsnfe);
+        
+        settingKey = settingKey;
+        propFilePath = propertiesFilePath;
+        inUserPreferences = true;
+        inPropertiesFile = true;
+    }
+    
+    
+    /* helper to get a detailed msg when setting can't be found in properties
+     * file or user's backing preferences store */
+    private static String getCombinedNotFoundMsg(SettingsKey key,
+        String propFilePath) {
+        final String frmtstr = "the required user setting '%s' was not found in"
+            + " the user's preferences or the properties file '%s'";
+        return String.format(frmtstr, key.key(), propFilePath);
     }
     
     
