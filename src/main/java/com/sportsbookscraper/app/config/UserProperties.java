@@ -12,6 +12,7 @@ import static com.sportsbookscraper.app.config.SettingsKey.OPENER_COL;
 import static com.sportsbookscraper.app.config.SettingsKey.ROWS_SIZETOFIT;
 import static com.sportsbookscraper.app.config.SettingsKey.SCRAPE_INTERVAL;
 import static com.sportsbookscraper.app.config.SettingsKey.SCRAPE_URL;
+import static com.sportsbookscraper.app.config.SettingsKey.SETTINGS_LAST_UPDATE;
 import static com.sportsbookscraper.app.config.SettingsKey.SHEET_FONT;
 import static com.sportsbookscraper.app.config.SettingsKey.SHEET_FONT_SIZE;
 import static com.sportsbookscraper.app.config.SettingsKey.SHEET_TABLE;
@@ -20,8 +21,12 @@ import static com.sportsbookscraper.app.config.SettingsKey.TEAMS_COL;
 import static com.sportsbookscraper.app.config.SettingsKey.TITLE_COL;
 import static com.sportsbookscraper.app.config.SettingsKey.TITLE_ROW;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -89,27 +94,110 @@ import java.util.Properties;
  * @author Jonathan Henly
  */
 final class UserProperties extends AbstractSettings {
-    // TODO remove CONFIG_CLASS_PATH <- it's just for debugging
-    private final String CONFIG_CLASS_PATH = "./config/config.properties";
+    
+    /**
+     * TODO DELETE THIS DEBUGGING METHOD
+     */
+    @Override
+    public void listSettings(PrintStream out) { props.list(out); }
+    
+    // class path to the default properties file
+    static final String DEFAULT_PROPERTIES_FILE = "./config/config.properties";
     
     private final Properties props;
     private final List<String> allSheets;
-    // individual sheet properties holder
-    private final List<SheetSettings> sheetProps;
+    private String propsFilePath;
     
+    /**
+     * This constructor is used when the user's backing preference's data store
+     * cannot be reached or is corrupted, and a user has supplied a non-default
+     * properties file.
+     * 
+     * @param propertiesFile
+     *                       - path to a specified properties file
+     */
     UserProperties(String propertiesFile)
         throws RequiredSettingNotFoundException, IOException {
         this(propertiesFile, null);
     }
     
-    // NOTE: do not change the order of calls in the following constructor, some
-    // calls depend on other calls happening prior
-    UserProperties(String propertiesFile, String pathToExcelFile)
+    /**
+     * This constructor is used when the user's backing preference's data store
+     * cannot be reached or is corrupted, and a user has supplied a non-default
+     * properties file as well as a path to an Excel file.
+     * <p>
+     * If the specified path to the Excel file is {@code null} then this
+     * constructor will use the Excel file path in the specified properties
+     * file.
+     * 
+     * @param propertiesFile
+     *                        - path to a specified properties file
+     * @param pathToExcelFile
+     *                        - if not {@code null}, a property overriding path
+     *                        to an Excel file
+     */
+    UserProperties(String propertiesFilePath, String pathToExcelFile)
         throws IOException, RequiredSettingNotFoundException {
-        // load user settings from config.properties file
-        props = loadProps(propertiesFile);
+        this(null, propertiesFilePath, pathToExcelFile);
+    }
+    
+    /**
+     * Special constructor used to signal that the default properties file
+     * should be used to load user settings.
+     * <p>
+     * This constructor should only be used if loading user settings from
+     * preferences or from a specified properties file have failed.
+     * <p>
+     * If this constructor throws a {@code RequiredSheetNotFoundException}, then
+     * nothing more can be done to load user settings. The caller of this method
+     * should catch the exception and throw a new exception using the following:
+     * <blockquote>
+     * 
+     * <pre>
+     * throw new RequiredSheetNotFoundException(SettingsKey, String, String)
+     * </pre>
+     * 
+     * </blockquote>
+     * 
+     * 
+     * @param pathToExcelFile
+     * @param cannonFodder
+     * @throws RequiredSettingNotFoundException
+     * @throws IOException
+     * @see RequiredSettingNotFoundException#RequiredSettingNotFoundException(
+     *      SettingsKey, String, String) RequiredSettingNotFoundException(
+     *      SettingsKey, String, String)
+     */
+    UserProperties(String pathToExcelFile, boolean cannonFodder)
+        throws IOException, RequiredSettingNotFoundException {
+        this(null, DEFAULT_PROPERTIES_FILE, pathToExcelFile);
+    }
+    
+    /* convenience constructor used by UserSettings */
+    UserProperties(Properties props, String propertiesFilePath)
+        throws RequiredSettingNotFoundException, IOException {
+        this(props, propertiesFilePath, null);
+    }
+    
+    /* main constructor that handles calls from all other constructors */
+    UserProperties(Properties newProps, String propertiesFilePath,
+        String pathToExcelFile)
+        throws RequiredSettingNotFoundException, IOException {
+        // assign propsFilePath in case it's needed to throw exceptions
+        propsFilePath = propertiesFilePath;
         
-        if (pathToExcelFile != null) {
+        /* DO NOT CHANGE THE ORDER OF CALLS IN THIS CONSTRUCTOR some calls
+         * depend on other calls happening prior */
+        
+        if (newProps == null) {
+            // load properties from file if newProps is null
+            props = loadPropertiesFromFile(propertiesFilePath);
+        } else {
+            // use newProps instead of loading properties from file
+            props = newProps;
+        }
+        
+        if (pathToExcelFile == null) {
             excelFilePath = getRequiredPropertyOrThrow(EXCEL_FILE_PATH);
         } else {
             excelFilePath = pathToExcelFile;
@@ -122,22 +210,53 @@ final class UserProperties extends AbstractSettings {
         // initialize properties shared across all sheets, i.e. font, etc.
         initSharedProperties();
         // create list of all individual sheet properties
-        sheetProps = loadSheetProperties(allSheets);
+        sheetSettings = loadSheetProperties(allSheets);
     }
     
-    /* loads properties from a passed in file, or throws IOException */
-    private Properties loadProps(String filename) throws IOException {
-        Properties props = new Properties();
+    
+    /* loads properties from a passed in file */
+    private Properties loadPropertiesFromFile(String filePath)
+        throws IOException, FileNotFoundException {
         
+        Properties props = null;
+        
+        if (filePath.equals(DEFAULT_PROPERTIES_FILE)) {
+            props = loadDefaultProperties();
+        } else {
+            props = loadPropertiesFromExternalFile(filePath);
+        }
+        return props;
+    }
+    
+    /* */
+    private Properties loadDefaultProperties() throws IOException {
+        Properties props = new Properties();
         try (InputStream input = UserProperties.class.getClassLoader()
-            .getResourceAsStream(filename)) {
+            .getResourceAsStream(DEFAULT_PROPERTIES_FILE)) {
+            
             if (input == null) {
-                System.out.println("Sorry, unable to find " + filename);
+                // if input is null then a fatal error has occurred
+                throw new FileNotFoundException("Internal properties file '"
+                    + DEFAULT_PROPERTIES_FILE + "' does not exist.");
             }
             
             props.load(input);
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } // don't need a catch statement, this method throws an IOException
+        
+        return props;
+    }
+    
+    /* if IOException (other than FileNotFoundException) is thrown, then it's
+     * from closing reader, which should very rarely (if ever) throw an
+     * IOException */
+    private Properties loadPropertiesFromExternalFile(String filePath)
+        throws FileNotFoundException, IOException {
+        Properties props = new Properties();
+        
+        File propertiesFile = new File(filePath);
+        
+        try (FileReader reader = new FileReader(propertiesFile)) {
+            props.load(reader);
         }
         
         return props;
@@ -145,6 +264,7 @@ final class UserProperties extends AbstractSettings {
     
     /* initialize application specific properties */
     private void initApplicationProperties() {
+        lastUpdatedTime = getLongPropOrDefault(SETTINGS_LAST_UPDATE);
         launchOnStart = getBoolPropOrDefault(LAUNCH_ON_START);
         scrapeInterval = getIntPropOrDefault(SCRAPE_INTERVAL);
         lastScrape = getLongPropOrDefault(LAST_SCRAPE); // should be 0L
@@ -153,20 +273,13 @@ final class UserProperties extends AbstractSettings {
     /* splits comma separated sheet names to an unmodifiable list, or throws */
     private List<String> initAllSheets()
         throws RequiredSettingNotFoundException {
-        // will throw if ALL_SHEETS property is not in config.properties
-        String tmpAllSheets = getRequiredPropertyOrThrow(ALL_SHEETS);
+        // will throw if ALL_SHEETS property is not in properties
+        String allSheetsStr = getRequiredPropertyOrThrow(ALL_SHEETS);
         
-        String[] sheetNames = tmpAllSheets.split(",");
-        List<String> nonEmptySheetNames = new ArrayList<>(sheetNames.length);
+        // convert non-empty comma delimited sheet names to List<String>
+        List<String> nonEmptySheetNames = Utils
+            .commaDelimitedStringToList(allSheetsStr);
         
-        // iterate over sheetNames, remove trail/leading whitespace and add to
-        // list if not an empty string
-        for (int i = 0; i < sheetNames.length; i++) {
-            String tmp = sheetNames[i].strip();
-            if (!tmp.isEmpty()) {
-                nonEmptySheetNames.add(tmp);
-            }
-        }
         
         // return unmodifiable list, it should not be changed
         return Collections.unmodifiableList(nonEmptySheetNames);
@@ -180,26 +293,31 @@ final class UserProperties extends AbstractSettings {
         rowSizeToFit = getBoolPropOrDefault(ROWS_SIZETOFIT);
     }
     
-    /* helper method used by methods retrieving required properties */
-    private String getRequiredPropertyOrThrow(String property)
-        throws RequiredSettingNotFoundException {
-        String propValue = props.getProperty(property);
-        if (propValue == null) {
-            throw new RequiredSettingNotFoundException(property,
-                CONFIG_CLASS_PATH);
-        }
-        return propValue;
-    }
-    
     /* overloaded helper method */
     private String getRequiredPropertyOrThrow(SettingsKey pk)
         throws RequiredSettingNotFoundException {
         return getRequiredPropertyOrThrow(pk.key());
     }
     
+    /* helper method used by methods retrieving required properties */
+    private String getRequiredPropertyOrThrow(String property)
+        throws RequiredSettingNotFoundException {
+        // try to get the required property
+        String propValue = props.getProperty(property);
+        
+        // throw if required property is null
+        if (propValue == null) {
+            throw new RequiredSettingNotFoundException(property, propsFilePath);
+        }
+        
+        return propValue;
+    }
+    
+    
     /* helper int property getter */
     private int getIntPropOrDefault(String prop, int def) {
         String tmp = props.getProperty(prop);
+        
         if (tmp != null) {
             int val;
             try {
@@ -288,20 +406,6 @@ final class UserProperties extends AbstractSettings {
     @Override
     public List<String> getSheetNames() { return allSheets; }
     
-    @Override
-    public SheetSettings getSheetSettings(int index) {
-        return sheetProps.get(index);
-    }
-    
-    @Override
-    public SheetSettings getSheetSettings(String name) {
-        for (SheetSettings sds : sheetProps) {
-            if (sds.getSheetName().equals(name)) { return sds; }
-        }
-        
-        return null;
-    }
-    
     /* -- SheetProperties Section -- */
     
     /* iterates over sheet names and creates sheet properties */
@@ -310,43 +414,44 @@ final class UserProperties extends AbstractSettings {
         
         // build sheet properties for each sheet
         for (String sheetName : sheets) {
-            sprops.add(buildSheetProperties(sheetName));
+            sprops.add(buildSheetSettings(sheetName));
         }
         
         return Collections.unmodifiableList(sprops);
     }
     
     /* builds sheet properties using the supplied sheet name */
-    private SheetSettings buildSheetProperties(String sheet) {
+    @Override
+    protected SheetSettings buildSheetSettings(String sheetName) {
         AbstractSheetSettings sp = new AbstractSheetSettings();
         
         // set this sheet's sheet name
-        sp.sheetName = sheet;
+        sp.sheetName = sheetName;
         
         // if no url then default, will be handled later in mediator
-        sp.scrapeUrl = getStrPropOrDefault(sheet, SCRAPE_URL);
+        sp.scrapeUrl = getStrPropOrDefault(sheetName, SCRAPE_URL);
         
-        sp.sheetTitle = getStrPropOrDefault(sheet, SHEET_TITLE);
-        sp.titleRow = getIntPropOrDefault(sheet, TITLE_ROW);
-        sp.titleCol = getIntPropOrDefault(sheet, TITLE_COL);
-        sp.opener = getBoolPropOrDefault(sheet, OPENER);
-        sp.teamsCol = getIntPropOrDefault(sheet, TEAMS_COL);
-        sp.keepExisting = getBoolPropOrDefault(sheet, KEEP_ORDER);
+        sp.sheetTitle = getStrPropOrDefault(sheetName, SHEET_TITLE);
+        sp.titleRow = getIntPropOrDefault(sheetName, TITLE_ROW);
+        sp.titleCol = getIntPropOrDefault(sheetName, TITLE_COL);
+        sp.opener = getBoolPropOrDefault(sheetName, OPENER);
+        sp.teamsCol = getIntPropOrDefault(sheetName, TEAMS_COL);
+        sp.keepExisting = getBoolPropOrDefault(sheetName, KEEP_ORDER);
         
         // now we have to range check any row or column index, for instance
         // tableRow should be greater than titleRow
         int tmp;
         
         // get tableRow prop, set it to titleRow + 1 if it's less than titleRow
-        tmp = getIntPropOrDefault(sheet, SHEET_TABLE);
+        tmp = getIntPropOrDefault(sheetName, SHEET_TABLE);
         sp.tableRow = (tmp > sp.titleRow) ? tmp : sp.titleRow + 1;
         
         // get openerCol prop, set it to teamsCol + 1 if it's less than teamsCol
-        tmp = getIntPropOrDefault(sheet, OPENER_COL);
+        tmp = getIntPropOrDefault(sheetName, OPENER_COL);
         sp.openerCol = (tmp > sp.teamsCol) ? tmp : sp.teamsCol + 1;
         
         // get openerCol prop, set it to teamsCol + 1 if it's less than teamsCol
-        tmp = getIntPropOrDefault(sheet, BOOKIE_COL);
+        tmp = getIntPropOrDefault(sheetName, BOOKIE_COL);
         // account for a sheet not having an opener column
         if (sp.hasOpener()) {
             sp.bookieCol = (tmp > sp.openerCol) ? tmp : sp.openerCol + 1;
@@ -357,5 +462,16 @@ final class UserProperties extends AbstractSettings {
         return sp;
     }
     
+    /**
+     * Used by {@link UserSettings} to create preferences from a loaded
+     * properties file.
+     * <p>
+     * This method is <i>usually</i> only needed when a user first uses the
+     * program, or when the preferences in the user's backing store have been
+     * corrupted and need resetting.
+     * 
+     * @return user settings loaded from a properties file.
+     */
+    Properties getProperties() { return props; }
     
 } // public final class WorkbookProperties

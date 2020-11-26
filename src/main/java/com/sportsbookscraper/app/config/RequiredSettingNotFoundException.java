@@ -72,6 +72,11 @@ public class RequiredSettingNotFoundException extends Exception {
     public String requiredSettingsKey() { return settingKey; }
     
     /**
+     * Used internally to signal that no user preferences exist.
+     */
+    RequiredSettingNotFoundException() {}
+    
+    /**
      * Constructs a {@code RequiredPropertyNotFoundException} with a detail
      * message informing that the specified required setting's key was not found
      * in the user's backing preferences data store.

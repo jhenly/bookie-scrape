@@ -11,6 +11,7 @@ import static com.sportsbookscraper.app.config.SettingsKey.OPENER_COL;
 import static com.sportsbookscraper.app.config.SettingsKey.ROWS_SIZETOFIT;
 import static com.sportsbookscraper.app.config.SettingsKey.SCRAPE_INTERVAL;
 import static com.sportsbookscraper.app.config.SettingsKey.SCRAPE_URL;
+import static com.sportsbookscraper.app.config.SettingsKey.SETTINGS_LAST_UPDATE;
 import static com.sportsbookscraper.app.config.SettingsKey.SHEET_FONT;
 import static com.sportsbookscraper.app.config.SettingsKey.SHEET_FONT_SIZE;
 import static com.sportsbookscraper.app.config.SettingsKey.SHEET_TABLE;
@@ -19,7 +20,7 @@ import static com.sportsbookscraper.app.config.SettingsKey.TEAMS_COL;
 import static com.sportsbookscraper.app.config.SettingsKey.TITLE_COL;
 import static com.sportsbookscraper.app.config.SettingsKey.TITLE_ROW;
 
-import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -42,17 +43,36 @@ import java.util.prefs.Preferences;
  */
 class UserPreferences extends AbstractSettings {
     private final List<String> allSheets;
-    // individual sheet properties holder
-    private final List<SheetSettings> sheetPrefs;
     private final Preferences prefs;
     
+    @Override
+    public void listSettings(PrintStream out) {
+        String s = "";
+        s += "excelFilePath: " + excelFilePath + "\n";
+        s += "launch on start: " + launchOnStart + "\n";
+        s += "scrape interval: " + scrapeInterval + "\n";
+        
+        for (int i = 0; i < allSheets.size() - 1; i++) {
+            s += allSheets.get(i) + ',';
+        }
+        s += allSheets.get(allSheets.size() - 1);
+        s += "\n";
+        
+        s += "font: " + font + "\n";
+        s += "fontSize: " + fontSize + "\n";
+        s += "colSizeToFit: " + colSizeToFit + "\n";
+        s += "rowSizeToFit: " + rowSizeToFit + "\n";
+        
+        out.println(s);
+    }
+    
     UserPreferences(Preferences userPreferences)
-        throws IOException, RequiredSettingNotFoundException {
+        throws RequiredSettingNotFoundException {
         this(userPreferences, null);
     }
     
     UserPreferences(Preferences userPreferences, String pathToExcelFile)
-        throws IOException, RequiredSettingNotFoundException {
+        throws RequiredSettingNotFoundException {
         prefs = userPreferences;
         
         if (pathToExcelFile != null) {
@@ -68,11 +88,12 @@ class UserPreferences extends AbstractSettings {
         // initialize properties shared across all sheets, i.e. font, etc.
         initSharedPreferences();
         // create list of all individual sheet properties
-        sheetPrefs = loadSheetPreferences(allSheets);
+        sheetSettings = loadSheetPreferences(allSheets);
     }
     
     /* initialize application specific preferences */
     private void initApplicationPreferences() {
+        lastUpdatedTime = getLongPreference(SETTINGS_LAST_UPDATE);
         launchOnStart = getBoolPreference(LAUNCH_ON_START);
         scrapeInterval = getIntPreference(SCRAPE_INTERVAL);
         lastScrape = getLongPreference(SettingsKey.LAST_SCRAPE);
@@ -160,65 +181,52 @@ class UserPreferences extends AbstractSettings {
     @Override
     public List<String> getSheetNames() { return allSheets; }
     
-    @Override
-    public SheetSettings getSheetSettings(int index) {
-        return sheetPrefs.get(index);
-    }
-    
-    @Override
-    public SheetSettings getSheetSettings(String name) {
-        for (SheetSettings sds : sheetPrefs) {
-            if (sds.getSheetName().equals(name)) { return sds; }
-        }
-        
-        return null;
-    }
-    
     /* -- Sheet Preferences Section -- */
     
     /* iterates over sheet names and creates sheet properties */
     private List<SheetSettings> loadSheetPreferences(List<String> sheets) {
-        List<SheetSettings> sprops = new ArrayList<>(sheets.size());
+        List<SheetSettings> sprefs = new ArrayList<>(sheets.size());
         
         // build sheet properties for each sheet
         for (String sheetName : sheets) {
-            sprops.add(buildSheetProperties(sheetName));
+            sprefs.add(buildSheetSettings(sheetName));
         }
         
-        return Collections.unmodifiableList(sprops);
+        return Collections.unmodifiableList(sprefs);
     }
     
     /* builds sheet properties using the supplied sheet name */
-    private SheetSettings buildSheetProperties(String sheet) {
+    @Override
+    protected SheetSettings buildSheetSettings(String sheetName) {
         AbstractSheetSettings sp = new AbstractSheetSettings();
         
         // set this sheet's sheet name
-        sp.sheetName = sheet;
+        sp.sheetName = sheetName;
         
         // if no url then default, will be handled later in mediator
-        sp.scrapeUrl = getStrSheetPreference(sheet, SCRAPE_URL);
+        sp.scrapeUrl = getStrSheetPreference(sheetName, SCRAPE_URL);
         
-        sp.sheetTitle = getStrSheetPreference(sheet, SHEET_TITLE);
-        sp.titleRow = getIntSheetPreference(sheet, TITLE_ROW);
-        sp.titleCol = getIntSheetPreference(sheet, TITLE_COL);
-        sp.opener = getBoolSheetPreference(sheet, OPENER);
-        sp.teamsCol = getIntSheetPreference(sheet, TEAMS_COL);
-        sp.keepExisting = getBoolSheetPreference(sheet, KEEP_ORDER);
+        sp.sheetTitle = getStrSheetPreference(sheetName, SHEET_TITLE);
+        sp.titleRow = getIntSheetPreference(sheetName, TITLE_ROW);
+        sp.titleCol = getIntSheetPreference(sheetName, TITLE_COL);
+        sp.opener = getBoolSheetPreference(sheetName, OPENER);
+        sp.teamsCol = getIntSheetPreference(sheetName, TEAMS_COL);
+        sp.keepExisting = getBoolSheetPreference(sheetName, KEEP_ORDER);
         
         // now we have to range check any row or column index, for instance
         // tableRow should be greater than titleRow
         int tmp;
         
         // get tableRow prop, set it to titleRow + 1 if it's less than titleRow
-        tmp = getIntSheetPreference(sheet, SHEET_TABLE);
+        tmp = getIntSheetPreference(sheetName, SHEET_TABLE);
         sp.tableRow = (tmp > sp.titleRow) ? tmp : sp.titleRow + 1;
         
         // get openerCol prop, set it to teamsCol + 1 if it's less than teamsCol
-        tmp = getIntSheetPreference(sheet, OPENER_COL);
+        tmp = getIntSheetPreference(sheetName, OPENER_COL);
         sp.openerCol = (tmp > sp.teamsCol) ? tmp : sp.teamsCol + 1;
         
         // get openerCol prop, set it to teamsCol + 1 if it's less than teamsCol
-        tmp = getIntSheetPreference(sheet, BOOKIE_COL);
+        tmp = getIntSheetPreference(sheetName, BOOKIE_COL);
         // account for a sheet not having an opener column
         if (sp.hasOpener()) {
             sp.bookieCol = (tmp > sp.openerCol) ? tmp : sp.openerCol + 1;
@@ -228,4 +236,5 @@ class UserPreferences extends AbstractSettings {
         
         return sp;
     }
+    
 }

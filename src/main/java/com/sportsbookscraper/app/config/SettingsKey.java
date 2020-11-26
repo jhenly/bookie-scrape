@@ -10,6 +10,7 @@ package com.sportsbookscraper.app.config;
  */
 enum SettingsKey {
     /* application settings */
+    SETTINGS_LAST_UPDATE("last_settings_update", 0L), // def 0 means need update
     LAUNCH_ON_START("launch_on_start", false),
     SCRAPE_INTERVAL("auto_scrape_interval", 0), // def 0 means no autoscrape
     LAST_SCRAPE("last_scrape", 0L), // def 0 means scrape now

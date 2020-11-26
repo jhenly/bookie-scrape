@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.prefs.BackingStoreException;
 
 import com.sportsbookscraper.app.config.RequiredSettingNotFoundException;
 import com.sportsbookscraper.app.config.Settings;
@@ -68,16 +69,21 @@ public class Mediator {
      *                       -
      */
     public Mediator(String propertiesPath, String excelFilePath) {
+        this.excelFilePath = excelFilePath;
         try {
-            settings = UserSettings.loadSettings(propertiesPath,
+            settings = UserSettings.loadUserSettings(propertiesPath,
                 excelFilePath);
         } catch (RequiredSettingNotFoundException | IOException e) {
             e.printStackTrace();
+        } catch (BackingStoreException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         
+        settings.listSettings(System.out);
         System.out.println("ExcelFilePath: " + excelFilePath);
-        
         sheetNames = settings.getSheetNames();
+        
         
         // create data store for each sheet
         createSheetDataForEachSheet();
@@ -85,6 +91,7 @@ public class Mediator {
         addSheetSettingsToEachSheetData();
         // add existing bookies to sheet data if keep order is true
         addExistingBookiesFromSheetToSheetData();
+        System.exit(1);
         
         scraper = new Scraper();
         for (String sheet : sheetNames) {

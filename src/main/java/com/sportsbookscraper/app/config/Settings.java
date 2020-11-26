@@ -1,5 +1,6 @@
 package com.sportsbookscraper.app.config;
 
+import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,6 +11,15 @@ import java.util.List;
  * @author Jonathan Henly
  */
 public interface Settings {
+    
+    /**
+     * Gets the last time these settings were updated in milliseconds since the
+     * Unix epoch.
+     * 
+     * @return the last time these settings were updated
+     */
+    long getLastSettingsUpdatedTime();
+    
     /**
      * Gets the path to the Excel file as a string.
      * 
@@ -104,6 +114,9 @@ public interface Settings {
      * @return the sheet settings associated with the sheet name supplied
      */
     public SheetSettings getSheetSettings(String name);
+    
+    /** TODO DEBUG METHOD -- DELETE THIS */
+    public void listSettings(PrintStream out);
     
     /**
      * Class that wraps individual sheet properties with accessor methods.

@@ -103,7 +103,7 @@ public class DateGroup implements Iterable<Match> {
      */
     @Override
     public String toString() {
-        String s = "";
+        String s = "date: " + date + "\n";
         for (Match m : this) {
             s += m.toString() + "\n";
         }
