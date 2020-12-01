@@ -33,7 +33,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 15
-        architecure: x64
+        architecture: x64
         
     - name: Cache Maven packages
       uses: actions/cache@v2
@@ -42,19 +42,18 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
         
-    - name: Build with Maven
-      run: mvn -X -B package --file pom.xml
-    
     - name: Output settings
       run: |
-        echo "outputting contents of C:\Users\runneradmin\.m2\settings.xml"
+        echo "outputting dir of C:\Users\runneradmin\.m2\repository"
         echo ""
-        type "C:\Users\runneradmin\.m2\settings.xml"
-        echo ""
-        echo "calling dir"
-        echo ""
-        cd "C:\Users\runneradmin\"
+        cd "C:\Users\runneradmin\.m2\repository"
         dir
+        echo "outputting dir of C:\Users\runneradmin\.m2\repository\org"
+        cd org
+        dir
+        
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
         
 
     
