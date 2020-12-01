@@ -25,7 +25,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
 
@@ -86,6 +86,7 @@
       <groupId>de.jensd</groupId>
       <artifactId>fontawesomefx-fontawesome</artifactId>
       <version>4.7.0-9.1.2</version>
+      <scope>compile</scope>
     </dependency>
 
     <dependency>
