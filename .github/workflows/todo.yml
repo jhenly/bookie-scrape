@@ -1,0 +1,23 @@
+# Converts '// TODO' comments to GitHub issues when a new commit is pushed.
+
+name: Convert TODO Comments To GitHub Issue
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    
+jobs:
+  build:
+    # Only runs on ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: "TODO to Issue"
+        uses: alstr/todo-to-issue-action@v2.3
+        id: "todo"
+        with:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LABEL: "TODO"
+          COMMENT_MARKER: "//"
+          CLOSE_ISSUES: "true"
