@@ -34,21 +34,18 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
      * Reads strings from a specified row index and specified range of column
      * indexes.
      *
-     * @param sheetName
-     *                  - the name of the Excel workbook sheet
-     * @param row
-     *                  - the row index in the sheet
-     * @param start
-     *                  - the index of the row to read from
-     * @param end
-     *                  - the last cell's column index in the range
+     * @param sheetName - the name of the Excel workbook sheet
+     * @param row - the row index in the sheet
+     * @param start - the index of the row to read from
+     * @param end - the last cell's column index in the range
      * @return a list of strings from the specified range of cells in a row
-     * @throws SheetNotFoundException
-     *                                - if this workbook does not contain a
-     *                                sheet named {@code sheetName}
+     * @throws SheetNotFoundException - if this workbook does not contain a
+     *         sheet named {@code sheetName}
      */
-    public List<String> readStringsInRow(String sheetName, int row, int start,
-        int end) throws SheetNotFoundException {
+    public List<String>
+    readStringsInRow(String sheetName, int row, int start, int end)
+        throws SheetNotFoundException
+    {
         // do closed check, arg count/value check, sheet exists check
         Sheet sheet = doPreChecksThenGetSheet(sheetName, row, start, end);
         currentSheet = sheet;
@@ -68,20 +65,17 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
      * column index cell and the last non-blank cell, will be empty strings in
      * the returned list.
      *
-     * @param sheetName
-     *                  - the name of the Excel workbook sheet
-     * @param row
-     *                  - the index of the row to read from
-     * @param start
-     *                  - the column index to start reading from
+     * @param sheetName - the name of the Excel workbook sheet
+     * @param row - the index of the row to read from
+     * @param start - the column index to start reading from
      * @return a list of strings from the specified range of column indexes in a
      *         row
-     * @throws SheetNotFoundException
-     *                                - if this workbook does not contain a
-     *                                sheet named {@code sheetName}
+     * @throws SheetNotFoundException - if this workbook does not contain a
+     *         sheet named {@code sheetName}
      */
     public List<String> readStringsInRow(String sheetName, int row, int start)
-        throws SheetNotFoundException {
+        throws SheetNotFoundException
+    {
         // do closed check, arg count/value check, sheet exists check
         Sheet sheet = doPreChecksThenGetSheet(sheetName, row, start);
         currentSheet = sheet;
@@ -93,8 +87,10 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
     }
     
     /* readStringsInRow* helper method, reads string cells from start to end */
-    private List<String> readStringsInRowFromStartToEnd(Row row, int start,
-        int end) throws SheetNotFoundException {
+    private List<String>
+    readStringsInRowFromStartToEnd(Row row, int start, int end)
+        throws SheetNotFoundException
+    {
         List<String> strings = new ArrayList<>(end - start);
         for (int col = start; col < end; col++) {
             Cell curCell = row.getCell(col);
@@ -111,7 +107,7 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
     
     /**
      * Used to tell the reader when to stop reading.
-     * 
+     *
      * @author Jonathan Henly
      */
     public enum StopOn {
@@ -138,19 +134,20 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
         }
         
         protected RangeReaderBuilder(WorkbookReader ref, Sheet sheet,
-            CellRange range) {
+                                     CellRange range)
+        {
             this(ref, range);
             this.sheet = sheet;
         }
         
         /**
-         * 
          * @param sheetName
          * @return
          * @throws SheetNotFoundException
          */
         public RangeReaderBuilder in(String sheetName)
-            throws SheetNotFoundException {
+            throws SheetNotFoundException
+        {
             
             sheet = ref.getSheetFromWorkbook(sheetName);
             nameOfSheet = sheetName;
@@ -161,7 +158,7 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
         /**
          * Reads the values from a range of cells in a specified sheet in this
          * workbook.
-         * 
+         *
          * @return a {@code List<String>} of the cell values read from the range
          */
         public List<String> read() {
@@ -182,9 +179,7 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
     }
     
     /**
-     * 
      * @author Jonathan Henly
-     *
      */
     public class RangeReader {
         private Sheet sheet;
@@ -225,7 +220,7 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
         
         /* returns a list containing the value of a single cell */
         private List<String> readCellRange() {
-            List<String> list = new ArrayList<String>(1);
+            List<String> list = new ArrayList<>(1);
             Row rs = sheet.getRow(range.rowStart());
             Cell cell = rs.getCell(range.colStart());
             
@@ -236,7 +231,7 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
         
         /* returns a list containing the values of cells in a row range */
         private List<String> readRowRange() {
-            List<String> list = new ArrayList<String>();
+            List<String> list = new ArrayList<>();
             
             Row rs = sheet.getRow(range.rowStart());
             for (int c = range.colStart(), n = range.colEnd(); c <= n; c++) {
@@ -249,7 +244,7 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
         
         /* returns a list containing the values of cells in a open row range */
         private List<String> readOpenRowRange() {
-            List<String> list = new ArrayList<String>();
+            List<String> list = new ArrayList<>();
             
             Row rs = sheet.getRow(range.rowStart());
             int end = rs.getLastCellNum();
@@ -264,7 +259,7 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
         
         /* returns a list containing the values of cells in a col range */
         private List<String> readColRange() {
-            List<String> list = new ArrayList<String>();
+            List<String> list = new ArrayList<>();
             
             int column = range.colStart();
             for (int r = range.rowStart(), n = range.rowEnd(); r <= n; r++) {
@@ -278,7 +273,7 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
         
         /* returns a list containing the values of cells in an open col range */
         private List<String> readOpenColRange() {
-            List<String> list = new ArrayList<String>();
+            List<String> list = new ArrayList<>();
             
             int column = range.colStart();
             Iterator<Row> ri = sheet.iterator();
@@ -297,7 +292,7 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
         
         /* returns a list containing the values of cells in a row_col range */
         private List<String> readRowColRange() {
-            List<String> list = new ArrayList<String>();
+            List<String> list = new ArrayList<>();
             
             for (int r = range.rowStart(), rn = range.rowEnd(); r <= rn; r++) {
                 Row curRow = sheet.getRow(r);
@@ -349,7 +344,7 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
     
     /**
      * TODO document this method
-     * 
+     *
      * @param range
      * @return
      */
@@ -374,21 +369,18 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
      * Reads strings from a specified column index and specified range of row
      * indexes.
      *
-     * @param sheetName
-     *                  - the name of the Excel workbook sheet
-     * @param col
-     *                  - the col index in the sheet
-     * @param start
-     *                  - the first cell's row index in the range
-     * @param end
-     *                  - the last cell's row index in the range
+     * @param sheetName - the name of the Excel workbook sheet
+     * @param col - the col index in the sheet
+     * @param start - the first cell's row index in the range
+     * @param end - the last cell's row index in the range
      * @return a list of strings from the specified range of cells in a column
-     * @throws SheetNotFoundException
-     *                                - if this workbook does not contain a
-     *                                sheet named {@code sheetName}
+     * @throws SheetNotFoundException - if this workbook does not contain a
+     *         sheet named {@code sheetName}
      */
-    public List<String> readStringsInCol(String sheetName, int col, int start,
-        int end) throws SheetNotFoundException {
+    public List<String>
+    readStringsInCol(String sheetName, int col, int start, int end)
+        throws SheetNotFoundException
+    {
         // do closed check, arg count/value check, sheet exists check
         Sheet sheet = doPreChecksThenGetSheet(sheetName, col, start, end);
         
@@ -418,8 +410,10 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
     
     
     /* helper method for read* methods, does close/arg/sheet exists checks */
-    private Sheet doPreChecksThenGetSheet(String sheetName, int index,
-        int start, int end) throws SheetNotFoundException {
+    private Sheet
+    doPreChecksThenGetSheet(String sheetName, int index, int start, int end)
+        throws SheetNotFoundException
+    {
         throwIfClosed(); // throw NPE if close() has been called
         checkArgs(index, start, end); // throws IllegalArgumentException
         
@@ -431,15 +425,18 @@ public class WorkbookReader extends AbstractWorkbook implements AutoCloseable {
     
     
     /* convenience overloaded helper, just calls doPreChecksThenGetSheet */
-    private Sheet doPreChecksThenGetSheet(String sheetName, int index,
-        int start) throws SheetNotFoundException {
+    private Sheet
+    doPreChecksThenGetSheet(String sheetName, int index, int start)
+        throws SheetNotFoundException
+    {
         // pass 'start' twice so check args doesn't throw when 'start < end'
         return doPreChecksThenGetSheet(sheetName, index, start, start);
     }
     
     /* helper to throw if int method arguments are negative or invalid range */
     private void checkArgs(int index, int start, int end)
-        throws IllegalArgumentException {
+        throws IllegalArgumentException
+    {
         if ((index | start | end) < 0) {
             throw new IllegalArgumentException(
                 "method arguments must be positive.");

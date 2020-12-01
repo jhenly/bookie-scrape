@@ -38,7 +38,6 @@ public class WorkbookWriter extends AbstractWorkbook {
     }
     
     /**
-     * 
      * @throws IOException
      */
     public void saveChangesToWorkbook() throws IOException {
@@ -46,15 +45,14 @@ public class WorkbookWriter extends AbstractWorkbook {
     }
     
     /**
-     * 
      * @param differentExcelFileName
      * @throws IOException
      */
     public void saveChangesToWorkbook(String fileName) throws IOException {
         String test = "src/test/resources/excel/Test.xlsx";
         
-        BufferedOutputStream bos = new BufferedOutputStream(
-            new FileOutputStream(test));
+        BufferedOutputStream bos =
+            new BufferedOutputStream(new FileOutputStream(test));
         
         workbook.write(bos);
         
@@ -73,11 +71,9 @@ public class WorkbookWriter extends AbstractWorkbook {
      * <p>
      * <b>Note:</b> for large sheets this can take a long time, so it's best to
      * only call this method once.
-     * 
-     * @param sheetName
-     *                        - the sheet to auto size columns in
-     * @param lastColumnIndex
-     *                        - the last column to auto size
+     *
+     * @param sheetName - the sheet to auto size columns in
+     * @param lastColumnIndex - the last column to auto size
      */
     public void autoSizeColumns(String sheetName, int lastColumnIndex) {
         forRange(CellRange.rowRange(0, 0, lastColumnIndex)).in(sheetName)
@@ -86,7 +82,7 @@ public class WorkbookWriter extends AbstractWorkbook {
     
     /**
      * TODO document this method
-     * 
+     *
      * @param range
      * @return
      */
@@ -103,9 +99,7 @@ public class WorkbookWriter extends AbstractWorkbook {
     }
     
     /**
-     * 
      * @author Jonathan Henly
-     *
      */
     protected class RangeWriterBuilder {
         private static final String DEF_DATA_FORMAT = "General";
@@ -121,11 +115,8 @@ public class WorkbookWriter extends AbstractWorkbook {
         
         
         /**
-         * 
-         * @param ref
-         *              - reference to this workbook writer
-         * @param range
-         *              - the range of cells to operate on
+         * @param ref - reference to this workbook writer
+         * @param range - the range of cells to operate on
          */
         protected RangeWriterBuilder(WorkbookWriter ref, CellRange range) {
             this.ref = ref;
@@ -140,16 +131,13 @@ public class WorkbookWriter extends AbstractWorkbook {
         }
         
         /**
-         * 
-         * @param ref
-         *              - reference to this workbook writer
-         * @param sheet
-         *              - the sheet that the specified cell range pertains to
-         * @param range
-         *              - the range of cells to operate on
+         * @param ref - reference to this workbook writer
+         * @param sheet - the sheet that the specified cell range pertains to
+         * @param range - the range of cells to operate on
          */
         protected RangeWriterBuilder(WorkbookWriter ref, XSSFSheet sheet,
-            CellRange range) {
+                                     CellRange range)
+        {
             this(ref, range);
             
             this.sheet = sheet;
@@ -172,7 +160,7 @@ public class WorkbookWriter extends AbstractWorkbook {
         
         /**
          * Signals that the data to be written is of type string.
-         * 
+         *
          * @return {@code this}, in order to chain builder calls
          */
         public RangeWriterBuilder dataIsString() {
@@ -182,7 +170,7 @@ public class WorkbookWriter extends AbstractWorkbook {
         
         /**
          * Signals that the data to be written is of type integer.
-         * 
+         *
          * @return {@code this}, in order to chain builder calls
          */
         public RangeWriterBuilder dataIsInteger() {
@@ -194,7 +182,7 @@ public class WorkbookWriter extends AbstractWorkbook {
         
         /**
          * Signals that the data to be written is of type double.
-         * 
+         *
          * @return {@code this}, in order to chain builder calls
          */
         public RangeWriterBuilder dataIsDouble() {
@@ -216,9 +204,8 @@ public class WorkbookWriter extends AbstractWorkbook {
         /**
          * Sets the cell range formatting to align horizontally by a specified
          * value.
-         * 
-         * @param hAlign
-         *               - one of the {@code HorizontalAlignment} enums.
+         *
+         * @param hAlign - one of the {@code HorizontalAlignment} enums.
          * @return {@code this}, in order to chain builder calls
          */
         public RangeWriterBuilder hAlign(HorizontalAlignment hAlign) {
@@ -229,9 +216,8 @@ public class WorkbookWriter extends AbstractWorkbook {
         /**
          * Sets the cell range formatting to align vertically by a specified
          * value.
-         * 
-         * @param vAlign
-         *               - one of the {@code VerticalAlignment} enums.
+         *
+         * @param vAlign - one of the {@code VerticalAlignment} enums.
          * @return {@code this}, in order to chain builder calls
          */
         public RangeWriterBuilder vAlign(VerticalAlignment vAlign) {
@@ -244,9 +230,8 @@ public class WorkbookWriter extends AbstractWorkbook {
          * <p>
          * For example: {@code "General"} (the default), {@code "0"},
          * {@code "0.00"}, {@code "#,##0"}, etc.
-         * 
-         * @param format
-         *               - the cell data format to use
+         *
+         * @param format - the cell data format to use
          * @return {@code this}, in order to chain builder calls
          */
         public RangeWriterBuilder withFormat(String format) {
@@ -258,9 +243,8 @@ public class WorkbookWriter extends AbstractWorkbook {
          * Specifies the font name to use when writing the cell range.
          * <p>
          * For example: {@code "Calibri"} (the default), {@code "Arial"}, etc.
-         * 
-         * @param fontName
-         *                 - the font name to use
+         *
+         * @param fontName - the font name to use
          * @return {@code this}, in order to chain builder calls
          */
         public RangeWriterBuilder setFontName(String fontName) {
@@ -272,9 +256,8 @@ public class WorkbookWriter extends AbstractWorkbook {
          * Specifies the font size to use when writing the cell range.
          * <p>
          * For example: {@code 11} (the default), {@code 12}, etc.
-         * 
-         * @param fontName
-         *                 - the font size to use
+         *
+         * @param fontName - the font size to use
          * @return {@code this}, in order to chain builder calls
          */
         public RangeWriterBuilder setFontSize(int fontSize) {
@@ -285,10 +268,9 @@ public class WorkbookWriter extends AbstractWorkbook {
         /**
          * Specifies whether or not to use a bold font when writing the cell
          * range.
-         * 
-         * @param bold
-         *             - {@code true} if the font should be bold, otherwise
-         *             {@code false}
+         *
+         * @param bold - {@code true} if the font should be bold, otherwise
+         *        {@code false}
          * @return {@code this}, in order to chain builder calls
          */
         public RangeWriterBuilder useBoldFont(boolean bold) {
@@ -299,10 +281,9 @@ public class WorkbookWriter extends AbstractWorkbook {
         /**
          * Specifies whether or not to use an italic font when writing the cell
          * range.
-         * 
-         * @param italic
-         *               - {@code true} if the font should be bold, otherwise
-         *               {@code false}
+         *
+         * @param italic - {@code true} if the font should be bold, otherwise
+         *        {@code false}
          * @return {@code this}, in order to chain builder calls
          */
         public RangeWriterBuilder useItalicFont(boolean italic) {
@@ -313,10 +294,9 @@ public class WorkbookWriter extends AbstractWorkbook {
         /**
          * Specifies a sheet to be used in one of the build methods, i.e.
          * {@link #write(List)}, {@link #autoSizeColumns()}, etc.
-         * 
-         * @param sheetName
-         *                  - the name of the sheet to be used by the
-         *                  {@code RangeWriter}
+         *
+         * @param sheetName - the name of the sheet to be used by the
+         *        {@code RangeWriter}
          * @return {@code this}, in order to chain builder calls
          */
         public RangeWriterBuilder in(String sheetName) {
@@ -327,7 +307,7 @@ public class WorkbookWriter extends AbstractWorkbook {
         }
         
         /**
-         * 
+         *
          */
         public void autoSizeColumns() {
             throwNPEIfSheetOrNameOfSheetAreNull();
@@ -338,10 +318,9 @@ public class WorkbookWriter extends AbstractWorkbook {
         /**
          * Writes values from a {@code List<String>} to a range of cells in a
          * specified sheet in this workbook.
-         * 
-         * @param whatToWrite
-         *                    {@code List<String>} of the data to write to the
-         *                    specified range of cells.
+         *
+         * @param whatToWrite {@code List<String>} of the data to write to the
+         *        specified range of cells.
          */
         public void write(List<String> whatToWrite) {
             throwNPEIfSheetOrNameOfSheetAreNull();
@@ -370,9 +349,7 @@ public class WorkbookWriter extends AbstractWorkbook {
     }
     
     /**
-     * 
      * @author Jonathan Henly
-     *
      */
     public class RangeWriter {
         private XSSFSheet sheet;
@@ -384,15 +361,15 @@ public class WorkbookWriter extends AbstractWorkbook {
         /**
          * Constructor used to write data to a given range of cells in a
          * specified sheet.
-         * 
-         * @param sht
-         *                - the sheet to perform actions on
-         * @param rng
-         *                - the range to perform actions on
+         *
+         * @param sht - the sheet to perform actions on
+         * @param rng - the range to perform actions on
          * @param toWrite
          */
         protected RangeWriter(XSSFSheet sht, CellRange rng,
-            List<String> toWrite, XSSFCellStyle style, DataType dataType) {
+                              List<String> toWrite, XSSFCellStyle style,
+                              DataType dataType)
+        {
             this(sht, rng);
             
             
@@ -404,11 +381,9 @@ public class WorkbookWriter extends AbstractWorkbook {
         /**
          * Constructor used to call methods that don't write anything, like
          * {@link #autoSizeColumns()}.
-         * 
-         * @param sht
-         *            - the sheet to perform actions on
-         * @param rng
-         *            - the range to perform actions on
+         *
+         * @param sht - the sheet to perform actions on
+         * @param rng - the range to perform actions on
          */
         protected RangeWriter(XSSFSheet sht, CellRange rng) {
             sheet = sht;
@@ -425,7 +400,7 @@ public class WorkbookWriter extends AbstractWorkbook {
         }
         
         /**
-         * 
+         *
          */
         protected void writeRange() {
             switch (range.type()) {
@@ -452,8 +427,8 @@ public class WorkbookWriter extends AbstractWorkbook {
         
         /* writes a list containing a single value to a cell */
         private void writeCellRange() {
-            XSSFRow rs = getRowOrReturnNewRowIfRowIsNull(sheet,
-                range.rowStart());
+            XSSFRow rs =
+                getRowOrReturnNewRowIfRowIsNull(sheet, range.rowStart());
             XSSFCell cell = getCellOrCreateNewIfNull(rs, range.colStart());
             
             setValueAndFormatCell(cell, out.get(0));
@@ -461,8 +436,8 @@ public class WorkbookWriter extends AbstractWorkbook {
         
         /* writes a list containing values to a range of cells in a row */
         private void writeRowRange() {
-            XSSFRow rs = getRowOrReturnNewRowIfRowIsNull(sheet,
-                range.rowStart());
+            XSSFRow rs =
+                getRowOrReturnNewRowIfRowIsNull(sheet, range.rowStart());
             
             int colStart = range.colStart();
             for (int c = colStart, n = range.colEnd(); c <= n; c++) {
@@ -501,7 +476,7 @@ public class WorkbookWriter extends AbstractWorkbook {
                     XSSFCell cell = getCellOrCreateNewIfNull(curRow, c);
                     
                     int outIndex = ((r - rowStart) * (colEnd - colStart + 1))
-                        + (c - colStart);
+                                   + (c - colStart);
                     
                     setValueAndFormatCell(cell, out.get(outIndex));
                 }
@@ -531,8 +506,9 @@ public class WorkbookWriter extends AbstractWorkbook {
         }
         
         /* */
-        private XSSFRow getRowOrReturnNewRowIfRowIsNull(XSSFSheet sheet,
-            int rowIndex) {
+        private XSSFRow
+        getRowOrReturnNewRowIfRowIsNull(XSSFSheet sheet, int rowIndex)
+        {
             XSSFRow row = sheet.getRow(rowIndex);
             if (row == null) {
                 row = sheet.createRow(rowIndex);
