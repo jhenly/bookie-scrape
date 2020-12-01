@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.bookiescrape.app.excel.CellRange;
 import com.bookiescrape.app.excel.CellRange.RangeType;
 
 
@@ -172,7 +171,6 @@ public class CellRangeTest {
         CellRange range = CellRange.rowRange(4, 1, 6);
         int expected = 6;
         
-        System.out.println(range.numCols());
         assertTrue(range.numCols() == expected);
     }
     
@@ -191,26 +189,20 @@ public class CellRangeTest {
         assertTrue(range.numRows() == expected);
     }
     
-    @Test
-    public void testCellRangeRangeStartGreaterThanEndNumCellsReturnsActualNumberOfCellsInRange() {
+    @Test(expected = IllegalArgumentException.class)
+    public void testCellRangeRangeStartGreaterThanEndThrowsIllegalArgumentException() {
         CellRange range = CellRange.range(2, 0, 2, 0);
-        int expected = 9;
-        assertTrue(range.numCells() == expected);
     }
     
-    @Test
-    public void testCellRangeRangeRowStartGreaterThanRowEndNumCellsReturnsActualNumberOfCellsInRange() {
+    @Test(expected = IllegalArgumentException.class)
+    public void testCellRangeRangeRowStartGreaterThanRowEndThrowsIllegalArgumentException() {
         CellRange range = CellRange.range(0, 2, 2, 0);
-        int expected = 9;
-        
-        assertTrue(range.numCells() == expected);
     }
     
-    @Test
-    public void testCellRangeRangeColStartGreaterThanColEndNumCellsReturnsActualNumberOfCellsInRange() {
+    @Test(expected = IllegalArgumentException.class)
+    public void testCellRangeRangeColStartGreaterThanColEndThrowsIllegalArgumentException() {
         CellRange range = CellRange.range(2, 0, 2, 0);
-        int expected = 9;
-        assertTrue(range.numCells() == expected);
+        assertTrue(range == null);
     }
     
     

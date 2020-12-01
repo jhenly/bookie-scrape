@@ -226,6 +226,9 @@ public class CellRange {
             throwIfNegativeRange(rs, cs);
         } else {
             throwIfNegativeRange(rs, re, cs, ce);
+            
+            throwIfStartGreaterThanEnd(rs, re);
+            throwIfStartGreaterThanEnd(cs, ce);
         }
         
         return new CellRange(rs, re, cs, ce);
@@ -252,12 +255,14 @@ public class CellRange {
         } else if (rs == re) {
             type = RangeType.ROW;
             
+            // open ended column range
             if (ce == Integer.MIN_VALUE) {
                 type = RangeType.OPEN_ROW;
             }
         } else if (cs == ce) {
             type = RangeType.COL;
             
+            // open ended row range
             if (re == Integer.MIN_VALUE) {
                 type = RangeType.OPEN_COL;
             }
@@ -265,8 +270,8 @@ public class CellRange {
             type = RangeType.ROW_COL;
         }
         
-        numRows = rs > re ? rs - re + 1 : re - rs + 1;
-        numCols = cs > ce ? cs - ce + 1 : ce - cs + 1;
+        numRows = re - rs + 1;
+        numCols = ce - cs + 1;
         numCells = numRows * numCols;
     }
     
@@ -282,6 +287,14 @@ public class CellRange {
     // ROW_COL type indexes..START...END.....START...END
     private static final int RS = 0, RE = 1, CS = 2, CE = 3;
     
+    /* throws IAE if starting index is greater than ending index */
+    private static void throwIfStartGreaterThanEnd(int start, int end) {
+        if (start > end) {
+            throw new IllegalArgumentException(String.format(
+                "starting index, %d, can not be greater than ending index, %d",
+                start, end));
+        }
+    }
     
     /* throws IAE if negative */
     private static void throwIfNegativeRange(int... idxs) {
@@ -297,7 +310,7 @@ public class CellRange {
         if (!pass) {
             throw new IllegalArgumentException(String
                 .format("range indexes are not allowed to be negative, recieved"
-                    + " paramater " + i + "=" + idxs[i]));
+                    + " paramater %d = %d", i, idxs[i]));
         }
     }
     
@@ -305,9 +318,9 @@ public class CellRange {
     private static void throwIfNegativeRange(int rc, int start) {
         // this IAE will *probably* be caught and re-thrown
         if (rc < 0 || start < 0) {
-            throw new IllegalArgumentException(
-                "range indexes are not allowed to be negative, recieved" + rc
-                    + " & " + start);
+            throw new IllegalArgumentException(String.format(
+                "range indexes are not allowed to be negative, recieved %d and %d",
+                rc, start));
         }
     }
     
