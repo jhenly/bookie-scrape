@@ -19,8 +19,6 @@ public class Driver {
          * System.out.println(bookie.getName() + " " + bookie.getBookieIndex());
          * } */
         
-        // TODO test GitHub todo to issue converter action
-        
     }
     
     public static void writeToFile(String filename, String content)
