@@ -5,12 +5,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.sportsbookscraper.app</groupId>
-  <artifactId>sports-book-scraper</artifactId>
+  <groupId>com.bookiescrape.app</groupId>
+  <artifactId>bookie-scrape</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>sports-book-scraper</name>
-  <url>https://github.com/jhenly/sports-book-scraper</url>
+  <name>bookie-scrape</name>
+  <url>https://github.com/jhenly/bookie-scrape</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -199,7 +199,7 @@
             
             <!-- used to test different 'public static void main(String[] args)' classes without changing pom.xml -->   
             <!-- via: 'clean javafx:run "-Dpackage.main=sample.Main"' -->
-            <mainClass>com.sportsbookscraper.app.${foo}</mainClass>
+            <mainClass>com.bookiescrape.app.${foo}</mainClass>
             
           </configuration>
         </plugin>
