@@ -19,8 +19,7 @@ public class Driver {
          * System.out.println(bookie.getName() + " " + bookie.getBookieIndex());
          * } */
         
-        String firstContainer = "./out/one_container.xml";
-        String secondContainer = "./out/two_container.xml";
+        // TODO test GitHub todo to issue converter action
         
     }
     
