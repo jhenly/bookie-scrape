@@ -1,4 +1,4 @@
-package com.bookiescrape.app.gui;
+package com.bookiescrape.app.fx.ui;
 
 import java.util.Random;
 
