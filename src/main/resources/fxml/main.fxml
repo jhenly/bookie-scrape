@@ -38,20 +38,17 @@
             </children>
           </HBox>
          </center>
-         <bottom>
-            <HBox id="main-bottom-hbox" prefHeight="51.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-         </bottom>
          <top>
-            <HBox id="main-top-hbox" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <ToolBar id="cntrl-btns-tool-bar" prefHeight="40.0" prefWidth="484.0" style="-fx-background-color: #0296f4;" stylesheets="@css/main.css">
-                    <items>
-                        <JFXButton buttonType="RAISED" contentDisplay="CENTER" onAction="#onCloseButtonAction" ripplerFill="#6b6969" styleClass="top-buttons" text="X" textFill="#f2f0f0" />
-                    </items>
-                  </ToolBar>
-               </children>
-            </HBox>
+            <ToolBar prefHeight="40.0" prefWidth="484.0" style="-fx-background-color: #0296f4;" BorderPane.alignment="CENTER">
+              <items>
+                <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onCloseButtonAction" text="X" />
+                  <JFXButton buttonType="RAISED" contentDisplay="CENTER" onAction="#onCloseButtonAction" ripplerFill="#6b6969" styleClass="top-buttons" text="X" textFill="#f2f0f0" />
+              </items>
+            </ToolBar>
          </top>
+         <bottom>
+            <HBox prefHeight="51.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </bottom>
       </BorderPane>
   
   </children>
