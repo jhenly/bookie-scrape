@@ -1,4 +1,4 @@
-package com.bookiescrape.app.sample;
+package com.bookiescrape.app.gui;
 
 import java.util.Random;
 

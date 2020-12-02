@@ -1,4 +1,4 @@
-package com.bookiescrape.app.sample;
+package com.bookiescrape.app.gui;
 
 import java.awt.AWTException;
 import java.awt.event.ActionEvent;
