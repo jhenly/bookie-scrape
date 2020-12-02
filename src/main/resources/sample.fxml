@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="478.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sportsbookscraper.app.sample.Controller">
+<AnchorPane prefHeight="600.0" prefWidth="478.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.sample.Controller">
   <children>
   
     <HBox alignment="CENTER" layoutX="452.0" layoutY="258.0" prefHeight="33.0" prefWidth="32.0" spacing="10.0">
