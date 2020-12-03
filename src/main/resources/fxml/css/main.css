@@ -1,28 +1,76 @@
 
-.regular-blue-backgroud { -fx-background-color: #0296f4 }
+.top-bar-backgroud { -fx-background-color: #2496ed }
 
-.border-gray { -fx-border-color: #e3e3e3 }
+.border-gray { -fx-border-color: #d6d6d8 }
 .border-black { -fx-border-color: #000000 }
 .border-blue { -fx-border-color: #0296f4 }
 
-.border-thin { -fx-border-width: 2px }
-.border-medium { -fx-border-width: 4px }
-.border-thick { -fx-border-width: 6px }
+.border-thin { -fx-border-width: 1px }
+.border-medium { -fx-border-width: 3px }
+.border-thick { -fx-border-width: 5px }
 
 .border-left-solid { -fx-border-style: solid none none none }
 .border-top-solid { -fx-border-style: none solid none none }
 .border-right-solid { -fx-border-style: none none solid none }
 .border-bottom-solid { -fx-border-style: none none none solid }
 
+.check-box {
+        selected-box-color: #007bff;
+        box-color: #70787d;
+        mark-color: #f4f4f6;
+}
+
+.check-box:selected > .box {
+        /* background color for selected checkbox */
+        -fx-background-color: selected-box-color;
+}
+
+.check-box > .box {
+        /* background color of unselected checkbox */
+        -fx-background-color: box-color;
+}
+
+.check-box:selected > .box > .mark,
+.check-box:indeterminate > .box > .mark {
+        /* modify mark color */
+        -fx-background-color: mark-color
+}
+
 #main-layout-pane {
-	
+	-fx-background-color: #f4f4f6;
+}
+
+.button {
+
+}
+
+.flat_button {
+        -fx-background-radius: 0;
+        -fx-padding: 0;
+        -fx-background-color: transparent;
+}
+
+.top-button {
+        -fx-background-color: #1182d9;
 }
 
 .control-button {
-	-fx-text-fill: #005ea3;
+	-fx-text-fill: #2e516b;
 	-fx-font-weight: bold;
+	-fx-background-radius: 0;
+	-fx-padding: 0;
+	-fx-background-color: transparent;
 }
 
+.control-button:pressed {}
+
+.control-button:hover { -fx-background-color: #1d78be }
+.control-button .close:hover { -fx-background-color: #d51e37 }
+
+.bottom-bar-background {
+        -fx-background-color: #fafafb;
+}
 #main-bottom-hbox {
         
 }
+
