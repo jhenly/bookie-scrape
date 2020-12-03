@@ -1,4 +1,4 @@
-package com.bookiescrape.app.sample;
+package com.bookiescrape.app.fx.control;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,7 +33,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 
-public class Controller implements Initializable {
+public class Main implements Initializable {
     @FXML
     private TextField outputExcelFilePathFeild;
     
