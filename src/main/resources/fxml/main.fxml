@@ -114,7 +114,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                            <graphic>
-                              <FontAwesomeIconView boundsType="VISUAL" fill="WHITE" size="20.0">
+                              <FontAwesomeIconView boundsType="VISUAL" fill="WHITE" glyphName="HISTORY" size="20.0">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
