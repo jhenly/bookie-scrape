@@ -1,3 +1,27 @@
+/*
+@font-face {
+    src: url('../font/Roboto-Regular.ttf');
+}
+
+@font-face {
+    src: url('../font/Roboto-Italic.ttf');
+    src: url('../font/Roboto-Thin.ttf');
+    src: url('../font/Roboto-ThinItalic.ttf');
+    src: url('../font/Roboto-Light.ttf');
+    src: url('../font/Roboto-LightItalic.ttf');
+    src: url('../font/Roboto-Bold.ttf');
+    src: url('../font/Roboto-BoldItalic.ttf');
+    src: url('../font/Roboto-Medium.ttf');
+    src: url('../font/Roboto-MediumItalic.ttf');
+    src: url('../font/Roboto-Black.ttf');
+    src: url('../font/Roboto-BlackItalic.ttf');
+}
+
+.roboto { -fx-font-family: 'Roboto' }
+.roboto-bold { -fx-font-family: 'Roboto Bold' }
+.roboto-italic { -fx-font-family: 'Roboto Italic' }
+.roboto-thin-italic { -fx-font-family: 'Roboto Thin Italic' }
+*/
 
 .top-bar-backgroud { -fx-background-color: #2496ed }
 
@@ -64,8 +88,8 @@
 
 .control-button:pressed {}
 
+.close:hover { -fx-background-color: #d51e37 }
 .control-button:hover { -fx-background-color: #1d78be }
-.control-button .close:hover { -fx-background-color: #d51e37 }
 
 .bottom-bar-background {
         -fx-background-color: #fafafb;

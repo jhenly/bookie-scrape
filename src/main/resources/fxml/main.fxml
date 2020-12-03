@@ -6,7 +6,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -14,21 +13,22 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="main-anchor-pane" depthTest="DISABLE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.Main">
+<AnchorPane id="main-anchor-pane" depthTest="DISABLE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.Main">
   <children>
-      <BorderPane id="main-layout-pane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane id="main-layout-pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
         
           <HBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
               
-                <Label text="Select Output File">
-                  <font>
-                    <Font name="System Bold Italic" size="18.0" />
-                  </font>
+                <Label styleClass="roboto" text="Select Output File" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                 </Label>
                 
                 <Button mnemonicParsing="false" onAction="#startWebScrapping" text="Start Scrapping " />
@@ -40,13 +40,13 @@
                   <Cursor fx:constant="HAND" />
                 </cursor>
                      <graphic>
-                        <FontAwesomeIconView boundsType="VISUAL" glyphName="FOLDER" selectionEnd="1" selectionStart="1" strokeWidth="2.0" />
+                        <FontAwesomeIconView boundsType="VISUAL" glyphName="FOLDER" selectionEnd="1" selectionStart="1" size="18.0" strokeWidth="2.0" />
                      </graphic>
               </JFXButton>
             
             </children>
                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="20.0" left="20.0" right="10.0" top="20.0" />
                </padding>
                <BorderPane.margin>
                   <Insets bottom="10.0" top="10.0" />
@@ -54,7 +54,7 @@
           </HBox>
          </center>
          <bottom>
-            <HBox id="main-bottom-hbox" fillHeight="false" prefHeight="51.0" BorderPane.alignment="BOTTOM_CENTER">
+            <HBox id="main-bottom-hbox" maxWidth="1.7976931348623157E308" BorderPane.alignment="BOTTOM_CENTER">
                <styleClass>
                   <String fx:value="bottom-bar-background" />
                   <String fx:value="border-gray" />
@@ -62,16 +62,35 @@
                   <String fx:value="border-thin" />
                </styleClass>
                <children>
-                  <Label text="Label" />
+                  <HBox HBox.hgrow="NEVER">
+                     <children>
+                        <Label styleClass="roboto" text="Bookie Scrape" textFill="#202020">
+                           <padding>
+                              <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                  <HBox HBox.hgrow="NEVER" />
                </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
             </HBox>
          </bottom>
          <top>
-            <HBox id="main-top-hbox" fillHeight="false" styleClass="top-bar-backgroud" BorderPane.alignment="TOP_CENTER">
+            <HBox id="main-top-hbox" styleClass="top-bar-backgroud" BorderPane.alignment="CENTER">
                <children>
-                  <Pane HBox.hgrow="ALWAYS" />
-                  <ButtonBar buttonMinWidth="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
-                    <buttons>
+                  <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                  <HBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" spacing="20.0" HBox.hgrow="NEVER">
+                     <children>
                       <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" styleClass="flat_button">
                            <cursor>
                               <Cursor fx:constant="HAND" />
@@ -102,35 +121,10 @@
                               </FontAwesomeIconView>
                            </graphic>
                         </Button>
-                    </buttons>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                     <padding>
-                        <Insets top="5.0" />
-                     </padding>
-                  </ButtonBar>
-                  <ButtonBar id="control-buttons-bar" HBox.hgrow="ALWAYS">
-                    <buttons>
-                      <Button alignment="TOP_RIGHT" cache="true" mnemonicParsing="false" onAction="#onCloseButtonAction">
-                           <styleClass>
-                              <String fx:value="control-button" />
-                              <String fx:value="close" />
-                           </styleClass>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <graphic>
-                              <Rectangle fill="#2698eb00" height="10.0" stroke="#2e516b" strokeType="INSIDE" strokeWidth="2.0" width="10.0">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </Rectangle>
-                           </graphic>
-                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox alignment="TOP_RIGHT" HBox.hgrow="NEVER">
+                     <children>
                         <Button alignment="TOP_RIGHT" cache="true" mnemonicParsing="false" onAction="#onCloseButtonAction">
                            <styleClass>
                               <String fx:value="control-button" />
@@ -145,23 +139,70 @@
                            <graphic>
                               <StackPane>
                                  <children>
-                                    <Label text="X" textFill="#2e516b" StackPane.alignment="CENTER" />
-                                    <Rectangle fill="#1f93ff00" height="30.0" smooth="false" stroke="TRANSPARENT" strokeType="INSIDE" width="30.0" StackPane.alignment="CENTER">
+                                    <Rectangle fill="#1f93ff00" height="20.0" smooth="false" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="control-button" width="30.0" />
+                                    <Line endX="5.0" startX="-4.0" stroke="#2e516b" />
+                                 </children>
+                              </StackPane>
+                           </graphic>
+                        </Button>
+                      <Button alignment="TOP_RIGHT" cache="true" mnemonicParsing="false" onAction="#onCloseButtonAction" styleClass="control-button" HBox.hgrow="ALWAYS">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <graphic>
+                              <StackPane>
+                                 <children>
+                                    <Rectangle fill="#1f93ff00" height="20.0" smooth="false" stroke="TRANSPARENT" strokeType="INSIDE" width="30.0">
                                        <styleClass>
                                           <String fx:value="control-button" />
-                                          <String fx:value="close" />
-                                          <String fx:value="control-button-square" />
+                                          <String fx:value="control-button-box" />
                                        </styleClass>
+                                    </Rectangle>
+                                    <Rectangle fill="#2698eb00" height="6.0" stroke="#2e516b" strokeType="OUTSIDE" width="6.0">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
                                     </Rectangle>
                                  </children>
                               </StackPane>
                            </graphic>
                         </Button>
-                    </buttons>
+                        <Button alignment="TOP_RIGHT" cache="true" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onCloseButtonAction" styleClass="control-button" HBox.hgrow="ALWAYS">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <graphic>
+                              <StackPane>
+                                 <children>
+                                    <Rectangle fill="#1f93ff00" height="20.0" smooth="false" stroke="TRANSPARENT" strokeType="INSIDE" width="30.0" StackPane.alignment="CENTER">
+                                       <styleClass>
+                                          <String fx:value="control-button" />
+                                          <String fx:value="close" />
+                                          <String fx:value="control-button-box" />
+                                       </styleClass>
+                                    </Rectangle>
+                                    <Label text="X" textFill="#2e516b" StackPane.alignment="CENTER" />
+                                 </children>
+                              </StackPane>
+                           </graphic>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
                      <HBox.margin>
-                        <Insets bottom="10.0" />
+                        <Insets bottom="15.0" />
                      </HBox.margin>
-                  </ButtonBar>
+                  </HBox>
                </children>
             </HBox>
          </top>
