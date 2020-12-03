@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -26,29 +25,40 @@ import com.bookiescrape.app.scrape.Scraper;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 
-public class Main implements Initializable {
+/**
+ * The controller class for {@code main.fxml}.
+ *
+ * @author Jonathan Henly
+ */
+public class Main {
+    
+    @FXML
+    private ResourceBundle resources;
+    
     @FXML
     private TextField outputExcelFilePathFeild;
-    
+
     @FXML
     private Button closeBtn;
-    
+
     private List<String> bookiesList = new ArrayList<>();
     private CellStyle style = null;
+
+    @FXML
+    private void initialize() {}
     
     @FXML
     void onCloseButtonAction(ActionEvent event) {
         // TODO minimize application (preferably to tray) rather than exiting
         Platform.exit();
     }
-    
+
     @FXML
     void selectOutputExcelFilePath(ActionEvent event) {
         if (outputExcelFilePathFeild.getText() != null
@@ -61,7 +71,7 @@ public class Main implements Initializable {
             }
         }
     }
-    
+
     @FXML
     void startWebScrapping(ActionEvent event) {
         try {
@@ -79,12 +89,7 @@ public class Main implements Initializable {
             e.printStackTrace();
         }
     }
-    
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        
-    }
-    
+
     private File exportExcelFile() {
         File csvFile = null;
         FileChooser fileChooser = new FileChooser();
@@ -105,22 +110,22 @@ public class Main implements Initializable {
         }
         return csvFile;
     }
-    
-    
+
+
     private static final String MONEY_LINE =
         "https://classic.sportsbookreview.com/betting-odds/money-line/";
-    
+
     private void scrapeWebData() throws IOException {
         Scraper scraper = new Scraper();
         scraper.scrape(MONEY_LINE);
-        
+
         System.out.println("*** Showing all Bookies list ***\n");
-        
+
         for (Bookie bookie : scraper.getBookies()) {
             System.out.println(bookie.name() + " " + bookie.index());
         }
-        
-        
+
+
         /* System.out.println("*** All Team Names ***\n\n\n"); for (Element e :
          * document.select("div#booksData.data-books").select("div.teamText")) {
          * System.out.println(e.select("a.get-grid").text()); }
@@ -201,12 +206,12 @@ public class Main implements Initializable {
          * (Element es :
          * document.select("div#booksData.data-books").select("div.teamText")) {
          * System.out.println(e.select("a.get-grid").text()); } } */
-        
-        
+
+
         // System.out.println("Final TeamNames" +
         // document.select("div.eventLines").size() + " )))");
         Set<String> linkedHashSet = new LinkedHashSet<>();
-        
+
         /// this code is 100% working
         /* for (int i = 0; i <
          * document.select("div.eventLines").get(0).children().get(3).children()
@@ -239,13 +244,13 @@ public class Main implements Initializable {
          * "div.eventLine.status-scheduled").text()); } linkedHashSet.add("end"
          * + count); count++; } */
         /* for (String i : linkedHashSet) { System.out.println(i); } */
-        
+
         /* System.out.println("All teamNames are !!!"); for (String s :
          * retrieveTeamNames(linkedHashSet)) { System.out.println(s); } */
-        
+
         exportDataToExcelSheet(retrieveTeamNames(linkedHashSet));
     }
-    
+
     private List<String> retrieveTeamNames(Set<String> linkedHashSet) {
         List<String> teamNames = new LinkedList<>();
         String previousString = "";
@@ -263,15 +268,15 @@ public class Main implements Initializable {
                                                                          // for
                                                                          // TeamNames
             Matcher teamNameMatcher = teamNamePattern.matcher(s);
-            
+
             Pattern openerColPatter = Pattern.compile(
                 "(?<=[A-Za-z]\\+|\\s\\-|\\s)[\\+|\\-\\d\\s]+(?=\\s\\d+\\.\\d\\%)");
             Matcher openerColMatcher = openerColPatter.matcher(s);
-            
+
             Pattern allLastColPattern =
                 Pattern.compile("(?<=%\\s)[\\+|\\-\\d\\s]+");
             Matcher allLoastColMatcher = allLastColPattern.matcher(s);
-            
+
             // if we find a match, get the group
             if (teamNameMatcher.find() && openerColMatcher.find()) {
                 // we're only looking for one group, so get it
@@ -282,16 +287,16 @@ public class Main implements Initializable {
                     allLastColGroupFound = allLoastColMatcher.group();
                     // System.out.println(allLastColGroupFound);
                 }
-                
+
                 // print the group out for verification
                 // System.out.format("'%s'\n", teamNameGroupFound);
-                
+
                 teamNames.add(teamNameGroupFound + " , " + openerColGroupFound
                     + " , " + allLastColGroupFound);
                 // scrappedData.setTeamName(teamNameGroupFound);
                 // scrappedData.setOpnerColumn(openerColGroupFound);
                 // scrappedData.setOtherColumns(allLastColGroupFound);
-                
+
             }
             // teamNames.add(scrappedData);
             previousString = s;
@@ -299,14 +304,14 @@ public class Main implements Initializable {
         }
         return teamNames;
     }
-    
-    
+
+
     private void exportDataToExcelSheet(List<String> data) throws IOException {
         // System.out.println("Exporting Data to Excel !!!");
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Scrapped Data Sheet");
-        
-        
+
+
         //////
         workbook.createCellStyle();
         // Setting Background color
@@ -315,7 +320,7 @@ public class Main implements Initializable {
          *
          * style.setFillForegroundColor(IndexedColors.RED.getIndex());
          * style.setFillPattern(FillPatternType.SOLID_FOREGROUND); */
-        
+
         boolean printDataFlag = false;
         int rowNum = 0;
         // System.out.println("Creating excel");
@@ -330,17 +335,17 @@ public class Main implements Initializable {
                     Cell cell = row.createCell(colNum++);
                     // cell.setCellStyle(style);
                     cell.setCellValue(data.get(i));
-                    
+
                     row = sheet.createRow(rowNum++);
                     row.setRowStyle(style);
                     /// columns List
                     Cell teamNameCol = row.createCell(0);
                     teamNameCol.setCellValue("Team Names");
-                    
-                    
+
+
                     Cell openerCOOOOl = row.createCell(colNum++);
                     openerCOOOOl.setCellValue("Opener");
-                    
+
                     for (int s = 0; s < 10; s++) {
                         Cell bookiesCol = row.createCell(colNum++);
                         bookiesCol.setCellValue(bookiesList.get(s));
@@ -348,13 +353,13 @@ public class Main implements Initializable {
                     // System.out.println(data.get(i));
                     continue;
                 }
-                
+
                 /* if(data.get(i).trim().equals("MLB BASEBALL")){ printDataFlag
                  * = true; Row row = sheet.createRow(rowNum++); Cell cell =
                  * row.createCell(colNum++); cell.setCellValue(data.get(i));
                  * System.out.println(data.get(i)); continue; } */
             }
-            
+
             if (printDataFlag) {
                 if (!data.get(i).contains(",")) {
                     // System.out.println(data.get(i) + " -going to false
@@ -369,20 +374,20 @@ public class Main implements Initializable {
                         splitTeamNameOpnerColAndOtherCols[1].trim().split(" ");
                     String[] otherColumns =
                         splitTeamNameOpnerColAndOtherCols[2].trim().split(" ");
-                    
+
                     Cell teamNameCell = row.createCell(colNum++);
                     teamNameCell
                         .setCellValue(splitTeamNameOpnerColAndOtherCols[0]);
-                    
+
                     StringBuilder builder = new StringBuilder();
                     for (int j = 0; j < opnerCol.length; j++) {
                         builder.append(opnerCol[j] + "\t  ");
                     }
                     Cell openerColCell = row.createCell(colNum++);
                     openerColCell.setCellValue(builder.toString());
-                    
+
                     builder = new StringBuilder();
-                    
+
                     int h = 1;
                     for (int k = 0; k < otherColumns.length; k++) {
                         if (k == (opnerCol.length * h)) {
@@ -398,7 +403,7 @@ public class Main implements Initializable {
                         + " " + otherColumns[otherColumns.length - 1]);
                 }
             }
-            
+
             /* if(lastColFlag){ Row row = sheet.createRow(rowNum++); String[]
              * splitTeamNameOpnerColAndOtherCols = data.get(i).split(",");
              * String[] opnerCol =
@@ -433,7 +438,7 @@ public class Main implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         // System.out.println("Done");
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Success !!!");
