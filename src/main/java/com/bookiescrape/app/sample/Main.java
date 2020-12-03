@@ -18,7 +18,7 @@ import javafx.stage.StageStyle;
  * @author Jonathan Henly
  */
 public class Main extends Application {
-
+    
     private static final String MAIN_FXML = "/fxml/main.fxml";
     
     @Override
@@ -27,26 +27,27 @@ public class Main extends Application {
         
         // load the main fxml file
         Parent root = FXMLLoader.load(mainFxmlUrl);
-
+        
         // create window with no title bar or default min, max, close buttons
         primaryStage.initStyle(StageStyle.UNDECORATED);
-
+        
         // create and set the main scene
-        primaryStage.setScene(new Scene(root, 500, 600));
-
+        primaryStage.setScene(new Scene(root));
+        
         // display the window
         primaryStage.show();
     }
-
-
+    
+    
     /**
      * Entry point of the application.
      *
-     * @param args - command line arguments
+     * @param args
+     *             - command line arguments
      */
     public static void main(String[] args) {
         // launch the JavaFX application
         launch(args);
     }
-
+    
 }

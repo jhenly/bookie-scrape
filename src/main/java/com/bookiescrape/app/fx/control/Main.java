@@ -29,6 +29,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 
 /**
@@ -43,13 +44,13 @@ public class Main {
     
     @FXML
     private TextField outputExcelFilePathFeild;
-
+    
     @FXML
     private Button closeBtn;
-
+    
     private List<String> bookiesList = new ArrayList<>();
     private CellStyle style = null;
-
+    
     @FXML
     private void initialize() {}
     
@@ -58,12 +59,27 @@ public class Main {
         // TODO minimize application (preferably to tray) rather than exiting
         Platform.exit();
     }
-
+    
+    @FXML
+    void onMinimizeButtonAction(ActionEvent event) {
+        Stage stage = (Stage) ((Button) event.getSource()).getScene()
+            .getWindow();
+        // is stage minimizable into task bar. (true | false)
+        stage.setIconified(!stage.isIconified());
+    }
+    
+    @FXML
+    void onMaximizeButtonAction(ActionEvent event) {
+        Stage stage = (Stage) ((Button) event.getSource()).getScene()
+            .getWindow();
+        // is stage minimizable into task bar. (true | false)
+        stage.setMaximized(!stage.isMaximized());
+    }
+    
     @FXML
     void selectOutputExcelFilePath(ActionEvent event) {
         if (outputExcelFilePathFeild.getText() != null
-            || !outputExcelFilePathFeild.getText().isEmpty())
-        {
+            || !outputExcelFilePathFeild.getText().isEmpty()) {
             File positivesCsvFile = exportExcelFile();
             if (positivesCsvFile != null) {
                 String anglesPath = positivesCsvFile.getAbsolutePath();
@@ -71,7 +87,7 @@ public class Main {
             }
         }
     }
-
+    
     @FXML
     void startWebScrapping(ActionEvent event) {
         try {
@@ -89,14 +105,14 @@ public class Main {
             e.printStackTrace();
         }
     }
-
+    
     private File exportExcelFile() {
         File csvFile = null;
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(
             "Select Folder Where you want to save your Output Excel Sheet");
-        FileChooser.ExtensionFilter emaiLFilter =
-            new FileChooser.ExtensionFilter("Excel File", "*.xlsx");
+        FileChooser.ExtensionFilter emaiLFilter = new FileChooser.ExtensionFilter(
+            "Excel File", "*.xlsx");
         /* FileChooser.ExtensionFilter allFileFilter = new
          * FileChooser.ExtensionFilter( "All Files", "*.*"); */
         fileChooser.getExtensionFilters().add(emaiLFilter);
@@ -110,22 +126,21 @@ public class Main {
         }
         return csvFile;
     }
-
-
-    private static final String MONEY_LINE =
-        "https://classic.sportsbookreview.com/betting-odds/money-line/";
-
+    
+    
+    private static final String MONEY_LINE = "https://classic.sportsbookreview.com/betting-odds/money-line/";
+    
     private void scrapeWebData() throws IOException {
         Scraper scraper = new Scraper();
         scraper.scrape(MONEY_LINE);
-
+        
         System.out.println("*** Showing all Bookies list ***\n");
-
+        
         for (Bookie bookie : scraper.getBookies()) {
             System.out.println(bookie.name() + " " + bookie.index());
         }
-
-
+        
+        
         /* System.out.println("*** All Team Names ***\n\n\n"); for (Element e :
          * document.select("div#booksData.data-books").select("div.teamText")) {
          * System.out.println(e.select("a.get-grid").text()); }
@@ -206,12 +221,12 @@ public class Main {
          * (Element es :
          * document.select("div#booksData.data-books").select("div.teamText")) {
          * System.out.println(e.select("a.get-grid").text()); } } */
-
-
+        
+        
         // System.out.println("Final TeamNames" +
         // document.select("div.eventLines").size() + " )))");
         Set<String> linkedHashSet = new LinkedHashSet<>();
-
+        
         /// this code is 100% working
         /* for (int i = 0; i <
          * document.select("div.eventLines").get(0).children().get(3).children()
@@ -244,13 +259,13 @@ public class Main {
          * "div.eventLine.status-scheduled").text()); } linkedHashSet.add("end"
          * + count); count++; } */
         /* for (String i : linkedHashSet) { System.out.println(i); } */
-
+        
         /* System.out.println("All teamNames are !!!"); for (String s :
          * retrieveTeamNames(linkedHashSet)) { System.out.println(s); } */
-
+        
         exportDataToExcelSheet(retrieveTeamNames(linkedHashSet));
     }
-
+    
     private List<String> retrieveTeamNames(Set<String> linkedHashSet) {
         List<String> teamNames = new LinkedList<>();
         String previousString = "";
@@ -260,23 +275,23 @@ public class Main {
                 teamNames.add(previousString);
                 // scrappedData.setGameName(previousString);
             }
-            Pattern teamNamePattern =
-                Pattern.compile("(?<=[p]\\s)[\\w\\s\\w]+(?=Options)");   // the
-                                                                         // pattern
-                                                                         // to
-                                                                         // search
-                                                                         // for
-                                                                         // TeamNames
+            Pattern teamNamePattern = Pattern
+                .compile("(?<=[p]\\s)[\\w\\s\\w]+(?=Options)");   // the
+                                                                  // pattern
+                                                                  // to
+                                                                  // search
+                                                                  // for
+                                                                  // TeamNames
             Matcher teamNameMatcher = teamNamePattern.matcher(s);
-
+            
             Pattern openerColPatter = Pattern.compile(
                 "(?<=[A-Za-z]\\+|\\s\\-|\\s)[\\+|\\-\\d\\s]+(?=\\s\\d+\\.\\d\\%)");
             Matcher openerColMatcher = openerColPatter.matcher(s);
-
-            Pattern allLastColPattern =
-                Pattern.compile("(?<=%\\s)[\\+|\\-\\d\\s]+");
+            
+            Pattern allLastColPattern = Pattern
+                .compile("(?<=%\\s)[\\+|\\-\\d\\s]+");
             Matcher allLoastColMatcher = allLastColPattern.matcher(s);
-
+            
             // if we find a match, get the group
             if (teamNameMatcher.find() && openerColMatcher.find()) {
                 // we're only looking for one group, so get it
@@ -287,16 +302,16 @@ public class Main {
                     allLastColGroupFound = allLoastColMatcher.group();
                     // System.out.println(allLastColGroupFound);
                 }
-
+                
                 // print the group out for verification
                 // System.out.format("'%s'\n", teamNameGroupFound);
-
+                
                 teamNames.add(teamNameGroupFound + " , " + openerColGroupFound
                     + " , " + allLastColGroupFound);
                 // scrappedData.setTeamName(teamNameGroupFound);
                 // scrappedData.setOpnerColumn(openerColGroupFound);
                 // scrappedData.setOtherColumns(allLastColGroupFound);
-
+                
             }
             // teamNames.add(scrappedData);
             previousString = s;
@@ -304,14 +319,14 @@ public class Main {
         }
         return teamNames;
     }
-
-
+    
+    
     private void exportDataToExcelSheet(List<String> data) throws IOException {
         // System.out.println("Exporting Data to Excel !!!");
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Scrapped Data Sheet");
-
-
+        
+        
         //////
         workbook.createCellStyle();
         // Setting Background color
@@ -320,7 +335,7 @@ public class Main {
          *
          * style.setFillForegroundColor(IndexedColors.RED.getIndex());
          * style.setFillPattern(FillPatternType.SOLID_FOREGROUND); */
-
+        
         boolean printDataFlag = false;
         int rowNum = 0;
         // System.out.println("Creating excel");
@@ -328,24 +343,23 @@ public class Main {
             int colNum = 0;
             if (!data.get(i).contains(",")) {
                 if (data.get(i).equals("NBA BASKETBALL")
-                    || data.get(i).trim().equals("MLB BASEBALL"))
-                {
+                    || data.get(i).trim().equals("MLB BASEBALL")) {
                     printDataFlag = true;
                     Row row = sheet.createRow(rowNum++);
                     Cell cell = row.createCell(colNum++);
                     // cell.setCellStyle(style);
                     cell.setCellValue(data.get(i));
-
+                    
                     row = sheet.createRow(rowNum++);
                     row.setRowStyle(style);
                     /// columns List
                     Cell teamNameCol = row.createCell(0);
                     teamNameCol.setCellValue("Team Names");
-
-
+                    
+                    
                     Cell openerCOOOOl = row.createCell(colNum++);
                     openerCOOOOl.setCellValue("Opener");
-
+                    
                     for (int s = 0; s < 10; s++) {
                         Cell bookiesCol = row.createCell(colNum++);
                         bookiesCol.setCellValue(bookiesList.get(s));
@@ -353,13 +367,13 @@ public class Main {
                     // System.out.println(data.get(i));
                     continue;
                 }
-
+                
                 /* if(data.get(i).trim().equals("MLB BASEBALL")){ printDataFlag
                  * = true; Row row = sheet.createRow(rowNum++); Cell cell =
                  * row.createCell(colNum++); cell.setCellValue(data.get(i));
                  * System.out.println(data.get(i)); continue; } */
             }
-
+            
             if (printDataFlag) {
                 if (!data.get(i).contains(",")) {
                     // System.out.println(data.get(i) + " -going to false
@@ -368,26 +382,26 @@ public class Main {
                 } else {
                     // System.out.println(data.get(i) + " -else");
                     Row row = sheet.createRow(rowNum++);
-                    String[] splitTeamNameOpnerColAndOtherCols =
-                        data.get(i).split(",");
-                    String[] opnerCol =
-                        splitTeamNameOpnerColAndOtherCols[1].trim().split(" ");
-                    String[] otherColumns =
-                        splitTeamNameOpnerColAndOtherCols[2].trim().split(" ");
-
+                    String[] splitTeamNameOpnerColAndOtherCols = data.get(i)
+                        .split(",");
+                    String[] opnerCol = splitTeamNameOpnerColAndOtherCols[1]
+                        .trim().split(" ");
+                    String[] otherColumns = splitTeamNameOpnerColAndOtherCols[2]
+                        .trim().split(" ");
+                    
                     Cell teamNameCell = row.createCell(colNum++);
                     teamNameCell
                         .setCellValue(splitTeamNameOpnerColAndOtherCols[0]);
-
+                    
                     StringBuilder builder = new StringBuilder();
                     for (int j = 0; j < opnerCol.length; j++) {
                         builder.append(opnerCol[j] + "\t  ");
                     }
                     Cell openerColCell = row.createCell(colNum++);
                     openerColCell.setCellValue(builder.toString());
-
+                    
                     builder = new StringBuilder();
-
+                    
                     int h = 1;
                     for (int k = 0; k < otherColumns.length; k++) {
                         if (k == (opnerCol.length * h)) {
@@ -403,7 +417,7 @@ public class Main {
                         + " " + otherColumns[otherColumns.length - 1]);
                 }
             }
-
+            
             /* if(lastColFlag){ Row row = sheet.createRow(rowNum++); String[]
              * splitTeamNameOpnerColAndOtherCols = data.get(i).split(",");
              * String[] opnerCol =
@@ -429,8 +443,8 @@ public class Main {
         }
         // System.out.println("Row : " + rowNum);
         try {
-            FileOutputStream outputStream =
-                new FileOutputStream(outputExcelFilePathFeild.getText());
+            FileOutputStream outputStream = new FileOutputStream(
+                outputExcelFilePathFeild.getText());
             workbook.write(outputStream);
             workbook.close();
         } catch (FileNotFoundException e) {
@@ -438,7 +452,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        
         // System.out.println("Done");
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Success !!!");

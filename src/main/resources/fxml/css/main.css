@@ -78,6 +78,15 @@
         -fx-background-color: #1182d9;
 }
 
+.control-button-close {
+    -fx-text-fill: #2e516b;
+    -fx-font-weight: bold;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+.control-button-close:hover { -fx-background-color: #d51e37 }
+
 .control-button {
 	-fx-text-fill: #2e516b;
 	-fx-font-weight: bold;
@@ -85,16 +94,10 @@
 	-fx-padding: 0;
 	-fx-background-color: transparent;
 }
-
-.control-button:pressed {}
-
-.close:hover { -fx-background-color: #d51e37 }
 .control-button:hover { -fx-background-color: #1d78be }
 
-.bottom-bar-background {
-        -fx-background-color: #fafafb;
-}
-#main-bottom-hbox {
-        
+.bottom-bar-background { -fx-background-color: #fafafb; }
+#main-bottom-hbox { 
+    
 }
 
