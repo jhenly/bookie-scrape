@@ -20,12 +20,12 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane id="main-anchor-pane" depthTest="DISABLE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.Main">
+<AnchorPane id="main-anchor-pane" depthTest="DISABLE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #00000000;" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.Main">
   <children>
-      <BorderPane id="main-layout-pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #00000000;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
         
-          <HBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+          <HBox id="main-layout-pane" alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
               
                 <Label styleClass="roboto" text="Select Output File" textAlignment="CENTER">
@@ -52,115 +52,17 @@
                   <Insets bottom="20.0" left="20.0" right="10.0" top="20.0" />
                </padding>
                <BorderPane.margin>
-                  <Insets bottom="10.0" top="10.0" />
+                  <Insets />
                </BorderPane.margin>
           </HBox>
          </center>
-         <bottom>
-            <VBox BorderPane.alignment="BOTTOM_CENTER">
-               <BorderPane.margin>
-                  <Insets />
-               </BorderPane.margin>
-               <children>
-                  <HBox id="main-bottom-hbox" maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
-                     <children>
-                        <VBox prefWidth="1.0" HBox.hgrow="NEVER">
-                           <children>
-                              <Pane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="3.0" styleClass="bottom-bar-background" VBox.vgrow="ALWAYS">
-                                 <cursor>
-                                    <Cursor fx:constant="H_RESIZE" />
-                                 </cursor>
-                              </Pane>
-                              <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="4.0" prefWidth="3.0" styleClass="bottom-bar-background" VBox.vgrow="NEVER">
-                                 <cursor>
-                                    <Cursor fx:constant="SW_RESIZE" />
-                                 </cursor>
-                              </Pane>
-                           </children>
-                        </VBox>
-                        <HBox HBox.hgrow="NEVER">
-                           <children>
-                              <Circle id="scrape-status-circle" fx:id="scraperStatusCircle" fill="#cbcbcd" radius="5.0" stroke="TRANSPARENT" strokeType="INSIDE">
-                                 <HBox.margin>
-                                    <Insets left="20.0" right="10.0" top="10.0" />
-                                 </HBox.margin>
-                              </Circle>
-                              <VBox>
-                                 <children>
-                                    <Label alignment="BOTTOM_CENTER" text="Bookie Scraper" textFill="#202020" VBox.vgrow="NEVER">
-                                       <font>
-                                          <Font name="Roboto Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <Label alignment="BOTTOM_LEFT" text="idle" textFill="#6b6b6b" VBox.vgrow="NEVER">
-                                       <font>
-                                          <Font name="Roboto Medium Italic" size="12.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                              </VBox>
-                              <TextFlow textAlignment="CENTER" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" top="10.0" />
-                           </padding>
-                        </HBox>
-                        <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                        <HBox HBox.hgrow="NEVER" />
-                        <VBox fillWidth="false" HBox.hgrow="NEVER">
-                           <children>
-                              <Pane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="3.0" styleClass="bottom-bar-background" VBox.vgrow="ALWAYS">
-                                 <cursor>
-                                    <Cursor fx:constant="H_RESIZE" />
-                                 </cursor>
-                              </Pane>
-                              <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="4.0" prefWidth="3.0" styleClass="bottom-bar-background" VBox.vgrow="NEVER">
-                                 <cursor>
-                                    <Cursor fx:constant="SE_RESIZE" />
-                                 </cursor>
-                              </Pane>
-                           </children>
-                        </VBox>
-                     </children>
-                     <styleClass>
-                        <String fx:value="bottom-bar-background" />
-                        <String fx:value="border-gray" />
-                        <String fx:value="border-top-solid" />
-                        <String fx:value="border-thin" />
-                     </styleClass>
-                  </HBox>
-                  <HBox VBox.vgrow="NEVER">
-                     <children>
-                        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="3.0" prefWidth="4.0" styleClass="bottom-bar-background" HBox.hgrow="NEVER">
-                           <cursor>
-                              <Cursor fx:constant="SW_RESIZE" />
-                           </cursor>
-                        </Pane>
-                        <Pane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="3.0" styleClass="bottom-bar-background" HBox.hgrow="ALWAYS">
-                           <cursor>
-                              <Cursor fx:constant="V_RESIZE" />
-                           </cursor>
-                        </Pane>
-                        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="3.0" prefWidth="4.0" styleClass="bottom-bar-background" HBox.hgrow="NEVER">
-                           <cursor>
-                              <Cursor fx:constant="SE_RESIZE" />
-                           </cursor>
-                        </Pane>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-         </bottom>
          <top>
             <HBox id="main-top-hbox" fx:id="mainTopHBox" onMouseDragged="#onMainTopHBoxMouseDragged" onMousePressed="#onMainTopHBoxMousePressed" styleClass="top-bar-backgroud" BorderPane.alignment="CENTER">
                <children>
                   <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                   <HBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" spacing="20.0" HBox.hgrow="NEVER">
                      <children>
-                      <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" styleClass="flat_button">
+                      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="flat_button" HBox.hgrow="NEVER">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -295,6 +197,49 @@
                </children>
             </HBox>
          </top>
+         <bottom>
+            <HBox BorderPane.alignment="BOTTOM_CENTER">
+               <children>
+                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="137.0" HBox.hgrow="NEVER">
+                     <children>
+                        <Circle id="scrape-status-circle" fx:id="scraperStatusCircle" fill="#cbcbcd" radius="5.0" stroke="TRANSPARENT" strokeType="INSIDE">
+                           <HBox.margin>
+                              <Insets left="20.0" right="10.0" top="10.0" />
+                           </HBox.margin>
+                        </Circle>
+                        <VBox>
+                           <children>
+                              <Label alignment="BOTTOM_CENTER" text="Bookie Scraper" textFill="#202020" VBox.vgrow="NEVER">
+                                 <font>
+                                    <Font name="Roboto Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="BOTTOM_LEFT" text="idle" textFill="#6b6b6b" VBox.vgrow="NEVER">
+                                 <font>
+                                    <Font name="Roboto Medium Italic" size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </VBox>
+                        <TextFlow textAlignment="CENTER" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                  <HBox fx:id="bottomRightHBox" HBox.hgrow="NEVER" />
+               </children>
+               <styleClass>
+                  <String fx:value="border-top-solid" />
+                  <String fx:value="border-gray" />
+                  <String fx:value="border-thin" />
+               </styleClass>
+            </HBox>
+         </bottom>
       </BorderPane>
   
   </children>

@@ -51,6 +51,8 @@ public class Main {
     @FXML
     private HBox mainTopHBox;
     @FXML
+    private HBox bottomRightHBox;
+    @FXML
     private TextField outputExcelFilePathFeild;
     @FXML
     private Button closeButton;
