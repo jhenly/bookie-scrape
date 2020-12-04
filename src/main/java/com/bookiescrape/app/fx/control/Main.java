@@ -27,7 +27,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -38,48 +45,127 @@ import javafx.stage.Stage;
  * @author Jonathan Henly
  */
 public class Main {
-    
     @FXML
     private ResourceBundle resources;
     
     @FXML
+    private HBox mainTopHBox;
+    @FXML
     private TextField outputExcelFilePathFeild;
+    @FXML
+    private Button closeButton;
+    @FXML
+    private Line closeButtonSlashOne;
+    @FXML
+    private Line closeButtonSlashTwo;
+    @FXML
+    private Label scraperStatusLabel;
     
     @FXML
-    private Button closeBtn;
+    private Circle scraperStatusCircle;
     
+    private static final Paint CLOSE_BUTTON_PAINT = Paint.valueOf("2e516b");
     private List<String> bookiesList = new ArrayList<>();
     private CellStyle style = null;
+    private double stageXOffset;
+    private double stageYOffset;
     
     @FXML
-    private void initialize() {}
+    private void initialize() {
+    }
+
+    /**
+     * Used to record the start of dragging the main window across the screen.
+     *
+     * @param event - the mouse pressed event caused by mouse pressing main's
+     *        top HBox
+     */
+    @FXML
+    void onMainTopHBoxMousePressed(MouseEvent event) {
+        stageXOffset = event.getSceneX();
+        stageYOffset = event.getSceneY();
+    }
     
+    /**
+     * Handles dragging the window across the screen after mouse pressing main's
+     * top HBox.
+     *
+     * @param event - the drag event caused by dragging the main window across
+     *        the screen
+     */
+    @FXML
+    void onMainTopHBoxMouseDragged(MouseEvent event) {
+        Stage stage = (Stage) ((HBox) event.getSource()).getScene().getWindow();
+        
+        stage.setX(event.getScreenX() - stageXOffset);
+        stage.setY(event.getScreenY() - stageYOffset);
+    }
+
+    /**
+     * Handles actions coming from the top most close button.
+     *
+     * @param event - the action event to handle
+     */
     @FXML
     void onCloseButtonAction(ActionEvent event) {
         // TODO minimize application (preferably to tray) rather than exiting
         Platform.exit();
     }
     
+    /**
+     * Used to turn the 'X' in the close button white.
+     *
+     * @param event - the mouse event to handle
+     */
     @FXML
-    void onMinimizeButtonAction(ActionEvent event) {
-        Stage stage = (Stage) ((Button) event.getSource()).getScene()
-            .getWindow();
-        // is stage minimizable into task bar. (true | false)
-        stage.setIconified(!stage.isIconified());
+    void onMouseEnteredCloseButton(MouseEvent event) {
+        closeButtonSlashOne.setStroke(Color.WHITE);
+        closeButtonSlashTwo.setStroke(Color.WHITE);
+    }
+
+    /**
+     * Used to turn the 'X' in the close button from white back to its original
+     * color.
+     *
+     * @param event - the mouse event to handle
+     */
+    @FXML
+    void onMouseExitedCloseButton(MouseEvent event) {
+        closeButtonSlashOne.setStroke(CLOSE_BUTTON_PAINT);
+        closeButtonSlashTwo.setStroke(CLOSE_BUTTON_PAINT);
     }
     
+    /**
+     * Handles actions on the top right most minimize button.
+     *
+     * @param event - the action event to handle
+     */
+    @FXML
+    void onMinimizeButtonAction(ActionEvent event) {
+        Stage stage =
+            (Stage) ((Button) event.getSource()).getScene().getWindow();
+
+        stage.setIconified(!stage.isIconified());
+    }
+
+    /**
+     * Handles actions on the top right most maximize button.
+     *
+     * @param event - the action event to handle
+     */
     @FXML
     void onMaximizeButtonAction(ActionEvent event) {
-        Stage stage = (Stage) ((Button) event.getSource()).getScene()
-            .getWindow();
-        // is stage minimizable into task bar. (true | false)
+        Stage stage =
+            (Stage) ((Button) event.getSource()).getScene().getWindow();
+
         stage.setMaximized(!stage.isMaximized());
     }
     
     @FXML
     void selectOutputExcelFilePath(ActionEvent event) {
         if (outputExcelFilePathFeild.getText() != null
-            || !outputExcelFilePathFeild.getText().isEmpty()) {
+            || !outputExcelFilePathFeild.getText().isEmpty())
+        {
             File positivesCsvFile = exportExcelFile();
             if (positivesCsvFile != null) {
                 String anglesPath = positivesCsvFile.getAbsolutePath();
@@ -111,8 +197,8 @@ public class Main {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(
             "Select Folder Where you want to save your Output Excel Sheet");
-        FileChooser.ExtensionFilter emaiLFilter = new FileChooser.ExtensionFilter(
-            "Excel File", "*.xlsx");
+        FileChooser.ExtensionFilter emaiLFilter =
+            new FileChooser.ExtensionFilter("Excel File", "*.xlsx");
         /* FileChooser.ExtensionFilter allFileFilter = new
          * FileChooser.ExtensionFilter( "All Files", "*.*"); */
         fileChooser.getExtensionFilters().add(emaiLFilter);
@@ -128,7 +214,8 @@ public class Main {
     }
     
     
-    private static final String MONEY_LINE = "https://classic.sportsbookreview.com/betting-odds/money-line/";
+    private static final String MONEY_LINE =
+        "https://classic.sportsbookreview.com/betting-odds/money-line/";
     
     private void scrapeWebData() throws IOException {
         Scraper scraper = new Scraper();
@@ -275,21 +362,21 @@ public class Main {
                 teamNames.add(previousString);
                 // scrappedData.setGameName(previousString);
             }
-            Pattern teamNamePattern = Pattern
-                .compile("(?<=[p]\\s)[\\w\\s\\w]+(?=Options)");   // the
-                                                                  // pattern
-                                                                  // to
-                                                                  // search
-                                                                  // for
-                                                                  // TeamNames
+            Pattern teamNamePattern =
+                Pattern.compile("(?<=[p]\\s)[\\w\\s\\w]+(?=Options)");   // the
+                                                                         // pattern
+                                                                         // to
+                                                                         // search
+                                                                         // for
+                                                                         // TeamNames
             Matcher teamNameMatcher = teamNamePattern.matcher(s);
             
             Pattern openerColPatter = Pattern.compile(
                 "(?<=[A-Za-z]\\+|\\s\\-|\\s)[\\+|\\-\\d\\s]+(?=\\s\\d+\\.\\d\\%)");
             Matcher openerColMatcher = openerColPatter.matcher(s);
             
-            Pattern allLastColPattern = Pattern
-                .compile("(?<=%\\s)[\\+|\\-\\d\\s]+");
+            Pattern allLastColPattern =
+                Pattern.compile("(?<=%\\s)[\\+|\\-\\d\\s]+");
             Matcher allLoastColMatcher = allLastColPattern.matcher(s);
             
             // if we find a match, get the group
@@ -343,7 +430,8 @@ public class Main {
             int colNum = 0;
             if (!data.get(i).contains(",")) {
                 if (data.get(i).equals("NBA BASKETBALL")
-                    || data.get(i).trim().equals("MLB BASEBALL")) {
+                    || data.get(i).trim().equals("MLB BASEBALL"))
+                {
                     printDataFlag = true;
                     Row row = sheet.createRow(rowNum++);
                     Cell cell = row.createCell(colNum++);
@@ -382,12 +470,12 @@ public class Main {
                 } else {
                     // System.out.println(data.get(i) + " -else");
                     Row row = sheet.createRow(rowNum++);
-                    String[] splitTeamNameOpnerColAndOtherCols = data.get(i)
-                        .split(",");
-                    String[] opnerCol = splitTeamNameOpnerColAndOtherCols[1]
-                        .trim().split(" ");
-                    String[] otherColumns = splitTeamNameOpnerColAndOtherCols[2]
-                        .trim().split(" ");
+                    String[] splitTeamNameOpnerColAndOtherCols =
+                        data.get(i).split(",");
+                    String[] opnerCol =
+                        splitTeamNameOpnerColAndOtherCols[1].trim().split(" ");
+                    String[] otherColumns =
+                        splitTeamNameOpnerColAndOtherCols[2].trim().split(" ");
                     
                     Cell teamNameCell = row.createCell(colNum++);
                     teamNameCell
@@ -443,8 +531,8 @@ public class Main {
         }
         // System.out.println("Row : " + rowNum);
         try {
-            FileOutputStream outputStream = new FileOutputStream(
-                outputExcelFilePathFeild.getText());
+            FileOutputStream outputStream =
+                new FileOutputStream(outputExcelFilePathFeild.getText());
             workbook.write(outputStream);
             workbook.close();
         } catch (FileNotFoundException e) {

@@ -13,9 +13,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane id="main-anchor-pane" depthTest="DISABLE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@css/main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.Main">
   <children>
@@ -25,15 +28,15 @@
           <HBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
               
-                <Label text="Select Output File" textAlignment="CENTER">
+                <Label styleClass="roboto" text="Select Output File" textAlignment="CENTER">
                      <font>
-                        <Font name="Roboto Regular" size="18.0" />
+                        <Font name="Roboto Black" size="16.0" />
                      </font>
                 </Label>
                 
                 <Button mnemonicParsing="false" onAction="#startWebScrapping" text="Start Scrapping " />
             
-                <TextField fx:id="outputExcelFilePathFeild" promptText="Select Output File Path where you want to store scrapped Data" />
+                      <TextField fx:id="outputExcelFilePathFeild" promptText="Select Output File Path where you want to store scrapped Data" />
               
               <JFXButton ellipsisString="" onAction="#selectOutputExcelFilePath" prefHeight="33.0" prefWidth="17.0">
                 <cursor>
@@ -54,39 +57,105 @@
           </HBox>
          </center>
          <bottom>
-            <HBox id="main-bottom-hbox" maxWidth="1.7976931348623157E308" BorderPane.alignment="BOTTOM_CENTER">
-               <styleClass>
-                  <String fx:value="bottom-bar-background" />
-                  <String fx:value="border-gray" />
-                  <String fx:value="border-top-solid" />
-                  <String fx:value="border-thin" />
-               </styleClass>
-               <children>
-                  <HBox HBox.hgrow="NEVER">
-                     <children>
-                        <Label text="Bookie Scrape" textFill="#202020">
-                           <padding>
-                              <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-                           </padding>
-                           <font>
-                              <Font name="Roboto Regular" size="14.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" top="10.0" />
-                     </padding>
-                  </HBox>
-                  <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                  <HBox HBox.hgrow="NEVER" />
-               </children>
+            <VBox BorderPane.alignment="BOTTOM_CENTER">
                <BorderPane.margin>
                   <Insets />
                </BorderPane.margin>
-            </HBox>
+               <children>
+                  <HBox id="main-bottom-hbox" maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
+                     <children>
+                        <VBox prefWidth="1.0" HBox.hgrow="NEVER">
+                           <children>
+                              <Pane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="3.0" styleClass="bottom-bar-background" VBox.vgrow="ALWAYS">
+                                 <cursor>
+                                    <Cursor fx:constant="H_RESIZE" />
+                                 </cursor>
+                              </Pane>
+                              <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="4.0" prefWidth="3.0" styleClass="bottom-bar-background" VBox.vgrow="NEVER">
+                                 <cursor>
+                                    <Cursor fx:constant="SW_RESIZE" />
+                                 </cursor>
+                              </Pane>
+                           </children>
+                        </VBox>
+                        <HBox HBox.hgrow="NEVER">
+                           <children>
+                              <Circle id="scrape-status-circle" fx:id="scraperStatusCircle" fill="#cbcbcd" radius="5.0" stroke="TRANSPARENT" strokeType="INSIDE">
+                                 <HBox.margin>
+                                    <Insets left="20.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </Circle>
+                              <VBox>
+                                 <children>
+                                    <Label alignment="BOTTOM_CENTER" text="Bookie Scraper" textFill="#202020" VBox.vgrow="NEVER">
+                                       <font>
+                                          <Font name="Roboto Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label alignment="BOTTOM_LEFT" text="idle" textFill="#6b6b6b" VBox.vgrow="NEVER">
+                                       <font>
+                                          <Font name="Roboto Medium Italic" size="12.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </VBox>
+                              <TextFlow textAlignment="CENTER" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                        <HBox HBox.hgrow="NEVER" />
+                        <VBox fillWidth="false" HBox.hgrow="NEVER">
+                           <children>
+                              <Pane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="3.0" styleClass="bottom-bar-background" VBox.vgrow="ALWAYS">
+                                 <cursor>
+                                    <Cursor fx:constant="H_RESIZE" />
+                                 </cursor>
+                              </Pane>
+                              <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="4.0" prefWidth="3.0" styleClass="bottom-bar-background" VBox.vgrow="NEVER">
+                                 <cursor>
+                                    <Cursor fx:constant="SE_RESIZE" />
+                                 </cursor>
+                              </Pane>
+                           </children>
+                        </VBox>
+                     </children>
+                     <styleClass>
+                        <String fx:value="bottom-bar-background" />
+                        <String fx:value="border-gray" />
+                        <String fx:value="border-top-solid" />
+                        <String fx:value="border-thin" />
+                     </styleClass>
+                  </HBox>
+                  <HBox VBox.vgrow="NEVER">
+                     <children>
+                        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="3.0" prefWidth="4.0" styleClass="bottom-bar-background" HBox.hgrow="NEVER">
+                           <cursor>
+                              <Cursor fx:constant="SW_RESIZE" />
+                           </cursor>
+                        </Pane>
+                        <Pane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="3.0" styleClass="bottom-bar-background" HBox.hgrow="ALWAYS">
+                           <cursor>
+                              <Cursor fx:constant="V_RESIZE" />
+                           </cursor>
+                        </Pane>
+                        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="3.0" prefWidth="4.0" styleClass="bottom-bar-background" HBox.hgrow="NEVER">
+                           <cursor>
+                              <Cursor fx:constant="SE_RESIZE" />
+                           </cursor>
+                        </Pane>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
          </bottom>
          <top>
-            <HBox id="main-top-hbox" styleClass="top-bar-backgroud" BorderPane.alignment="CENTER">
+            <HBox id="main-top-hbox" fx:id="mainTopHBox" onMouseDragged="#onMainTopHBoxMouseDragged" onMousePressed="#onMainTopHBoxMousePressed" styleClass="top-bar-backgroud" BorderPane.alignment="CENTER">
                <children>
                   <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                   <HBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" spacing="20.0" HBox.hgrow="NEVER">
@@ -96,14 +165,22 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                            <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" />
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
+                           <HBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
+                           </HBox.margin>
                            <graphic>
-                              <FontAwesomeIconView boundsType="VISUAL" fill="WHITE" glyphName="COG" size="20.0" stroke="#ffffff00">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </FontAwesomeIconView>
+                              <StackPane>
+                                 <children>
+                                    <Circle fill="#1182d9" radius="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" StackPane.alignment="CENTER" />
+                                    <FontAwesomeIconView boundsType="VISUAL" fill="WHITE" glyphName="COG" size="30.0" stroke="#ffffff00" strokeType="INSIDE" strokeWidth="0.0" StackPane.alignment="CENTER">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </FontAwesomeIconView>
+                                 </children>
+                              </StackPane>
                            </graphic>
                         </Button>
                         <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" styleClass="flat_button">
@@ -113,23 +190,30 @@
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
+                           <HBox.margin>
+                              <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                           </HBox.margin>
                            <graphic>
-                              <FontAwesomeIconView boundsType="VISUAL" fill="WHITE" glyphName="HISTORY" size="20.0">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </FontAwesomeIconView>
+                              <StackPane>
+                                 <children>
+                                    <Circle fill="#1182d9" radius="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+                                    <FontAwesomeIconView boundsType="VISUAL" fill="WHITE" glyphName="HISTORY" size="30.0" strokeType="INSIDE" StackPane.alignment="CENTER">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </FontAwesomeIconView>
+                                 </children>
+                              </StackPane>
                            </graphic>
                         </Button>
                      </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
                   </HBox>
                   <HBox alignment="TOP_RIGHT" HBox.hgrow="NEVER">
                      <children>
-                        <Button alignment="TOP_RIGHT" cache="true" mnemonicParsing="false" onAction="#onMinimizeButtonAction">
-                           <styleClass>
-                              <String fx:value="control-button" />
-                              <String fx:value="close" />
-                           </styleClass>
+                        <Button alignment="TOP_RIGHT" cache="true" mnemonicParsing="false" onAction="#onMinimizeButtonAction" styleClass="control-button">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -139,8 +223,8 @@
                            <graphic>
                               <StackPane>
                                  <children>
-                                    <Rectangle fill="#1f93ff00" height="20.0" smooth="false" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="control-button" width="30.0" />
-                                    <Line endX="5.0" startX="-4.0" stroke="#2e516b" />
+                                    <Rectangle fill="#1f93ff00" height="30.0" smooth="false" stroke="TRANSPARENT" strokeType="INSIDE" styleClass="control-button" width="40.0" />
+                                    <Line endX="5.0" startX="-4.0" stroke="#2e516b" strokeWidth="2.0" />
                                  </children>
                               </StackPane>
                            </graphic>
@@ -155,13 +239,13 @@
                            <graphic>
                               <StackPane>
                                  <children>
-                                    <Rectangle fill="#1f93ff00" height="20.0" smooth="false" stroke="TRANSPARENT" strokeType="INSIDE" width="30.0">
+                                    <Rectangle fill="#1f93ff00" height="30.0" smooth="false" stroke="TRANSPARENT" strokeType="INSIDE" width="40.0">
                                        <styleClass>
                                           <String fx:value="control-button" />
                                           <String fx:value="control-button-box" />
                                        </styleClass>
                                     </Rectangle>
-                                    <Rectangle fill="#2698eb00" height="6.0" stroke="#2e516b" strokeType="OUTSIDE" width="6.0">
+                                    <Rectangle fill="#2698eb00" height="10.0" stroke="#2e516b" strokeType="OUTSIDE" strokeWidth="2.0" width="10.0">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
@@ -170,7 +254,7 @@
                               </StackPane>
                            </graphic>
                         </Button>
-                        <Button alignment="TOP_RIGHT" cache="true" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onCloseButtonAction" HBox.hgrow="ALWAYS">
+                        <Button fx:id="closeButton" alignment="TOP_RIGHT" cache="true" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onCloseButtonAction" onMouseEntered="#onMouseEnteredCloseButton" onMouseExited="#onMouseExitedCloseButton" onMouseMoved="#onMouseEnteredCloseButton" HBox.hgrow="ALWAYS">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -180,14 +264,15 @@
                            <graphic>
                               <StackPane>
                                  <children>
-                                    <Rectangle fill="#1f93ff00" height="20.0" smooth="false" stroke="TRANSPARENT" strokeType="INSIDE" width="30.0" StackPane.alignment="CENTER">
+                                    <Rectangle fill="#1f93ff00" height="30.0" smooth="false" stroke="TRANSPARENT" strokeType="INSIDE" width="40.0" StackPane.alignment="CENTER">
                                        <styleClass>
                                           <String fx:value="control-button" />
                                           <String fx:value="close" />
                                           <String fx:value="control-button-box" />
                                        </styleClass>
                                     </Rectangle>
-                                    <Label text="X" textFill="#2e516b" StackPane.alignment="CENTER" />
+                                    <Line fx:id="closeButtonSlashOne" endX="8.0" rotate="45.0" startX="-8.0" stroke="#2e516b" strokeWidth="2.0" styleClass="control-button-close-label" />
+                                    <Line fx:id="closeButtonSlashTwo" endX="8.0" rotate="-45.0" startX="-8.0" stroke="#2e516b" strokeWidth="2.0" styleClass="control-button-close-label" />
                                  </children>
                               </StackPane>
                            </graphic>
@@ -200,12 +285,12 @@
                            </styleClass>
                         </Button>
                      </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
                      <HBox.margin>
                         <Insets bottom="15.0" />
                      </HBox.margin>
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
                   </HBox>
                </children>
             </HBox>

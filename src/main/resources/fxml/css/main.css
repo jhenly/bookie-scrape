@@ -1,8 +1,9 @@
-/*
+
 @font-face {
     src: url('../font/Roboto-Regular.ttf');
 }
 
+/*
 @font-face {
     src: url('../font/Roboto-Italic.ttf');
     src: url('../font/Roboto-Thin.ttf');
@@ -16,27 +17,41 @@
     src: url('../font/Roboto-Black.ttf');
     src: url('../font/Roboto-BlackItalic.ttf');
 }
+*/
 
-.roboto { -fx-font-family: 'Roboto' }
+.roboto { 
+	-fx-font-family: 'Roboto';
+}
+
 .roboto-bold { -fx-font-family: 'Roboto Bold' }
 .roboto-italic { -fx-font-family: 'Roboto Italic' }
+.roboto-bold-italic { -fx-font-family: 'Roboto Bold Italic' }
+.roboto-medium { -fx-font-family: 'Roboto Medium' }
+.roboto-medium-italic { -fx-font-family: 'Roboto Medium Italic' }
+.roboto-thin { -fx-font-family: 'Roboto Thin' }
 .roboto-thin-italic { -fx-font-family: 'Roboto Thin Italic' }
-*/
+.roboto-light { -fx-font-family: 'Roboto Light' }
+.roboto-light-italic { 
+	-fx-font-family: 'Roboto Italic';
+ }
+
 
 .top-bar-backgroud { -fx-background-color: #2496ed }
 
-.border-gray { -fx-border-color: #d6d6d8 }
-.border-black { -fx-border-color: #000000 }
-.border-blue { -fx-border-color: #0296f4 }
+
+
+.border-top-solid { -fx-border-style: solid none none none }
+.border-left-solid { -fx-border-style: none solid none none }
+.border-bottom-solid { -fx-border-style: none none solid none }
+.border-right-solid { -fx-border-style: none none none solid }
 
 .border-thin { -fx-border-width: 1px }
 .border-medium { -fx-border-width: 3px }
 .border-thick { -fx-border-width: 5px }
 
-.border-left-solid { -fx-border-style: solid none none none }
-.border-top-solid { -fx-border-style: none solid none none }
-.border-right-solid { -fx-border-style: none none solid none }
-.border-bottom-solid { -fx-border-style: none none none solid }
+.border-gray { -fx-border-color: #d6d6d8 }
+.border-black { -fx-border-color: #000000 }
+.border-blue { -fx-border-color: #0296f4 }
 
 .check-box {
         selected-box-color: #007bff;
@@ -87,6 +102,8 @@
 }
 .control-button-close:hover { -fx-background-color: #d51e37 }
 
+.control-button-close-label { -fx-text-fill: #2e516b; }
+
 .control-button {
 	-fx-text-fill: #2e516b;
 	-fx-font-weight: bold;
@@ -96,7 +113,9 @@
 }
 .control-button:hover { -fx-background-color: #1d78be }
 
+
 .bottom-bar-background { -fx-background-color: #fafafb; }
+
 #main-bottom-hbox { 
     
 }
