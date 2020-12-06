@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -23,18 +24,17 @@ import com.bookiescrape.app.scrape.Bookie;
 import com.bookiescrape.app.scrape.Scraper;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -46,6 +46,20 @@ import javafx.stage.Stage;
  * @author Jonathan Henly
  */
 public class Main {
+    
+    /* Package Private Constants */
+    
+    /** Constant representing the inactive state of a top button. */
+    static int TOP_BTN_INACTIVE_STATE = 0;
+    /** Constant representing the selected state of a top button. */
+    static int TOP_BTN_SELECTED_STATE = 1;
+    
+    /* Private Constants */
+    private static final String SETTINGS_BUTTON_ID = "settingsButton";
+    private static final String LOG_BUTTON_ID = "historyButton";
+    
+    /* Private Members and FXML Members */
+    
     @FXML
     private ResourceBundle resources;
     
@@ -55,7 +69,7 @@ public class Main {
     private HBox bottomRightHBox;
     @FXML
     private TextField outputExcelFilePathFeild;
-
+    
     @FXML
     private Button closeButton;
     
@@ -63,34 +77,33 @@ public class Main {
     private Button settingsButton;
     private boolean settingsActive = false;
     @FXML
-    private Button historyButton;
-    private boolean historyActive = false;
-
+    private Button logButton;
+    private boolean logActive = false;
+    
+    // holds the currently selected top hbox button, if one is selected
+    private Button activeTopButton;
+    
     @FXML
     private Label scraperStatusLabel;
     @FXML
     private Circle scraperStatusCircle;
     
-    private static final Paint CLOSE_BUTTON_PAINT = Paint.valueOf("2e516b");
-    private static final Paint TOP_BUTTON_ORIG_BACK = Paint.valueOf("1182d9");
-    private static final Paint TOP_BUTTON_HOVER_BACK = Paint.valueOf("0b6db8");
-
     private List<String> bookiesList = new ArrayList<>();
     private CellStyle style = null;
-
+    
     private double stageXOffset;
     private double stageYOffset;
     
     
     @FXML
-    private void initialize() {
-    }
-
+    private void initialize() {}
+    
     /**
      * Used to record the start of dragging the main window across the screen.
      *
-     * @param event - the mouse pressed event caused by mouse pressing main's
-     *        top HBox
+     * @param event
+     *              - the mouse pressed event caused by mouse pressing main's
+     *              top HBox
      */
     @FXML
     void onMainTopHBoxMousePressed(MouseEvent event) {
@@ -102,8 +115,9 @@ public class Main {
      * Handles dragging the window across the screen after mouse pressing main's
      * top HBox.
      *
-     * @param event - the drag event caused by dragging the main window across
-     *        the screen
+     * @param event
+     *              - the drag event caused by dragging the main window across
+     *              the screen
      */
     @FXML
     void onMainTopHBoxMouseDragged(MouseEvent event) {
@@ -112,137 +126,152 @@ public class Main {
         stage.setX(event.getScreenX() - stageXOffset);
         stage.setY(event.getScreenY() - stageYOffset);
     }
-
+    
     /**
      * Handles actions coming from the top most close button.
      *
-     * @param event - the action event to handle
+     * @param event
+     *              - the action event to handle
      */
     @FXML
     void onCloseButtonAction(ActionEvent event) {
         // TODO minimize application (preferably to tray) rather than exiting
         Platform.exit();
     }
-
+    
     /**
      * Handles actions on the top right most minimize button.
      *
-     * @param event - the action event to handle
+     * @param event
+     *              - the action event to handle
      */
     @FXML
     void onMinimizeButtonAction(ActionEvent event) {
-        Stage stage =
-            (Stage) ((Button) event.getSource()).getScene().getWindow();
-
+        Stage stage = (Stage) ((Button) event.getSource()).getScene()
+            .getWindow();
+        
         stage.setIconified(!stage.isIconified());
     }
-
+    
     /**
      * Handles actions on the top right most maximize button.
      *
-     * @param event - the action event to handle
+     * @param event
+     *              - the action event to handle
      */
     @FXML
     void onMaximizeButtonAction(ActionEvent event) {
-        Stage stage =
-            (Stage) ((Button) event.getSource()).getScene().getWindow();
-
+        Stage stage = (Stage) ((Button) event.getSource()).getScene()
+            .getWindow();
+        
         stage.setMaximized(!stage.isMaximized());
     }
-
+    
     @FXML
     void onTopButtonAction(ActionEvent event) {
-        // don't do anything if this button is currently active
-        if (topButtonIsActive((Button) event.getSource())) { return; }
-        
         Button topButton = (Button) event.getSource();
-        System.out.printf("Active Buttons: settings[%b] history[%b]%n",
-            settingsActive, historyActive);
-        System.out.println(topButton.getId());
-
-        setTopButtonActive(topButton);
-
-        StackPane sp = (StackPane) topButton.getChildrenUnmodifiable().get(0);
-        Circle circle = (Circle) sp.getChildren().get(0);
-        // FontAwesomeIconView faiv =
-        // (FontAwesomeIconView) sp.getChildren().get(1);
-
-        // faiv.setStyleClass("");
         
-        int i = 0;
-        for (Node node : sp.getChildren()) {
-            System.out.printf("child[%d] -  %s%n", i,
-                node.getClass().getCanonicalName());
-            i++;
+        // don't do anything if the button is already active
+        if (activeTopButton == topButton) { return; }
+        
+        // set any active top button to inactive and set top button to selected
+        setActiveTopButton(topButton);
+        
+        // call on action method for the active button
+        switch (topButton.getId()) {
+            case SETTINGS_BUTTON_ID:
+                settingsButtonActivated();
+                settingsActive = true;
+                logActive = false;
+                break;
+            
+            case LOG_BUTTON_ID:
+                logButtonActivated();
+                settingsActive = false;
+                logActive = true;
+                break;
+            
+            default:
+                settingsActive = false;
+                logActive = false;
         }
-        
-        circle.setFill(Color.WHITE);
-
     }
-
-    @FXML
-    void onTopButtonEntered(MouseEvent event) {
-        // don't do anything if ths button is currently active
-        if (topButtonIsActive((Button) event.getSource())) { return; }
-
-        Button topButton = (Button) event.getSource();
-        // make the top button's backing circle darker
-        StackPane sp = (StackPane) topButton.getChildrenUnmodifiable().get(0);
-        Circle circle = (Circle) sp.getChildren().get(0);
-        
-        circle.setFill(TOP_BUTTON_HOVER_BACK);
-    }
-
-    @FXML
-    void onTopButtonExited(MouseEvent event) {
-        Button topButton = (Button) event.getSource();
-        // don't do anything if ths button is currently active
-        if (topButtonIsActive(topButton)) { return; }
-
-        // set the top button's circle back to the original color
-        StackPane sp = (StackPane) topButton.getChildrenUnmodifiable().get(0);
-        Circle circle = (Circle) sp.getChildren().get(0);
-        
-        circle.setFill(TOP_BUTTON_ORIG_BACK);
-    }
-
-    private static final String SETTINGS_BUTTON_ID = "settingsButton";
-    private static final String HISTORY_BUTTON_ID = "historyButton";
-
+    
     /* top buttons hover effect methods helper */
     private boolean topButtonIsActive(Button button) {
-        switch (button.getId()) {
-            case SETTINGS_BUTTON_ID:
-                return settingsActive;
-            case HISTORY_BUTTON_ID:
-                return historyActive;
-            default:
-                return false;
-        }
+        return activeTopButton == button;
     }
-
+    
     /* helper to set top buttons active */
-    private void setTopButtonActive(Button button) {
-        switch (button.getId()) {
-            case SETTINGS_BUTTON_ID:
-                settingsActive = true;
-                historyActive = false;
-                break;
-            case HISTORY_BUTTON_ID:
-                settingsActive = false;
-                historyActive = true;
-                break;
-            default:
-                settingsActive = false;
-                historyActive = false;
+    private void setActiveTopButton(Button button) {
+        Button btn = Objects.requireNonNull(button);
+        
+        // if another button is active then set it to inactive
+        if (activeTopButton != null) {
+            changeTopButtonState(activeTopButton, TOP_BTN_INACTIVE_STATE);
         }
+        
+        // set the new active top hbox button and change its state to selected
+        changeTopButtonState(btn, TOP_BTN_SELECTED_STATE);
+        activeTopButton = btn;
+    }
+    
+    /* called when top settings button is activated, shows settings view */
+    private void settingsButtonActivated() {
+        // TODO implement showing the settings view
+    }
+    
+    /* called when top log button is activated, shows log view */
+    private void logButtonActivated() {
+        // TODO implement showing the log view
+    }
+    
+    /**
+     * Changes the visible state of a specified top button.
+     * <p>
+     * The supported values for the parameter {@code state} follow:
+     * <ul>
+     * <li>{@linkplain #TOP_BTN_INACTIVE_STATE}</li>
+     * <li>{@linkplain #TOP_BTN_SELECTED_STATE}</li>
+     * </ul>
+     * Passing a value other than those listed will produce undefined behavior.
+     * <p>
+     * This method assumes the passed in button has the following node
+     * hierarchy:
+     * 
+     * <pre>
+     * &lt;Button&gt;
+     *   &lt;Parent&gt;
+     *     &lt;Node&gt; &lt;!-- Inactive State Node --&gt; &lt;/Node&gt;
+     *     &lt;Node&gt; &lt;!-- Selected State Node --&gt; &lt;/Node&gt;
+     *   &lt;/Parent&gt;
+     * &lt;/Button&gt;
+     * </pre>
+     * 
+     * @param button
+     *               - the button to change the state of, this argument cannot
+     *               be {@code null}
+     * @param state
+     *               - the state to change to
+     */
+    void changeTopButtonState(Button button, int state) {
+        Button btn = Objects.requireNonNull(button);
+        
+        // get the state nodes' parent container
+        ObservableList<Node> states = ((Parent) btn.getChildrenUnmodifiable()
+            .get(0)).getChildrenUnmodifiable();
+        
+        Node inactive = states.get(TOP_BTN_INACTIVE_STATE);
+        Node selected = states.get(TOP_BTN_SELECTED_STATE);
+        
+        inactive.setVisible(state == TOP_BTN_INACTIVE_STATE);
+        selected.setVisible(state == TOP_BTN_SELECTED_STATE);
     }
     
     @FXML
     void selectOutputExcelFilePath(ActionEvent event) {
         if (outputExcelFilePathFeild.getText() != null
-            || !outputExcelFilePathFeild.getText().isEmpty())
-        {
+            || !outputExcelFilePathFeild.getText().isEmpty()) {
             File positivesCsvFile = exportExcelFile();
             if (positivesCsvFile != null) {
                 String anglesPath = positivesCsvFile.getAbsolutePath();
@@ -274,8 +303,8 @@ public class Main {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(
             "Select Folder Where you want to save your Output Excel Sheet");
-        FileChooser.ExtensionFilter emaiLFilter =
-            new FileChooser.ExtensionFilter("Excel File", "*.xlsx");
+        FileChooser.ExtensionFilter emaiLFilter = new FileChooser.ExtensionFilter(
+            "Excel File", "*.xlsx");
         /* FileChooser.ExtensionFilter allFileFilter = new
          * FileChooser.ExtensionFilter( "All Files", "*.*"); */
         fileChooser.getExtensionFilters().add(emaiLFilter);
@@ -291,8 +320,7 @@ public class Main {
     }
     
     
-    private static final String MONEY_LINE =
-        "https://classic.sportsbookreview.com/betting-odds/money-line/";
+    private static final String MONEY_LINE = "https://classic.sportsbookreview.com/betting-odds/money-line/";
     
     private void scrapeWebData() throws IOException {
         Scraper scraper = new Scraper();
@@ -439,21 +467,21 @@ public class Main {
                 teamNames.add(previousString);
                 // scrappedData.setGameName(previousString);
             }
-            Pattern teamNamePattern =
-                Pattern.compile("(?<=[p]\\s)[\\w\\s\\w]+(?=Options)");   // the
-                                                                         // pattern
-                                                                         // to
-                                                                         // search
-                                                                         // for
-                                                                         // TeamNames
+            Pattern teamNamePattern = Pattern
+                .compile("(?<=[p]\\s)[\\w\\s\\w]+(?=Options)");   // the
+                                                                  // pattern
+                                                                  // to
+                                                                  // search
+                                                                  // for
+                                                                  // TeamNames
             Matcher teamNameMatcher = teamNamePattern.matcher(s);
             
             Pattern openerColPatter = Pattern.compile(
                 "(?<=[A-Za-z]\\+|\\s\\-|\\s)[\\+|\\-\\d\\s]+(?=\\s\\d+\\.\\d\\%)");
             Matcher openerColMatcher = openerColPatter.matcher(s);
             
-            Pattern allLastColPattern =
-                Pattern.compile("(?<=%\\s)[\\+|\\-\\d\\s]+");
+            Pattern allLastColPattern = Pattern
+                .compile("(?<=%\\s)[\\+|\\-\\d\\s]+");
             Matcher allLoastColMatcher = allLastColPattern.matcher(s);
             
             // if we find a match, get the group
@@ -507,8 +535,7 @@ public class Main {
             int colNum = 0;
             if (!data.get(i).contains(",")) {
                 if (data.get(i).equals("NBA BASKETBALL")
-                    || data.get(i).trim().equals("MLB BASEBALL"))
-                {
+                    || data.get(i).trim().equals("MLB BASEBALL")) {
                     printDataFlag = true;
                     Row row = sheet.createRow(rowNum++);
                     Cell cell = row.createCell(colNum++);
@@ -547,12 +574,12 @@ public class Main {
                 } else {
                     // System.out.println(data.get(i) + " -else");
                     Row row = sheet.createRow(rowNum++);
-                    String[] splitTeamNameOpnerColAndOtherCols =
-                        data.get(i).split(",");
-                    String[] opnerCol =
-                        splitTeamNameOpnerColAndOtherCols[1].trim().split(" ");
-                    String[] otherColumns =
-                        splitTeamNameOpnerColAndOtherCols[2].trim().split(" ");
+                    String[] splitTeamNameOpnerColAndOtherCols = data.get(i)
+                        .split(",");
+                    String[] opnerCol = splitTeamNameOpnerColAndOtherCols[1]
+                        .trim().split(" ");
+                    String[] otherColumns = splitTeamNameOpnerColAndOtherCols[2]
+                        .trim().split(" ");
                     
                     Cell teamNameCell = row.createCell(colNum++);
                     teamNameCell
@@ -608,8 +635,8 @@ public class Main {
         }
         // System.out.println("Row : " + rowNum);
         try {
-            FileOutputStream outputStream =
-                new FileOutputStream(outputExcelFilePathFeild.getText());
+            FileOutputStream outputStream = new FileOutputStream(
+                outputExcelFilePathFeild.getText());
             workbook.write(outputStream);
             workbook.close();
         } catch (FileNotFoundException e) {

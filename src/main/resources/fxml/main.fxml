@@ -95,7 +95,7 @@
                         </HBox>
                         <HBox id="top-hbox-buttons" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" spacing="20.0" HBox.hgrow="NEVER">
                            <children>
-                            <Button fx:id="settingsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onTopButtonAction" onMouseEntered="#onTopButtonEntered" onMouseExited="#onTopButtonExited" onMouseMoved="#onTopButtonEntered" styleClass="flat-button" HBox.hgrow="NEVER">
+                            <Button fx:id="settingsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onTopButtonAction" styleClass="flat-button" HBox.hgrow="NEVER">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -106,9 +106,9 @@
                                     <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
                                  </HBox.margin>
                                  <graphic>
-                                    <StackPane styleClass="top-hbox-button-stack-pane">
+                                    <StackPane>
                                        <children>
-                                          <StackPane styleClass="inactive">
+                                          <StackPane styleClass="inactive" StackPane.alignment="CENTER">
                                              <children>
                                                 <Circle radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER">
                                                    <cursor>
@@ -129,7 +129,7 @@
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
                                           </StackPane>
-                                          <StackPane styleClass="selected" visible="false">
+                                          <StackPane styleClass="selected" visible="false" StackPane.alignment="CENTER">
                                              <children>
                                                 <Circle fill="WHITE" radius="1.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER">
                                                    <cursor>
@@ -157,7 +157,7 @@
                                     </StackPane>
                                  </graphic>
                               </Button>
-                              <Button fx:id="historyButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onTopButtonAction" onMouseEntered="#onTopButtonEntered" onMouseExited="#onTopButtonExited" onMouseMoved="#onTopButtonEntered" styleClass="flat-button">
+                              <Button fx:id="logButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onTopButtonAction" styleClass="flat-button">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -168,11 +168,11 @@
                                     <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
                                  </HBox.margin>
                                  <graphic>
-                                    <StackPane styleClass="top-hbox-button-stack-pane">
+                                    <StackPane>
                                        <children>
-                                          <StackPane styleClass="inactive">
+                                          <StackPane styleClass="inactive" StackPane.alignment="CENTER">
                                              <children>
-                                                <Circle radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle">
+                                                <Circle radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER">
                                                    <cursor>
                                                       <Cursor fx:constant="HAND" />
                                                    </cursor></Circle>
@@ -191,9 +191,9 @@
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
                                           </StackPane>
-                                          <StackPane styleClass="selected" visible="false">
+                                          <StackPane styleClass="selected" visible="false" StackPane.alignment="CENTER">
                                              <children>
-                                                <Circle fill="WHITE" radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle">
+                                                <Circle fill="WHITE" radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER">
                                                    <cursor>
                                                       <Cursor fx:constant="DEFAULT" />
                                                    </cursor></Circle>
