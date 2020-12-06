@@ -73,21 +73,22 @@
     </dependency>
     <!-- End Apache POI Dependencies -->
 
+    <!-- Begin ControlsFX dependencies -->
+    <dependency>
+      <groupId>org.controlsfx</groupId>
+      <artifactId>controlsfx</artifactId>
+      <version>11.0.3</version>
+      <scope>compile</scope>
+    </dependency>
+    <!-- End ControlsFX dependencies -->
+    
     <!-- Begin OpenJFX Dependencies -->
     <dependency>
       <groupId>com.jfoenix</groupId>
       <artifactId>jfoenix</artifactId>
       <version>9.0.10</version>
       <scope>compile</scope>
-    </dependency>
-    
-    <!-- FontAwesomeFX dependencies -->
-    <dependency>
-      <groupId>de.jensd</groupId>
-      <artifactId>fontawesomefx-fontawesome</artifactId>
-      <version>4.7.0-9.1.2</version>
-      <scope>compile</scope>
-    </dependency>
+    </dependency>    
 
     <dependency>
       <groupId>org.openjfx</groupId>
@@ -196,7 +197,7 @@
             <!-- Used to specify absolute path to JDK's java executable,
                  i.e. "/absolute/path/to/jdk-#.#.#/bin/java", if Maven throws errors
                  because it can't find it. -->
-	    <!-- <executable>E:\\Programming\\Java\\jdk-15.0.1\\bin\\java</executable> -->
+	        <executable>/home/henly/Programming/java/jdk-14.0.1/bin/java</executable>
             
             <!-- used to test different 'public static void main(String[] args)' classes without changing pom.xml -->   
             <!-- via: 'clean javafx:run "-Dpackage.main=sample.Main"' -->
