@@ -71,7 +71,7 @@ jobs:
         id: todo
         with:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABEL: "todo"
+          LABEL: "TODO"
           COMMENT_MARKER: "//"
           CLOSE_ISSUES: "true"
 
