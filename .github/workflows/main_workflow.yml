@@ -6,12 +6,10 @@ name: Main Workflow
 
 on:
   push:
-    branches: [ * ]
     paths:
     - 'src/**'
     - 'pom.xml'
   pull_request:
-    branches: [ * ]
     paths:
     - 'src/**'
     - 'pom.xml'
