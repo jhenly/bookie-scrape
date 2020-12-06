@@ -25,16 +25,17 @@ import com.bookiescrape.app.scrape.Scraper;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -54,23 +55,32 @@ public class Main {
     private HBox bottomRightHBox;
     @FXML
     private TextField outputExcelFilePathFeild;
+
     @FXML
     private Button closeButton;
+    
     @FXML
-    private Line closeButtonSlashOne;
+    private Button settingsButton;
+    private boolean settingsActive = false;
     @FXML
-    private Line closeButtonSlashTwo;
+    private Button historyButton;
+    private boolean historyActive = false;
+
     @FXML
     private Label scraperStatusLabel;
-    
     @FXML
     private Circle scraperStatusCircle;
     
     private static final Paint CLOSE_BUTTON_PAINT = Paint.valueOf("2e516b");
+    private static final Paint TOP_BUTTON_ORIG_BACK = Paint.valueOf("1182d9");
+    private static final Paint TOP_BUTTON_HOVER_BACK = Paint.valueOf("0b6db8");
+
     private List<String> bookiesList = new ArrayList<>();
     private CellStyle style = null;
+
     private double stageXOffset;
     private double stageYOffset;
+    
     
     @FXML
     private void initialize() {
@@ -113,30 +123,7 @@ public class Main {
         // TODO minimize application (preferably to tray) rather than exiting
         Platform.exit();
     }
-    
-    /**
-     * Used to turn the 'X' in the close button white.
-     *
-     * @param event - the mouse event to handle
-     */
-    @FXML
-    void onMouseEnteredCloseButton(MouseEvent event) {
-        closeButtonSlashOne.setStroke(Color.WHITE);
-        closeButtonSlashTwo.setStroke(Color.WHITE);
-    }
 
-    /**
-     * Used to turn the 'X' in the close button from white back to its original
-     * color.
-     *
-     * @param event - the mouse event to handle
-     */
-    @FXML
-    void onMouseExitedCloseButton(MouseEvent event) {
-        closeButtonSlashOne.setStroke(CLOSE_BUTTON_PAINT);
-        closeButtonSlashTwo.setStroke(CLOSE_BUTTON_PAINT);
-    }
-    
     /**
      * Handles actions on the top right most minimize button.
      *
@@ -161,6 +148,94 @@ public class Main {
             (Stage) ((Button) event.getSource()).getScene().getWindow();
 
         stage.setMaximized(!stage.isMaximized());
+    }
+
+    @FXML
+    void onTopButtonAction(ActionEvent event) {
+        // don't do anything if this button is currently active
+        if (topButtonIsActive((Button) event.getSource())) { return; }
+        
+        Button topButton = (Button) event.getSource();
+        System.out.printf("Active Buttons: settings[%b] history[%b]%n",
+            settingsActive, historyActive);
+        System.out.println(topButton.getId());
+
+        setTopButtonActive(topButton);
+
+        StackPane sp = (StackPane) topButton.getChildrenUnmodifiable().get(0);
+        Circle circle = (Circle) sp.getChildren().get(0);
+        // FontAwesomeIconView faiv =
+        // (FontAwesomeIconView) sp.getChildren().get(1);
+
+        // faiv.setStyleClass("");
+        
+        int i = 0;
+        for (Node node : sp.getChildren()) {
+            System.out.printf("child[%d] -  %s%n", i,
+                node.getClass().getCanonicalName());
+            i++;
+        }
+        
+        circle.setFill(Color.WHITE);
+
+    }
+
+    @FXML
+    void onTopButtonEntered(MouseEvent event) {
+        // don't do anything if ths button is currently active
+        if (topButtonIsActive((Button) event.getSource())) { return; }
+
+        Button topButton = (Button) event.getSource();
+        // make the top button's backing circle darker
+        StackPane sp = (StackPane) topButton.getChildrenUnmodifiable().get(0);
+        Circle circle = (Circle) sp.getChildren().get(0);
+        
+        circle.setFill(TOP_BUTTON_HOVER_BACK);
+    }
+
+    @FXML
+    void onTopButtonExited(MouseEvent event) {
+        Button topButton = (Button) event.getSource();
+        // don't do anything if ths button is currently active
+        if (topButtonIsActive(topButton)) { return; }
+
+        // set the top button's circle back to the original color
+        StackPane sp = (StackPane) topButton.getChildrenUnmodifiable().get(0);
+        Circle circle = (Circle) sp.getChildren().get(0);
+        
+        circle.setFill(TOP_BUTTON_ORIG_BACK);
+    }
+
+    private static final String SETTINGS_BUTTON_ID = "settingsButton";
+    private static final String HISTORY_BUTTON_ID = "historyButton";
+
+    /* top buttons hover effect methods helper */
+    private boolean topButtonIsActive(Button button) {
+        switch (button.getId()) {
+            case SETTINGS_BUTTON_ID:
+                return settingsActive;
+            case HISTORY_BUTTON_ID:
+                return historyActive;
+            default:
+                return false;
+        }
+    }
+
+    /* helper to set top buttons active */
+    private void setTopButtonActive(Button button) {
+        switch (button.getId()) {
+            case SETTINGS_BUTTON_ID:
+                settingsActive = true;
+                historyActive = false;
+                break;
+            case HISTORY_BUTTON_ID:
+                settingsActive = false;
+                historyActive = true;
+                break;
+            default:
+                settingsActive = false;
+                historyActive = false;
+        }
     }
     
     @FXML

@@ -3,6 +3,29 @@
     src: url('../font/Roboto-Regular.ttf');
 }
 
+@font-face {
+	src: url('../font/BellotaText-Regular.ttf');
+}
+@font-face {
+	src: url('../font/BellotaText-Bold.ttf');
+}
+@font-face {
+	src: url('../font/BellotaText-BoldItalic.ttf');
+}
+
+@font-face {
+    src: url('../font/Gelasio-Regular.ttf');
+}
+@font-face {
+    src: url('../font/Gelasio-Medium.ttf');
+}
+@font-face {
+    src: url('../font/Gelasio-Bold.ttf');
+}
+@font-face {
+	src: url('../font/Gelasio-SemiBold.ttf');
+}
+
 /*
 @font-face {
     src: url('../font/Roboto-Italic.ttf');
@@ -33,11 +56,10 @@
 .roboto-light { -fx-font-family: 'Roboto Light' }
 .roboto-light-italic { 
 	-fx-font-family: 'Roboto Italic';
- }
+}
 
-
-.top-bar-backgroud { -fx-background-color: #2496ed }
-
+/* force font anti aliasing */
+.text{ -fx-font-smoothing-type: gray; }
 
 
 .border-top-solid { -fx-border-style: solid none none none }
@@ -75,34 +97,69 @@
         -fx-background-color: mark-color
 }
 
-#main-layout-pane {
-	-fx-background-color: #f4f4f6;
-}
-
-.button {
-
-}
-
-.flat_button {
+.flat-button {
         -fx-background-radius: 0;
         -fx-padding: 0;
         -fx-background-color: transparent;
 }
 
-.top-button {
-        -fx-background-color: #1182d9;
+
+/* --- Begin Main's Top Specific Layout Section --- */
+
+#main-top-hbox {
+	-fx-background-color: #2496ed;
 }
 
+.top-hbox { -fx-background-color: #2496ed }
+
+/*
+.top-hbox-button:hover > .top-hbox-button-stack-pane > .top-hbox-button-circle { -fx-fill: #0b6db8; }
+*/
+
+.top-hbox .logo-label-left, .logo-label-right {
+        -fx-font-family: "Roboto";
+        -fx-font-size: 16;
+}
+
+.top-hbox .logo-icon {
+        -fx-size: 36;
+        -fx-min-width: -fx-size;
+	-fx-min-height: -fx-size;
+	-fx-max-width: -fx-size;
+	-fx-max-height: -fx-size;
+	-fx-background-color: white;
+}
+.top-hbox .flat-button .icon {
+	-fx-size: 24;
+	-fx-min-width: -fx-size;
+	-fx-min-height: -fx-size;
+	-fx-max-width: -fx-size;
+	-fx-max-height: -fx-size;
+}
+
+.top-hbox .flat-button .inactive Circle { -fx-fill: #1182d9 }
+.top-hbox .flat-button:hover .inactive Circle { -fx-fill: #0b6db8 }
+.top-hbox .flat-button .inactive .icon { -fx-background-color: white }
+
+.top-hbox .flat-button .selected Circle { -fx-fill: white }
+.top-hbox .flat-button .selected .icon { -fx-background-color: #2496ed }
+
+.top-hbox .flat-button .inactive { }
+.top-hbox .flat-button .selected { }
+
 .control-button-close {
-    -fx-text-fill: #2e516b;
-    -fx-font-weight: bold;
     -fx-background-radius: 0;
     -fx-padding: 0;
     -fx-background-color: transparent;
 }
-.control-button-close:hover { -fx-background-color: #d51e37 }
+.control-button-close:hover > .control-button-close-stack-pane > .control-button-box {
+	-fx-fill: #d51e37
+}
+.control-button-close:hover > .control-button-close-stack-pane > .control-button-close-x {
+	-fx-stroke: #ffffff;
+}
+.control-button-close-x { -fx-stroke: #2e516b; }
 
-.control-button-close-label { -fx-text-fill: #2e516b; }
 
 .control-button {
 	-fx-text-fill: #2e516b;
@@ -111,12 +168,39 @@
 	-fx-padding: 0;
 	-fx-background-color: transparent;
 }
+
 .control-button:hover { -fx-background-color: #1d78be }
 
+/* --- End Main's Top Specific Layout Section --- */
+
+
+/* --- Begin Main's Middle Specific Layout Section --- */
+
+#main-middle-hbox {
+	-fx-background-color: #f4f4f6;
+}
+
+/* --- End Main's Middle Layout Section --- */
+
+
+/* --- Begin Main's Bottom Specific Layout Section --- */
+
+#main-bottom-hbox { 
+    -fx-background-color: #fafafb;
+}
 
 .bottom-bar-background { -fx-background-color: #fafafb; }
 
-#main-bottom-hbox { 
-    
+#bottom-hbox-bookie-scraper-label {
+	-fx-font-family: "Roboto Medium";
+	-fx-font-size: 14;
 }
+
+#bottom-hbox-scraper-status {
+	-fx-font-family: "Bellota Text Bold Italic";
+	-fx-font-size: 13;
+}
+
+/* --- End Main's Bottom Specific Layout Section --- */
+
 
