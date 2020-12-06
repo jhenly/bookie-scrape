@@ -68,14 +68,14 @@
                               <Region HBox.hgrow="NEVER">
                                  <styleClass>
                                     <String fx:value="logo-icon" />
-                                    <String fx:value="book-reader-icon" />
+                                    <String fx:value="user-secrets-icon" />
                                  </styleClass>
                               </Region>
                               <VBox alignment="CENTER" HBox.hgrow="NEVER">
                                  <children>
                                     <Label alignment="BOTTOM_CENTER" styleClass="logo-label-left" text="bookie" textFill="WHITE" VBox.vgrow="NEVER">
                                        <padding>
-                                          <Insets left="4.0" top="3.0" />
+                                          <Insets left="4.0" top="2.0" />
                                        </padding>
                                     </Label>
                                     <Label styleClass="logo-label-right" text="scrape" textFill="WHITE" VBox.vgrow="NEVER">
@@ -92,56 +92,6 @@
                            <padding>
                               <Insets right="10.0" />
                            </padding>
-                        </HBox>
-                        <VBox alignment="CENTER" HBox.hgrow="NEVER">
-                           <children>
-                              <Region VBox.vgrow="NEVER">
-                                 <styleClass>
-                                    <String fx:value="logo-icon" />
-                                    <String fx:value="book-reader-icon" />
-                                 </styleClass>
-                                 <VBox.margin>
-                                    <Insets bottom="-3.0" />
-                                 </VBox.margin>
-                              </Region>
-                              <Label alignment="BOTTOM_CENTER" styleClass="logo-label-left" text="bookie scrape" textFill="WHITE" VBox.vgrow="NEVER" />
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <padding>
-                              <Insets bottom="5.0" top="5.0" />
-                           </padding>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </VBox>
-                        <HBox id="bookie-scrape-logo" alignment="CENTER" HBox.hgrow="NEVER">
-                           <children>
-                              <Label alignment="BOTTOM_CENTER" styleClass="logo-label-left" text="bookie" textFill="WHITE">
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                                 <padding>
-                                    <Insets right="2.0" top="16.0" />
-                                 </padding>
-                              </Label>
-                              <Region>
-                                 <styleClass>
-                                    <String fx:value="logo-icon" />
-                                    <String fx:value="book-reader-icon" />
-                                 </styleClass>
-                              </Region>
-                              
-                              <Label styleClass="logo-label-right" text="scrape" textFill="WHITE">
-                                 <padding>
-                                    <Insets left="2.0" top="16.0" />
-                                 </padding>
-                              </Label>
-                           </children>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
                         </HBox>
                         <HBox id="top-hbox-buttons" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" spacing="20.0" HBox.hgrow="NEVER">
                            <children>
@@ -160,35 +110,50 @@
                                        <children>
                                           <StackPane styleClass="inactive">
                                              <children>
-                                                <Circle radius="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER">
+                                                <Circle radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER">
                                                    <cursor>
                                                       <Cursor fx:constant="HAND" />
                                                    </cursor></Circle>
-                                                <Region>
+                                                <Region StackPane.alignment="CENTER">
                                                    <styleClass>
                                                       <String fx:value="icon" />
                                                       <String fx:value="cog-icon" />
                                                    </styleClass>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
                                                 </Region>
                                                 
                                              </children>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
                                           </StackPane>
                                           <StackPane styleClass="selected" visible="false">
                                              <children>
-                                                <Circle fill="WHITE" radius="20.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER">
+                                                <Circle fill="WHITE" radius="1.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER">
                                                    <cursor>
-                                                      <Cursor fx:constant="HAND" />
+                                                      <Cursor fx:constant="DEFAULT" />
                                                    </cursor></Circle>
-                                                <Region>
+                                                <Region StackPane.alignment="CENTER">
                                                    <styleClass>
                                                       <String fx:value="icon" />
                                                       <String fx:value="cog-icon" />
                                                    </styleClass>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
                                                 </Region>
                                              
                                              </children>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
                                           </StackPane>
                                        </children>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
                                     </StackPane>
                                  </graphic>
                               </Button>
@@ -207,29 +172,50 @@
                                        <children>
                                           <StackPane styleClass="inactive">
                                              <children>
-                                                <Circle radius="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
-                                                <Region>
+                                                <Circle radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle">
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor></Circle>
+                                                <Region StackPane.alignment="CENTER">
                                                    <styleClass>
                                                       <String fx:value="icon" />
                                                       <String fx:value="book-dead-icon" />
                                                    </styleClass>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
                                                 </Region>
                                                 
                                              </children>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
                                           </StackPane>
                                           <StackPane styleClass="selected" visible="false">
                                              <children>
-                                                <Circle fill="WHITE" radius="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
-                                                <Region>
+                                                <Circle fill="WHITE" radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle">
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor></Circle>
+                                                <Region StackPane.alignment="CENTER">
                                                    <styleClass>
                                                       <String fx:value="icon" />
                                                       <String fx:value="book-dead-icon" />
                                                    </styleClass>
+                                                   <cursor>
+                                                      <Cursor fx:constant="DEFAULT" />
+                                                   </cursor>
                                                 </Region>
                                                 
                                              </children>
+                                             <cursor>
+                                                <Cursor fx:constant="DEFAULT" />
+                                             </cursor>
                                           </StackPane>
                                        </children>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
                                     </StackPane>
                                  </graphic>
                               </Button>
@@ -306,7 +292,7 @@
                                     </StackPane>
                                  </graphic>
                                  <HBox.margin>
-                                    <Insets />
+                                    <Insets right="-1.0" />
                                  </HBox.margin>
                                  <styleClass>
                                     <String fx:value="control-button-close" />

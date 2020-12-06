@@ -122,26 +122,32 @@
 }
 
 .top-hbox .logo-icon {
-        -fx-size: 36;
-        -fx-min-width: -fx-size;
+    -fx-size: 34;
+    -fx-min-width: -fx-size;
 	-fx-min-height: -fx-size;
 	-fx-max-width: -fx-size;
 	-fx-max-height: -fx-size;
 	-fx-background-color: white;
 }
+
 .top-hbox .flat-button .icon {
-	-fx-size: 24;
+	-fx-size: 20;
 	-fx-min-width: -fx-size;
 	-fx-min-height: -fx-size;
 	-fx-max-width: -fx-size;
 	-fx-max-height: -fx-size;
 }
 
-.top-hbox .flat-button .inactive Circle { -fx-fill: #1182d9 }
-.top-hbox .flat-button:hover .inactive Circle { -fx-fill: #0b6db8 }
+.top-hbox .flat-button .circle {
+    -fx-scale-x: 1.5em;
+    -fx-scale-y: 1.5em;
+}
+
+.top-hbox .flat-button .inactive .circle { -fx-fill: #1182d9 }
+.top-hbox .flat-button:hover .inactive .circle { -fx-fill: #0b6db8 }
 .top-hbox .flat-button .inactive .icon { -fx-background-color: white }
 
-.top-hbox .flat-button .selected Circle { -fx-fill: white }
+.top-hbox .flat-button .selected .circle { -fx-fill: white }
 .top-hbox .flat-button .selected .icon { -fx-background-color: #2496ed }
 
 .top-hbox .flat-button .inactive { }
