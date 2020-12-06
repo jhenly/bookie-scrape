@@ -217,10 +217,14 @@ public class Main {
     }
     
     /* called when top settings button is activated, shows settings view */
-    private void settingsButtonActivated() {}
+    private void settingsButtonActivated() {
+        // TODO implement showing the settings view
+    }
     
     /* called when top log button is activated, shows log view */
-    private void logButtonActivated() {}
+    private void logButtonActivated() {
+        // TODO implement showing the log view
+    }
     
     /**
      * Changes the visible state of a specified top button.
