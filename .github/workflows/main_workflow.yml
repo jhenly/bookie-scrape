@@ -6,12 +6,12 @@ name: Main Workflow
 
 on:
   push:
-    branches: [ main ]
+    branches: [ * ]
     paths:
     - 'src/**'
     - 'pom.xml'
   pull_request:
-    branches: [ main ]
+    branches: [ * ]
     paths:
     - 'src/**'
     - 'pom.xml'
@@ -24,6 +24,10 @@ jobs:
   # Builds Java project with Maven
   build-maven:
     runs-on: windows-latest
+    
+    # Only run this job on main branch
+    if: github.ref == 'refs/heads/main'
+
     steps:
     - uses: actions/checkout@v2
           
