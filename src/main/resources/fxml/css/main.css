@@ -26,6 +26,40 @@
 	src: url('../font/Gelasio-SemiBold.ttf');
 }
 
+/* NunitoSans - Fonts */
+@font-face {
+    src: url('../font/NunitoSans-Regular.ttf');
+}
+@font-face {
+    src: url('../font/NunitoSans-Italic.ttf');
+}
+@font-face {
+    src: url('../font/NunitoSans-Bold.ttf');
+}
+@font-face {
+    src: url('../font/NunitoSans-BoldItalic.ttf');
+}
+@font-face {
+    src: url('../font/NunitoSans-SemiBold.ttf');
+}
+@font-face {
+    src: url('../font/NunitoSans-SemiBoldItalic.ttf');
+}
+
+/* Noto Sans KR - Fonts */
+@font-face {
+    src: url('../font/NotoSansKR-Regular.otf');
+}
+@font-face {
+    src: url('../font/NotoSansKR-Medium.otf');
+}
+@font-face {
+    src: url('../font/NotoSansKR-Thin.otf');
+}
+@font-face {
+    src: url('../font/NotoSansKR-Bold.otf');
+}
+
 /*
 @font-face {
     src: url('../font/Roboto-Italic.ttf');
@@ -59,8 +93,32 @@
 }
 
 /* force font anti aliasing */
-.text{ -fx-font-smoothing-type: gray; }
+.text { -fx-font-smoothing-type: gray; }
 
+/* Begin Text Styles */
+
+.text-head {
+    -fx-text-fill: #202020;
+    -fx-font-size: 24pt;
+    -fx-font-family: 'Nunito Sans';
+}
+
+.text-sub-head {
+    -fx-text-fill: #202020;
+    -fx-font-size: 20pt;
+    -fx-font-family: 'Nunito Sans';
+}
+
+.text-desc { 
+    -fx-text-fill: #71797e;
+    -fx-font-size: 18pt;
+    -fx-font-family: 'Nunito Sans';
+}
+
+
+/* End Text Styles */
+
+/* Begin Border Styles */
 
 .border-top-solid { -fx-border-style: solid none none none }
 .border-left-solid { -fx-border-style: none solid none none }
@@ -68,12 +126,16 @@
 .border-right-solid { -fx-border-style: none none none solid }
 
 .border-thin { -fx-border-width: 1px }
-.border-medium { -fx-border-width: 3px }
-.border-thick { -fx-border-width: 5px }
+.border-medium { -fx-border-width: 2px }
+.border-thick { -fx-border-width: 3px }
 
 .border-gray { -fx-border-color: #d6d6d8 }
 .border-black { -fx-border-color: #000000 }
 .border-blue { -fx-border-color: #0296f4 }
+
+/* End Border Styles */
+
+/* Begin Check Box Styles */
 
 .check-box {
         selected-box-color: #007bff;
@@ -97,12 +159,17 @@
         -fx-background-color: mark-color
 }
 
+/* End Check Box Styles */
+
+/* Begin Button Styles */
+
 .flat-button {
-        -fx-background-radius: 0;
-        -fx-padding: 0;
-        -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-background-color: transparent;
 }
 
+/* End Button Styles */
 
 /* --- Begin Main's Top Specific Layout Section --- */
 
@@ -112,13 +179,9 @@
 
 .top-hbox { -fx-background-color: #2496ed }
 
-/*
-.top-hbox-button:hover > .top-hbox-button-stack-pane > .top-hbox-button-circle { -fx-fill: #0b6db8; }
-*/
-
 .top-hbox .logo-label-left, .logo-label-right {
-        -fx-font-family: "Roboto";
-        -fx-font-size: 16;
+    -fx-font-family: "Roboto";
+    -fx-font-size: 16;
 }
 
 .top-hbox .logo-icon {
@@ -166,15 +229,7 @@
 }
 .control-button-close-x { -fx-stroke: #2e516b; }
 
-
-.control-button {
-	-fx-text-fill: #2e516b;
-	-fx-font-weight: bold;
-	-fx-background-radius: 0;
-	-fx-padding: 0;
-	-fx-background-color: transparent;
-}
-
+.control-button {}
 .control-button:hover { -fx-background-color: #1d78be }
 
 /* --- End Main's Top Specific Layout Section --- */
@@ -182,9 +237,27 @@
 
 /* --- Begin Main's Middle Specific Layout Section --- */
 
-#main-middle-hbox {
+#main-middle-vbox {
 	-fx-background-color: #f4f4f6;
 }
+
+.main-middle-hbox {
+    -fx-background-color: #f4f4f6;
+}
+
+.view-title-bar {}
+.view-title-bar .view-title {
+    -fx-text-fill: #202020;
+    -fx-font-size: 12pt;
+    -fx-font-family: 'Noto Sans KR';
+}
+.view-title-bar .close-view { }
+.view-title-bar .close-view .close-view-x {
+    -fx-stroke: #70787d;
+    -fx-stroke-width: 1.6;
+}
+
+.view-title-bar .close-view:hover .close-view-x { -fx-stroke: #202020 }
 
 /* --- End Main's Middle Layout Section --- */
 

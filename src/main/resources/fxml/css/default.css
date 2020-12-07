@@ -1,0 +1,66 @@
+.main-middle-hbox {
+    -fx-padding: 20 40 20 40;
+}
+.default-time-rect {
+    -fx-stroke-width: 0px;
+    -fx-background-color: #d1d1d1;
+    -fx-background-radius: 20 20 20 20;
+    -fx-size: 10em;
+    -fx-min-width: 8em;
+    -fx-min-height: -fx-size;
+    -fx-max-width: 10em;
+    -fx-max-height: -fx-size;
+    -fx-padding: 0 100 0 0;
+}
+.default-time-rect-left {
+    -fx-padding: 0 5 0 0;
+}
+.default-time-rect-right {
+    -fx-padding: 0 0 0 5;
+}
+.default-over-label {
+    -fx-font-size: 40;
+    -fx-font-family: 'Nunito Sans SemiBold';
+    -fx-font-weight: 900;
+    -fx-padding: 0 0 0 0;
+}
+
+.time-rect-container {
+}
+
+.default-time-text {
+    -fx-font-size: 80px;
+    -fx-text-fill: #636363;
+    -fx-font-family: 'Nunito Sans SemiBold';
+}
+
+.colon-separator {
+    -fx-font-size: 80px;
+    -fx-font-family: 'Nunito Sans';
+    -fx-padding: 0 0 10 0;
+}
+
+.time-label {
+    -fx-font-family: 'Nunito Sans';
+    -fx-font-size: 24pt;
+    -fx-text-fill: #636363;
+}
+
+.default-time-days {
+    -fx-padding: 0 10 0 0;
+}
+.default-time-hours {
+    -fx-padding : 0 10 0 10;
+}
+.default-time-minutes {
+    -fx-padding: 0 10 0 10;
+}
+.days-label {
+    
+}
+.hours-label {
+    
+}
+.minutes-label {
+    
+}

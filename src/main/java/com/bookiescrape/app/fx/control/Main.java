@@ -66,6 +66,8 @@ public class Main {
     @FXML
     private HBox mainTopHBox;
     @FXML
+    private HBox mainMiddleHbox;
+    @FXML
     private HBox bottomRightHBox;
     @FXML
     private TextField outputExcelFilePathFeild;
@@ -79,6 +81,11 @@ public class Main {
     @FXML
     private Button logButton;
     private boolean logActive = false;
+    
+    @FXML
+    private Button viewClose;
+    @FXML
+    private Label viewTitleLabel;
     
     // holds the currently selected top hbox button, if one is selected
     private Button activeTopButton;
@@ -216,16 +223,6 @@ public class Main {
         activeTopButton = btn;
     }
     
-    /* called when top settings button is activated, shows settings view */
-    private void settingsButtonActivated() {
-        // TODO implement showing the settings view
-    }
-    
-    /* called when top log button is activated, shows log view */
-    private void logButtonActivated() {
-        // TODO implement showing the log view
-    }
-    
     /**
      * Changes the visible state of a specified top button.
      * <p>
@@ -266,6 +263,30 @@ public class Main {
         
         inactive.setVisible(state == TOP_BTN_INACTIVE_STATE);
         selected.setVisible(state == TOP_BTN_SELECTED_STATE);
+    }
+    
+    /* called when top settings button is activated, shows settings view */
+    private void settingsButtonActivated() {
+        // TODO implement showing the settings view
+        viewClose.setVisible(true);
+        
+        viewTitleLabel.setText("Settings");
+    }
+    
+    /* called when top log button is activated, shows log view */
+    private void logButtonActivated() {
+        // TODO implement showing the log view
+        viewClose.setVisible(true);
+        
+        viewTitleLabel.setText("Logs");
+    }
+    
+    @FXML
+    void onViewCloseAction(ActionEvent action) {
+        if (activeTopButton == null)
+            return;
+        
+        changeTopButtonState(activeTopButton, TOP_BTN_INACTIVE_STATE);
     }
     
     @FXML

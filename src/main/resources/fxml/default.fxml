@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<HBox alignment="CENTER" styleClass="main-middle-hbox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.Default">
+   <stylesheets>
+      <URL value="@css/default.css" />
+      <URL value="@css/main.css" />
+   </stylesheets>
+   <children>
+      <VBox alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="NEVER">
+               <children>
+                  <Label alignment="TOP_LEFT" styleClass="default-over-label" text="Time Till Next Scrape" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                     <children>
+                        <HBox alignment="CENTER" styleClass="default-time-days">
+                           <children>
+                              <VBox alignment="CENTER" styleClass="time-rect-container" HBox.hgrow="NEVER">
+                                 <children>
+                                    <StackPane styleClass="container">
+                                       <children>
+                                          <Region styleClass="default-time-rect" StackPane.alignment="CENTER" />
+                                          <Label alignment="CENTER" contentDisplay="CENTER" styleClass="default-time-text" text="0" />
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Days" VBox.vgrow="NEVER">
+                           <styleClass>
+                              <String fx:value="days-label" />
+                              <String fx:value="time-label" />
+                           </styleClass>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <Label alignment="CENTER" contentDisplay="CENTER" styleClass="colon-separator" text=":" HBox.hgrow="NEVER" />
+                  <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                     <children>
+                        <HBox alignment="CENTER" styleClass="default-time-hours">
+                           <children>
+                              <VBox alignment="CENTER" styleClass="time-rect-container" HBox.hgrow="NEVER">
+                                 <children>
+                                    <StackPane>
+                                       <children>
+                                          <Region styleClass="default-time-rect" StackPane.alignment="CENTER" />
+                                          <Label alignment="CENTER" contentDisplay="CENTER" styleClass="default-time-text" text="0" StackPane.alignment="CENTER" />
+                                       </children>
+                                       <styleClass>
+                                          <String fx:value="container" />
+                                          <String fx:value="default-time-rect-left" />
+                                       </styleClass>
+                                    </StackPane>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox alignment="CENTER" styleClass="time-rect-container" HBox.hgrow="NEVER">
+                                 <children>
+                                    <StackPane>
+                                       <children>
+                                          <Region styleClass="default-time-rect" StackPane.alignment="CENTER" />
+                                          <Label alignment="CENTER" contentDisplay="CENTER" styleClass="default-time-text" text="0" />
+                                       </children>
+                                       <styleClass>
+                                          <String fx:value="container" />
+                                          <String fx:value="default-time-rect-right" />
+                                       </styleClass>
+                                    </StackPane>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Hours" VBox.vgrow="NEVER">
+                           <styleClass>
+                              <String fx:value="hours-label" />
+                              <String fx:value="time-label" />
+                           </styleClass>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <Label alignment="CENTER" contentDisplay="CENTER" styleClass="colon-separator" text=":" HBox.hgrow="NEVER" />
+                  <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                     <children>
+                        <HBox alignment="CENTER" styleClass="default-time-minutes">
+                           <children>
+                              <VBox alignment="CENTER" styleClass="time-rect-container" HBox.hgrow="NEVER">
+                                 <children>
+                                    <StackPane>
+                                       <children>
+                                          <Region styleClass="default-time-rect" StackPane.alignment="CENTER" />
+                                          <Label alignment="CENTER" contentDisplay="CENTER" styleClass="default-time-text" text="0" textFill="#3e3e3e" />
+                                       </children>
+                                       <styleClass>
+                                          <String fx:value="container" />
+                                          <String fx:value="default-time-rect-left" />
+                                       </styleClass>
+                                    </StackPane>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" styleClass="time-rect-container" HBox.hgrow="NEVER">
+                                 <children>
+                                    <StackPane>
+                                       <children>
+                                          <Region styleClass="default-time-rect" StackPane.alignment="CENTER" />
+                                          <Label alignment="CENTER" contentDisplay="CENTER" styleClass="default-time-text" text="0" textFill="#646464" />
+                                       </children>
+                                       <styleClass>
+                                          <String fx:value="container" />
+                                          <String fx:value="default-time-rect-right" />
+                                       </styleClass>
+                                    </StackPane>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Minutes" VBox.vgrow="NEVER">
+                           <styleClass>
+                              <String fx:value="minutes-label" />
+                              <String fx:value="time-label" />
+                           </styleClass>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets left="20.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets left="20.0" right="20.0" />
+   </padding>
+</HBox>
