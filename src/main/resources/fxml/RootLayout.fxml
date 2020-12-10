@@ -397,7 +397,7 @@
   
   </children>
    <stylesheets>
-      <URL value="@css/main.css" />
+      <URL value="@css/root.css" />
       <URL value="@css/icons.css" />
    </stylesheets>
 </AnchorPane>

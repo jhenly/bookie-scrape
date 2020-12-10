@@ -11,8 +11,8 @@
 
 <HBox alignment="CENTER" styleClass="main-middle-hbox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.Dashboard">
    <stylesheets>
-      <URL value="@css/default.css" />
-      <URL value="@css/main.css" />
+      <URL value="@css/root.css" />
+      <URL value="@css/dashboard.css" />
    </stylesheets>
    <children>
       <VBox alignment="CENTER">
