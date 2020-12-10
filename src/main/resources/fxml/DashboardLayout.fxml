@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<HBox alignment="CENTER" styleClass="main-middle-hbox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.Default">
+<HBox alignment="CENTER" styleClass="main-middle-hbox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.Dashboard">
    <stylesheets>
       <URL value="@css/default.css" />
       <URL value="@css/main.css" />

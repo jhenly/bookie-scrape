@@ -2,10 +2,12 @@ package com.bookiescrape.app.fx.control;
 
 import java.util.ResourceBundle;
 
+import com.bookiescrape.app.sample.Main;
+
 import javafx.fxml.FXML;
 
 
-public class Default {
+public class Dashboard {
 
     @FXML
     private ResourceBundle resources;
@@ -16,7 +18,7 @@ public class Default {
     /**
      * Constructor is called before the initialize() method.
      */
-    Default() {}
+    Dashboard() {}
 
     /**
      * Initializes the default controller class.

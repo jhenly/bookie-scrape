@@ -1,6 +1,6 @@
 package com.bookiescrape.app.sample;
 
-import java.net.URL;
+import java.io.IOException;
 
 import com.bookiescrape.app.fx.ui.FontUtils;
 import com.bookiescrape.app.fx.ui.ResizeHelper;
@@ -37,46 +37,62 @@ public class Main extends Application {
     // the resulting font directory after packaging jar
     private static final String FONT_DIR_PATH = "/fxml/font/";
     
-    // fxml file paths
-    private static final String MAIN_FXML = "/fxml/main.fxml";
-    private static final String DEFAULT_FXML = "/fxml/default.fxml";
-    private static final String SETTINGS_FXML = "/fxml/settings.fxml";
-    private static final String LOG_FXML = "/fxml/log.fxml";
+    // fxml layout file paths
+    private static final String ROOT_FXML = "/fxml/RootLayout.fxml";
+    private static final String DASHBOARD_FXML = "/fxml/DashboardLayout.fxml";
+    private static final String SETTINGS_FXML = "/fxml/SettingsLayout.fxml";
+    private static final String LOG_FXML = "/fxml/LogLayout.fxml";
     
+    private Stage primaryStage;
+
+    private Parent rootView;
+    private Parent dashboardView;
+    private Parent settingsView;
+    private Parent logView;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
+
         // load fonts in '/fxml/font/'
         FontUtils.loadFontsFromResources(FONT_DIR_PATH);
 
-        URL mainFxmlUrl = getClass().getResource(MAIN_FXML);
-        URL defaultUrl = getClass().getResource(DEFAULT_FXML);
-        URL settingsUrl = getClass().getResource(SETTINGS_FXML);
-        URL logUrl = getClass().getResource(LOG_FXML);
-
-        // load the main fxml file
-        Parent root = FXMLLoader.load(mainFxmlUrl);
-
-        // load all of the view fxml's
-        Parent defaultView = FXMLLoader.load(defaultUrl);
-        Parent settingsView = FXMLLoader.load(settingsUrl);
-        Parent logView = FXMLLoader.load(logUrl);
+        // load the root layout's fxml file
+        rootView = FXMLLoader.load(getClass().getResource(ROOT_FXML));
 
         // create window with no title bar or default min, max, close buttons
         primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.setScene(new Scene(root));
+        primaryStage.setScene(new Scene(rootView));
 
         // add listener to stage for window edge resizing
         ResizeHelper.addResizeListener(primaryStage);
 
         primaryStage.show();
 
+        setPrimaryStageMinBounds();
+
+        // initialize all of the views
+        initViews();
+    }
+
+    /* initializes all of the views */
+    private void initViews() throws IOException {
+        // load all of the views
+        dashboardView = FXMLLoader.load(getClass().getResource(DASHBOARD_FXML));
+        settingsView = FXMLLoader.load(getClass().getResource(SETTINGS_FXML));
+        logView = FXMLLoader.load(getClass().getResource(LOG_FXML));
+
+
+    }
+    
+    /* enforces window to not become smaller than root's min bounds */
+    private void setPrimaryStageMinBounds() {
         // get root node's bounds to calculate min width and height
-        Bounds rootBounds = root.getBoundsInLocal();
+        Bounds rootBounds = rootView.getBoundsInLocal();
         double deltaW = primaryStage.getWidth() - rootBounds.getWidth();
         double deltaH = primaryStage.getHeight() - rootBounds.getHeight();
-
-        Bounds prefBounds = getPrefBounds(root);
-
+        
+        Bounds prefBounds = getPrefBounds(rootView);
         primaryStage.setMinWidth(prefBounds.getWidth() + deltaW);
         primaryStage.setMinHeight(prefBounds.getHeight() + deltaH);
     }
@@ -100,5 +116,12 @@ public class Main extends Application {
         
         return new BoundingBox(0, 0, prefWidth, prefHeight);
     }
+    
+    /**
+     * Gets the primary stage.
+     *
+     * @return the primary stage
+     */
+    public Stage getPrimaryStage() { return primaryStage; }
     
 }
