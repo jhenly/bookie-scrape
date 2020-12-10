@@ -1,0 +1,43 @@
+# Please see the documentation for all configuration options:
+# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "maven"
+    # Required location of pom.xml
+    directory: "/"
+    schedule:
+      interval: "daily"
+    allow:
+      
+      # JUnit
+      - dependency-name: junit:junit
+      
+      # HtmlUnit
+      - dependency-name: net.sourceforge.htmlunit:htmlunit
+      
+      # Apache POI
+      - dependency-name: org.apache.poi:poi
+      - dependency-name: org.apache.poi:poi-ooxml
+      - dependency-name: org.apache.poi:poi-ooxml-schemas
+      - dependency-name: org.apache.poi:poi-scratchpad
+      - dependency-name: org.apache.poi:poi-excelent
+      
+      # OpenJFX
+      - dependency-name: org.openjfx:javafx-controls
+      - dependency-name: org.openjfx:javafx-graphics
+      - dependency-name: org.openjfx:javafx-base
+      - dependency-name: org.openjfx:javafx-fxml
+      - dependency-name: org.openjfx:javafx-web
+      - dependency-name: org.openjfx:javafx-swing
+      - dependency-name: org.openjfx:javafx-media
+      #  JavaFX Maven Plugin - lets you do [ javafx:run ]
+      - dependency-name: org.openjfx:javafx-maven-plugin
+      
+      
+  - package-ecosystem: "github-actions"
+    # Leave directory as "/", dependabot will use default location
+    #  of `.github/workflows`
+    directory: "/"
+    schedule:
+      interval: "daily"
