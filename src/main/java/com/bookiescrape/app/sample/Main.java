@@ -2,6 +2,7 @@ package com.bookiescrape.app.sample;
 
 import java.net.URL;
 
+import com.bookiescrape.app.fx.ui.FontUtils;
 import com.bookiescrape.app.fx.ui.ResizeHelper;
 
 import javafx.application.Application;
@@ -24,28 +25,28 @@ import javafx.stage.StageStyle;
  * @author Jonathan Henly
  */
 public class Main extends Application {
-
+    
     /**
      * Entry point of the application.
      *
      * @param args - command line arguments
      */
     public static void main(String[] args) { launch(args); }
-    
-    
+
+
     // the resulting font directory after packaging jar
     private static final String FONT_DIR_PATH = "/fxml/font/";
-
+    
     // fxml file paths
     private static final String MAIN_FXML = "/fxml/main.fxml";
     private static final String DEFAULT_FXML = "/fxml/default.fxml";
     private static final String SETTINGS_FXML = "/fxml/settings.fxml";
     private static final String LOG_FXML = "/fxml/log.fxml";
-
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
         // load fonts in '/fxml/font/'
-        // FontUtils();
+        FontUtils.loadFontsFromResources(FONT_DIR_PATH);
 
         URL mainFxmlUrl = getClass().getResource(MAIN_FXML);
         URL defaultUrl = getClass().getResource(DEFAULT_FXML);
@@ -79,12 +80,12 @@ public class Main extends Application {
         primaryStage.setMinWidth(prefBounds.getWidth() + deltaW);
         primaryStage.setMinHeight(prefBounds.getHeight() + deltaH);
     }
-
+    
     /* method to help ensure resizing stage respects min height and width */
     private static Bounds getPrefBounds(Node node) {
         double prefWidth;
         double prefHeight;
-
+        
         Orientation bias = node.getContentBias();
         if (bias == Orientation.HORIZONTAL) {
             prefWidth = node.prefWidth(-1);
@@ -96,8 +97,8 @@ public class Main extends Application {
             prefWidth = node.prefWidth(-1);
             prefHeight = node.prefHeight(-1);
         }
-
+        
         return new BoundingBox(0, 0, prefWidth, prefHeight);
     }
-
+    
 }
