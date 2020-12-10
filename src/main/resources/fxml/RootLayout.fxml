@@ -26,8 +26,8 @@
          <top>
             <HBox id="main-top-hbox" fx:id="mainTopHBox" onMouseDragged="#onMainTopHBoxMouseDragged" onMousePressed="#onMainTopHBoxMousePressed" styleClass="top-hbox" BorderPane.alignment="TOP_CENTER">
                <children>
-                  <Pane maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="340.0" HBox.hgrow="ALWAYS" />
-                  <HBox alignment="CENTER" HBox.hgrow="NEVER">
+                  <Pane maxWidth="1.7976931348623157E308" prefWidth="340.0" HBox.hgrow="ALWAYS" />
+                  <HBox alignment="CENTER" minWidth="110.0" HBox.hgrow="NEVER">
                      <children>
                         <Region HBox.hgrow="NEVER">
                            <styleClass>
@@ -37,12 +37,12 @@
                         </Region>
                         <VBox alignment="CENTER" HBox.hgrow="NEVER">
                            <children>
-                              <Label alignment="BOTTOM_CENTER" styleClass="logo-label-left" text="bookie" textFill="WHITE" VBox.vgrow="NEVER">
+                              <Label alignment="BOTTOM_CENTER" styleClass="logo-label-left" text="bookie" textFill="WHITE" textOverrun="CLIP" VBox.vgrow="NEVER">
                                  <padding>
                                     <Insets left="4.0" top="2.0" />
                                  </padding>
                               </Label>
-                              <Label styleClass="logo-label-right" text="scrape" textFill="WHITE" VBox.vgrow="NEVER">
+                              <Label styleClass="logo-label-right" text="scrape" textFill="WHITE" textOverrun="CLIP" VBox.vgrow="NEVER">
                                  <padding>
                                     <Insets left="4.0" />
                                  </padding>
@@ -54,7 +54,7 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <Pane maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="126.0" HBox.hgrow="ALWAYS" />
+                  <Pane maxWidth="1.7976931348623157E308" prefWidth="126.0" HBox.hgrow="ALWAYS" />
                   <HBox alignment="CENTER" HBox.hgrow="NEVER">
                      <children>
                         <HBox id="top-hbox-buttons" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" spacing="20.0" HBox.hgrow="NEVER">
