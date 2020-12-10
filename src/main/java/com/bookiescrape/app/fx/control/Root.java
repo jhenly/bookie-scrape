@@ -41,28 +41,28 @@ import javafx.stage.Stage;
 
 
 /**
- * The controller class for {@code main.fxml}.
+ * The controller class for {@code RootLayout.fxml}.
  *
  * @author Jonathan Henly
  */
 public class Root {
-    
+
     /* Package Private Constants */
-    
+
     /** Constant representing the inactive state of a top button. */
     static int TOP_BTN_INACTIVE_STATE = 0;
     /** Constant representing the selected state of a top button. */
     static int TOP_BTN_SELECTED_STATE = 1;
-    
+
     /* Private Constants */
     private static final String SETTINGS_BUTTON_ID = "settingsButton";
     private static final String LOG_BUTTON_ID = "historyButton";
-    
+
     /* Private Members and FXML Members */
-    
+
     @FXML
     private ResourceBundle resources;
-    
+
     @FXML
     private HBox mainTopHBox;
     @FXML
@@ -71,119 +71,114 @@ public class Root {
     private HBox bottomRightHBox;
     @FXML
     private TextField outputExcelFilePathFeild;
-    
+
     @FXML
     private Button closeButton;
-    
+
     @FXML
     private Button settingsButton;
     private boolean settingsActive = false;
     @FXML
     private Button logButton;
     private boolean logActive = false;
-    
+
     @FXML
     private Button viewClose;
     @FXML
     private Label viewTitleLabel;
-    
+
     // holds the currently selected top hbox button, if one is selected
     private Button activeTopButton;
-    
+
     @FXML
     private Label scraperStatusLabel;
     @FXML
     private Circle scraperStatusCircle;
-    
+
     private List<String> bookiesList = new ArrayList<>();
     private CellStyle style = null;
-    
+
     private double stageXOffset;
     private double stageYOffset;
-    
-    
+
+
     @FXML
     private void initialize() {}
-    
+
     /**
      * Used to record the start of dragging the main window across the screen.
      *
-     * @param event
-     *              - the mouse pressed event caused by mouse pressing main's
-     *              top HBox
+     * @param event - the mouse pressed event caused by mouse pressing main's
+     *        top HBox
      */
     @FXML
     void onMainTopHBoxMousePressed(MouseEvent event) {
         stageXOffset = event.getSceneX();
         stageYOffset = event.getSceneY();
     }
-    
+
     /**
      * Handles dragging the window across the screen after mouse pressing main's
      * top HBox.
      *
-     * @param event
-     *              - the drag event caused by dragging the main window across
-     *              the screen
+     * @param event - the drag event caused by dragging the main window across
+     *        the screen
      */
     @FXML
     void onMainTopHBoxMouseDragged(MouseEvent event) {
         Stage stage = (Stage) ((HBox) event.getSource()).getScene().getWindow();
-        
+
         stage.setX(event.getScreenX() - stageXOffset);
         stage.setY(event.getScreenY() - stageYOffset);
     }
-    
+
     /**
      * Handles actions coming from the top most close button.
      *
-     * @param event
-     *              - the action event to handle
+     * @param event - the action event to handle
      */
     @FXML
     void onCloseButtonAction(ActionEvent event) {
         // TODO minimize application (preferably to tray) rather than exiting
         Platform.exit();
     }
-    
+
     /**
      * Handles actions on the top right most minimize button.
      *
-     * @param event
-     *              - the action event to handle
+     * @param event - the action event to handle
      */
     @FXML
     void onMinimizeButtonAction(ActionEvent event) {
-        Stage stage = (Stage) ((Button) event.getSource()).getScene()
-            .getWindow();
-        
+        Stage stage =
+            (Stage) ((Button) event.getSource()).getScene().getWindow();
+
         stage.setIconified(!stage.isIconified());
     }
-    
+
     /**
      * Handles actions on the top right most maximize button.
      *
-     * @param event
-     *              - the action event to handle
+     * @param event - the action event to handle
      */
     @FXML
     void onMaximizeButtonAction(ActionEvent event) {
-        Stage stage = (Stage) ((Button) event.getSource()).getScene()
-            .getWindow();
-        
+        Stage stage =
+            (Stage) ((Button) event.getSource()).getScene().getWindow();
+
         stage.setMaximized(!stage.isMaximized());
     }
-    
+
     @FXML
     void onTopButtonAction(ActionEvent event) {
         Button topButton = (Button) event.getSource();
-        
+
         // don't do anything if the button is already active
         if (activeTopButton == topButton) { return; }
-        
+
         // set any active top button to inactive and set top button to selected
         setActiveTopButton(topButton);
-        
+
         // call on action method for the active button
         switch (topButton.getId()) {
             case SETTINGS_BUTTON_ID:
@@ -191,38 +186,38 @@ public class Root {
                 settingsActive = true;
                 logActive = false;
                 break;
-            
+
             case LOG_BUTTON_ID:
                 logButtonActivated();
                 settingsActive = false;
                 logActive = true;
                 break;
-            
+
             default:
                 settingsActive = false;
                 logActive = false;
         }
     }
-    
+
     /* top buttons hover effect methods helper */
     private boolean topButtonIsActive(Button button) {
         return activeTopButton == button;
     }
-    
+
     /* helper to set top buttons active */
     private void setActiveTopButton(Button button) {
         Button btn = Objects.requireNonNull(button);
-        
+
         // if another button is active then set it to inactive
         if (activeTopButton != null) {
             changeTopButtonState(activeTopButton, TOP_BTN_INACTIVE_STATE);
         }
-        
+
         // set the new active top hbox button and change its state to selected
         changeTopButtonState(btn, TOP_BTN_SELECTED_STATE);
         activeTopButton = btn;
     }
-    
+
     /**
      * Changes the visible state of a specified top button.
      * <p>
@@ -235,7 +230,7 @@ public class Root {
      * <p>
      * This method assumes the passed in button has the following node
      * hierarchy:
-     * 
+     *
      * <pre>
      * &lt;Button&gt;
      *   &lt;Parent&gt;
@@ -244,55 +239,54 @@ public class Root {
      *   &lt;/Parent&gt;
      * &lt;/Button&gt;
      * </pre>
-     * 
-     * @param button
-     *               - the button to change the state of, this argument cannot
-     *               be {@code null}
-     * @param state
-     *               - the state to change to
+     *
+     * @param button - the button to change the state of, this argument cannot
+     *        be {@code null}
+     * @param state - the state to change to
      */
     void changeTopButtonState(Button button, int state) {
         Button btn = Objects.requireNonNull(button);
-        
+
         // get the state nodes' parent container
-        ObservableList<Node> states = ((Parent) btn.getChildrenUnmodifiable()
-            .get(0)).getChildrenUnmodifiable();
-        
+        ObservableList<Node> states =
+            ((Parent) btn.getChildrenUnmodifiable().get(0))
+                .getChildrenUnmodifiable();
+
         Node inactive = states.get(TOP_BTN_INACTIVE_STATE);
         Node selected = states.get(TOP_BTN_SELECTED_STATE);
-        
+
         inactive.setVisible(state == TOP_BTN_INACTIVE_STATE);
         selected.setVisible(state == TOP_BTN_SELECTED_STATE);
     }
-    
+
     /* called when top settings button is activated, shows settings view */
     private void settingsButtonActivated() {
         // TODO implement showing the settings view
         viewClose.setVisible(true);
-        
+
         viewTitleLabel.setText("Settings");
     }
-    
+
     /* called when top log button is activated, shows log view */
     private void logButtonActivated() {
         // TODO implement showing the log view
         viewClose.setVisible(true);
-        
+
         viewTitleLabel.setText("Logs");
     }
-    
+
     @FXML
     void onViewCloseAction(ActionEvent action) {
-        if (activeTopButton == null)
-            return;
-        
+        if (activeTopButton == null) { return; }
+
         changeTopButtonState(activeTopButton, TOP_BTN_INACTIVE_STATE);
     }
-    
+
     @FXML
     void selectOutputExcelFilePath(ActionEvent event) {
         if (outputExcelFilePathFeild.getText() != null
-            || !outputExcelFilePathFeild.getText().isEmpty()) {
+            || !outputExcelFilePathFeild.getText().isEmpty())
+        {
             File positivesCsvFile = exportExcelFile();
             if (positivesCsvFile != null) {
                 String anglesPath = positivesCsvFile.getAbsolutePath();
@@ -300,7 +294,7 @@ public class Root {
             }
         }
     }
-    
+
     @FXML
     void startWebScrapping(ActionEvent event) {
         try {
@@ -318,14 +312,14 @@ public class Root {
             e.printStackTrace();
         }
     }
-    
+
     private File exportExcelFile() {
         File csvFile = null;
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(
             "Select Folder Where you want to save your Output Excel Sheet");
-        FileChooser.ExtensionFilter emaiLFilter = new FileChooser.ExtensionFilter(
-            "Excel File", "*.xlsx");
+        FileChooser.ExtensionFilter emaiLFilter =
+            new FileChooser.ExtensionFilter("Excel File", "*.xlsx");
         /* FileChooser.ExtensionFilter allFileFilter = new
          * FileChooser.ExtensionFilter( "All Files", "*.*"); */
         fileChooser.getExtensionFilters().add(emaiLFilter);
@@ -339,21 +333,22 @@ public class Root {
         }
         return csvFile;
     }
-    
-    
-    private static final String MONEY_LINE = "https://classic.sportsbookreview.com/betting-odds/money-line/";
-    
+
+
+    private static final String MONEY_LINE =
+        "https://classic.sportsbookreview.com/betting-odds/money-line/";
+
     private void scrapeWebData() throws IOException {
         Scraper scraper = new Scraper();
         scraper.scrape(MONEY_LINE);
-        
+
         System.out.println("*** Showing all Bookies list ***\n");
-        
+
         for (Bookie bookie : scraper.getBookies()) {
             System.out.println(bookie.name() + " " + bookie.index());
         }
-        
-        
+
+
         /* System.out.println("*** All Team Names ***\n\n\n"); for (Element e :
          * document.select("div#booksData.data-books").select("div.teamText")) {
          * System.out.println(e.select("a.get-grid").text()); }
@@ -434,12 +429,12 @@ public class Root {
          * (Element es :
          * document.select("div#booksData.data-books").select("div.teamText")) {
          * System.out.println(e.select("a.get-grid").text()); } } */
-        
-        
+
+
         // System.out.println("Final TeamNames" +
         // document.select("div.eventLines").size() + " )))");
         Set<String> linkedHashSet = new LinkedHashSet<>();
-        
+
         /// this code is 100% working
         /* for (int i = 0; i <
          * document.select("div.eventLines").get(0).children().get(3).children()
@@ -472,13 +467,13 @@ public class Root {
          * "div.eventLine.status-scheduled").text()); } linkedHashSet.add("end"
          * + count); count++; } */
         /* for (String i : linkedHashSet) { System.out.println(i); } */
-        
+
         /* System.out.println("All teamNames are !!!"); for (String s :
          * retrieveTeamNames(linkedHashSet)) { System.out.println(s); } */
-        
+
         exportDataToExcelSheet(retrieveTeamNames(linkedHashSet));
     }
-    
+
     private List<String> retrieveTeamNames(Set<String> linkedHashSet) {
         List<String> teamNames = new LinkedList<>();
         String previousString = "";
@@ -488,23 +483,23 @@ public class Root {
                 teamNames.add(previousString);
                 // scrappedData.setGameName(previousString);
             }
-            Pattern teamNamePattern = Pattern
-                .compile("(?<=[p]\\s)[\\w\\s\\w]+(?=Options)");   // the
-                                                                  // pattern
-                                                                  // to
-                                                                  // search
-                                                                  // for
-                                                                  // TeamNames
+            Pattern teamNamePattern =
+                Pattern.compile("(?<=[p]\\s)[\\w\\s\\w]+(?=Options)");   // the
+                                                                         // pattern
+                                                                         // to
+                                                                         // search
+                                                                         // for
+                                                                         // TeamNames
             Matcher teamNameMatcher = teamNamePattern.matcher(s);
-            
+
             Pattern openerColPatter = Pattern.compile(
                 "(?<=[A-Za-z]\\+|\\s\\-|\\s)[\\+|\\-\\d\\s]+(?=\\s\\d+\\.\\d\\%)");
             Matcher openerColMatcher = openerColPatter.matcher(s);
-            
-            Pattern allLastColPattern = Pattern
-                .compile("(?<=%\\s)[\\+|\\-\\d\\s]+");
+
+            Pattern allLastColPattern =
+                Pattern.compile("(?<=%\\s)[\\+|\\-\\d\\s]+");
             Matcher allLoastColMatcher = allLastColPattern.matcher(s);
-            
+
             // if we find a match, get the group
             if (teamNameMatcher.find() && openerColMatcher.find()) {
                 // we're only looking for one group, so get it
@@ -515,16 +510,16 @@ public class Root {
                     allLastColGroupFound = allLoastColMatcher.group();
                     // System.out.println(allLastColGroupFound);
                 }
-                
+
                 // print the group out for verification
                 // System.out.format("'%s'\n", teamNameGroupFound);
-                
+
                 teamNames.add(teamNameGroupFound + " , " + openerColGroupFound
                     + " , " + allLastColGroupFound);
                 // scrappedData.setTeamName(teamNameGroupFound);
                 // scrappedData.setOpnerColumn(openerColGroupFound);
                 // scrappedData.setOtherColumns(allLastColGroupFound);
-                
+
             }
             // teamNames.add(scrappedData);
             previousString = s;
@@ -532,14 +527,14 @@ public class Root {
         }
         return teamNames;
     }
-    
-    
+
+
     private void exportDataToExcelSheet(List<String> data) throws IOException {
         // System.out.println("Exporting Data to Excel !!!");
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Scrapped Data Sheet");
-        
-        
+
+
         //////
         workbook.createCellStyle();
         // Setting Background color
@@ -548,7 +543,7 @@ public class Root {
          *
          * style.setFillForegroundColor(IndexedColors.RED.getIndex());
          * style.setFillPattern(FillPatternType.SOLID_FOREGROUND); */
-        
+
         boolean printDataFlag = false;
         int rowNum = 0;
         // System.out.println("Creating excel");
@@ -556,23 +551,24 @@ public class Root {
             int colNum = 0;
             if (!data.get(i).contains(",")) {
                 if (data.get(i).equals("NBA BASKETBALL")
-                    || data.get(i).trim().equals("MLB BASEBALL")) {
+                    || data.get(i).trim().equals("MLB BASEBALL"))
+                {
                     printDataFlag = true;
                     Row row = sheet.createRow(rowNum++);
                     Cell cell = row.createCell(colNum++);
                     // cell.setCellStyle(style);
                     cell.setCellValue(data.get(i));
-                    
+
                     row = sheet.createRow(rowNum++);
                     row.setRowStyle(style);
                     /// columns List
                     Cell teamNameCol = row.createCell(0);
                     teamNameCol.setCellValue("Team Names");
-                    
-                    
+
+
                     Cell openerCOOOOl = row.createCell(colNum++);
                     openerCOOOOl.setCellValue("Opener");
-                    
+
                     for (int s = 0; s < 10; s++) {
                         Cell bookiesCol = row.createCell(colNum++);
                         bookiesCol.setCellValue(bookiesList.get(s));
@@ -580,13 +576,13 @@ public class Root {
                     // System.out.println(data.get(i));
                     continue;
                 }
-                
+
                 /* if(data.get(i).trim().equals("MLB BASEBALL")){ printDataFlag
                  * = true; Row row = sheet.createRow(rowNum++); Cell cell =
                  * row.createCell(colNum++); cell.setCellValue(data.get(i));
                  * System.out.println(data.get(i)); continue; } */
             }
-            
+
             if (printDataFlag) {
                 if (!data.get(i).contains(",")) {
                     // System.out.println(data.get(i) + " -going to false
@@ -595,26 +591,26 @@ public class Root {
                 } else {
                     // System.out.println(data.get(i) + " -else");
                     Row row = sheet.createRow(rowNum++);
-                    String[] splitTeamNameOpnerColAndOtherCols = data.get(i)
-                        .split(",");
-                    String[] opnerCol = splitTeamNameOpnerColAndOtherCols[1]
-                        .trim().split(" ");
-                    String[] otherColumns = splitTeamNameOpnerColAndOtherCols[2]
-                        .trim().split(" ");
-                    
+                    String[] splitTeamNameOpnerColAndOtherCols =
+                        data.get(i).split(",");
+                    String[] opnerCol =
+                        splitTeamNameOpnerColAndOtherCols[1].trim().split(" ");
+                    String[] otherColumns =
+                        splitTeamNameOpnerColAndOtherCols[2].trim().split(" ");
+
                     Cell teamNameCell = row.createCell(colNum++);
                     teamNameCell
                         .setCellValue(splitTeamNameOpnerColAndOtherCols[0]);
-                    
+
                     StringBuilder builder = new StringBuilder();
                     for (int j = 0; j < opnerCol.length; j++) {
                         builder.append(opnerCol[j] + "\t  ");
                     }
                     Cell openerColCell = row.createCell(colNum++);
                     openerColCell.setCellValue(builder.toString());
-                    
+
                     builder = new StringBuilder();
-                    
+
                     int h = 1;
                     for (int k = 0; k < otherColumns.length; k++) {
                         if (k == (opnerCol.length * h)) {
@@ -630,7 +626,7 @@ public class Root {
                         + " " + otherColumns[otherColumns.length - 1]);
                 }
             }
-            
+
             /* if(lastColFlag){ Row row = sheet.createRow(rowNum++); String[]
              * splitTeamNameOpnerColAndOtherCols = data.get(i).split(",");
              * String[] opnerCol =
@@ -656,8 +652,8 @@ public class Root {
         }
         // System.out.println("Row : " + rowNum);
         try {
-            FileOutputStream outputStream = new FileOutputStream(
-                outputExcelFilePathFeild.getText());
+            FileOutputStream outputStream =
+                new FileOutputStream(outputExcelFilePathFeild.getText());
             workbook.write(outputStream);
             workbook.close();
         } catch (FileNotFoundException e) {
@@ -665,7 +661,7 @@ public class Root {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         // System.out.println("Done");
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Success !!!");

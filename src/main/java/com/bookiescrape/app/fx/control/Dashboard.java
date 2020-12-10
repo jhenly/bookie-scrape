@@ -1,25 +1,25 @@
 package com.bookiescrape.app.fx.control;
 
-import java.util.ResourceBundle;
-
 import com.bookiescrape.app.sample.Main;
 
 import javafx.fxml.FXML;
 
 
+/**
+ * The controller class for {@code DashboardLayout.fxml}.
+ *
+ * @author Jonathan Henly
+ */
 public class Dashboard {
-
-    @FXML
-    private ResourceBundle resources;
-
+    
     // reference to the main application.
     private Main main;
-
+    
     /**
      * Constructor is called before the initialize() method.
      */
-    Dashboard() {}
-
+    public Dashboard() {}
+    
     /**
      * Initializes the default controller class.
      * <p>
@@ -28,13 +28,13 @@ public class Dashboard {
     @FXML
     private void initialize() {
         // initialize the person table with the two columns.
-        
+
         // firstNameColumn.setCellValueFactory(cellData ->
         // cellData.getValue().firstNameProperty());
         // lastNameColumn.setCellValueFactory(cellData ->
         // cellData.getValue().lastNameProperty());
     }
-
+    
     /**
      * Called by the main application to give a reference to itself.
      *
@@ -42,9 +42,9 @@ public class Dashboard {
      */
     public void setMain(Main mainRef) {
         main = mainRef;
-
+        
         // add observable list data to the table
         // personTable.setItems(mainApp.getPersonData());
     }
-    
+
 }
