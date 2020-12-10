@@ -93,49 +93,49 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>16-ea+4</version>
+      <version>15.0.1</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-graphics</artifactId>
-      <version>16-ea+4</version>
+      <version>15.0.1</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-base</artifactId>
-      <version>16-ea+4</version>
+      <version>15.0.1</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>16-ea+4</version>
+      <version>15.0.1</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-web</artifactId>
-      <version>16-ea+4</version>
+      <version>15.0.1</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-swing</artifactId>
-      <version>16-ea+4</version>
+      <version>15.0.1</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-media</artifactId>
-      <version>16-ea+4</version>
+      <version>15.0.1</version>
       <scope>compile</scope>
     </dependency>
     <!-- End OpenJFX Dependencies -->
@@ -185,6 +185,30 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
+        
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>3.3.0</version>
+          <configuration>
+            <descriptorRefs>
+              <descriptorRef>jar-with-dependencies</descriptorRef>
+            </descriptorRefs>
+            <archive>
+              <manifest>
+                <mainClass>com.bookiescrape.app.sample.Main</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
+          <executions>
+            <execution>
+              <id>make-assembly</id> <!-- this is used for inheritance merges -->
+              <phase>package</phase> <!-- bind to the packaging phase -->
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
 
 
         <!-- allows for 'clean javafx:run' -->
@@ -195,9 +219,12 @@
           <configuration>
           
             <!-- Used to specify absolute path to JDK's java executable,
+<<<<<<< HEAD
                  i.e. "/absolute/path/to/jdk-#.#.#/bin/java", if Maven throws errors
                  because it can't find it. -->
 	        <executable>E:\\Programming\\Java\jdk-15.0.1\\bin\\java</executable>
+=======
+>>>>>>> c1584402d892da8c9b11e6d6c2530e81b9f41f38
             
             <!-- used to test different 'public static void main(String[] args)' classes without changing pom.xml -->   
             <!-- via: 'clean javafx:run "-Dpackage.main=sample.Main"' -->
