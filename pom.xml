@@ -222,10 +222,7 @@
 <<<<<<< HEAD
                  i.e. "/absolute/path/to/jdk-#.#.#/bin/java", if Maven throws errors
                  because it can't find it. -->
-	        <executable>E:\\Programming\\Java\jdk-15.0.1\\bin\\java</executable>
-=======
->>>>>>> c1584402d892da8c9b11e6d6c2530e81b9f41f38
-            
+	    <executable>/home/henly/Programming/java/jdk-15.0.1/bin/java</executable>           
             <!-- used to test different 'public static void main(String[] args)' classes without changing pom.xml -->   
             <!-- via: 'clean javafx:run "-Dpackage.main=sample.Main"' -->
             <mainClass>com.bookiescrape.app.${foo}</mainClass>
