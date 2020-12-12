@@ -26,93 +26,189 @@
                </padding></Pane>
             <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" HBox.hgrow="NEVER">
                <children>
-                  <Button mnemonicParsing="false" styleClass="flat-button" VBox.vgrow="NEVER">
-                     <graphic>
-                        <StackPane>
-                           <children>
-                              <HBox alignment="CENTER" fillHeight="false" StackPane.alignment="CENTER">
+                  <HBox maxWidth="1.7976931348623157E308">
+                     <children>
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="flat-button" HBox.hgrow="ALWAYS">
+                           <graphic>
+                              <StackPane>
                                  <children>
-                                    <Region HBox.hgrow="NEVER">
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
+                                       <children>
+                                          <Region HBox.hgrow="NEVER">
+                                             <styleClass>
+                                                <String fx:value="icon" />
+                                                <String fx:value="icon-sliders" />
+                                             </styleClass>
+                                          </Region>
+                                          <Label styleClass="button-label" text="General" HBox.hgrow="NEVER" />
+                                       </children>
                                        <styleClass>
-                                          <String fx:value="icon" />
-                                          <String fx:value="icon-sliders" />
+                                          <String fx:value="selected" />
+                                          <String fx:value="container" />
                                        </styleClass>
-                                    </Region>
-                                    <Label styleClass="button-label" text="General" HBox.hgrow="NEVER" />
+                                       <StackPane.margin>
+                                          <Insets />
+                                       </StackPane.margin>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" visible="false" StackPane.alignment="CENTER">
+                                       <children>
+                                          <Region HBox.hgrow="NEVER">
+                                             <styleClass>
+                                                <String fx:value="icon" />
+                                                <String fx:value="icon-sliders" />
+                                             </styleClass>
+                                          </Region>
+                                          <Label styleClass="button-label" text="General" HBox.hgrow="NEVER" />
+                                       </children>
+                                       <styleClass>
+                                          <String fx:value="inactive" />
+                                          <String fx:value="container" />
+                                       </styleClass>
+                                       <StackPane.margin>
+                                          <Insets />
+                                       </StackPane.margin>
+                                    </HBox>
                                  </children>
-                                 <styleClass>
-                                    <String fx:value="selected" />
-                                    <String fx:value="container" />
-                                 </styleClass>
-                                 <StackPane.margin>
-                                    <Insets />
-                                 </StackPane.margin>
-                              </HBox>
-                              <HBox alignment="CENTER" fillHeight="false" visible="false" StackPane.alignment="CENTER">
+                              </StackPane>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox maxWidth="1.7976931348623157E308">
+                     <children>
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="flat-button" HBox.hgrow="ALWAYS">
+                           <graphic>
+                              <StackPane alignment="CENTER_LEFT">
                                  <children>
-                                    <Region HBox.hgrow="NEVER">
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
+                                       <children>
+                                          <Region HBox.hgrow="NEVER">
+                                             <styleClass>
+                                                <String fx:value="icon" />
+                                                <String fx:value="icon-book-dead" />
+                                             </styleClass>
+                                          </Region>
+                                          <Label styleClass="button-label" text="Logging" HBox.hgrow="NEVER" />
+                                       </children>
                                        <styleClass>
-                                          <String fx:value="icon" />
-                                          <String fx:value="icon-sliders" />
+                                          <String fx:value="selected" />
+                                          <String fx:value="container" />
                                        </styleClass>
-                                    </Region>
-                                    <Label styleClass="button-label" text="General" HBox.hgrow="NEVER" />
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
+                                       <children>
+                                          <Region HBox.hgrow="NEVER">
+                                             <styleClass>
+                                                <String fx:value="icon" />
+                                                <String fx:value="icon-book-dead" />
+                                             </styleClass>
+                                          </Region>
+                                          <Label styleClass="button-label" text="Logging" HBox.hgrow="NEVER" />
+                                       </children>
+                                       <styleClass>
+                                          <String fx:value="inactive" />
+                                          <String fx:value="container" />
+                                       </styleClass>
+                                       <StackPane.margin>
+                                          <Insets />
+                                       </StackPane.margin>
+                                    </HBox>
                                  </children>
-                                 <styleClass>
-                                    <String fx:value="inactive" />
-                                    <String fx:value="container" />
-                                 </styleClass>
-                                 <StackPane.margin>
-                                    <Insets />
-                                 </StackPane.margin>
-                              </HBox>
-                           </children>
-                        </StackPane>
-                     </graphic>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin></Button>
-                  <Button mnemonicParsing="false" styleClass="flat-button">
-                     <graphic>
-                        <StackPane>
-                           <children>
-                              <HBox alignment="CENTER" fillHeight="false" StackPane.alignment="CENTER">
+                              </StackPane>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="flat-button" HBox.hgrow="ALWAYS">
+                           <graphic>
+                              <StackPane>
                                  <children>
-                                    <Region HBox.hgrow="NEVER">
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
+                                       <children>
+                                          <Region HBox.hgrow="NEVER">
+                                             <styleClass>
+                                                <String fx:value="icon" />
+                                                <String fx:value="icon-brand-windows" />
+                                             </styleClass>
+                                          </Region>
+                                          <Label styleClass="button-label" text="Microsoft Excel" HBox.hgrow="NEVER" />
+                                       </children>
                                        <styleClass>
-                                          <String fx:value="icon" />
-                                          <String fx:value="icon-sliders" />
+                                          <String fx:value="selected" />
+                                          <String fx:value="container" />
                                        </styleClass>
-                                    </Region>
-                                    <Label styleClass="button-label" text="Logging" HBox.hgrow="NEVER" />
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
+                                       <children>
+                                          <Region HBox.hgrow="NEVER">
+                                             <styleClass>
+                                                <String fx:value="icon" />
+                                                <String fx:value="icon-brand-windows" />
+                                             </styleClass>
+                                          </Region>
+                                          <Label styleClass="button-label" text="Microsoft Excel" HBox.hgrow="NEVER" />
+                                       </children>
+                                       <styleClass>
+                                          <String fx:value="inactive" />
+                                          <String fx:value="container" />
+                                       </styleClass>
+                                       <StackPane.margin>
+                                          <Insets />
+                                       </StackPane.margin>
+                                    </HBox>
                                  </children>
-                                 <styleClass>
-                                    <String fx:value="selected" />
-                                    <String fx:value="container" />
-                                 </styleClass>
-                              </HBox>
-                              <HBox alignment="CENTER" fillHeight="false" StackPane.alignment="CENTER">
+                              </StackPane>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox maxWidth="1.7976931348623157E308">
+                     <children>
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="flat-button" HBox.hgrow="ALWAYS">
+                           <graphic>
+                              <StackPane>
                                  <children>
-                                    <Region HBox.hgrow="NEVER">
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
+                                       <children>
+                                          <Region HBox.hgrow="NEVER">
+                                             <styleClass>
+                                                <String fx:value="icon" />
+                                                <String fx:value="icon-brand-goole" />
+                                             </styleClass>
+                                          </Region>
+                                          <Label styleClass="button-label" text="Google Sheets" HBox.hgrow="NEVER" />
+                                       </children>
                                        <styleClass>
-                                          <String fx:value="icon" />
-                                          <String fx:value="icon-sliders" />
+                                          <String fx:value="selected" />
+                                          <String fx:value="container" />
                                        </styleClass>
-                                    </Region>
-                                    <Label styleClass="button-label" text="Logging" HBox.hgrow="NEVER" />
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
+                                       <children>
+                                          <Region HBox.hgrow="NEVER">
+                                             <styleClass>
+                                                <String fx:value="icon" />
+                                                <String fx:value="icon-brand-goole" />
+                                             </styleClass>
+                                          </Region>
+                                          <Label styleClass="button-label" text="Google Sheets" HBox.hgrow="NEVER" />
+                                       </children>
+                                       <styleClass>
+                                          <String fx:value="inactive" />
+                                          <String fx:value="container" />
+                                       </styleClass>
+                                       <StackPane.margin>
+                                          <Insets />
+                                       </StackPane.margin>
+                                    </HBox>
                                  </children>
-                                 <styleClass>
-                                    <String fx:value="inactive" />
-                                    <String fx:value="container" />
-                                 </styleClass>
-                                 <StackPane.margin>
-                                    <Insets />
-                                 </StackPane.margin>
-                              </HBox>
-                           </children>
-                        </StackPane>
-                     </graphic>
-                  </Button>
+                              </StackPane>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
             </VBox>
             <Pane maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS">
