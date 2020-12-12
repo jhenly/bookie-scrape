@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -47,7 +48,9 @@ public class Root {
     @FXML
     private HBox mainTopHBox;
     @FXML
-    private HBox mainMiddleHbox;
+    private HBox rootMiddleHbox;
+    @FXML
+    private BorderPane rootViewPane;
     @FXML
     private HBox bottomRightHBox;
     
@@ -80,6 +83,18 @@ public class Root {
     private double stageXOffset;
     private double stageYOffset;
     
+    private Parent settingsView;
+    private SettingsController settingsController;
+    
+    /**
+     * 
+     * @param settingsController
+     */
+    public void setSettingsView(Parent settingsView,
+        SettingsController settingsController) {
+        this.settingsView = settingsView;
+        this.settingsController = settingsController;
+    }
     
     @FXML
     private void initialize() {}
@@ -87,8 +102,9 @@ public class Root {
     /**
      * Used to record the start of dragging the main window across the screen.
      *
-     * @param event - the mouse pressed event caused by mouse pressing main's
-     *        top HBox
+     * @param event
+     *              - the mouse pressed event caused by mouse pressing main's
+     *              top HBox
      */
     @FXML
     void onMainTopHBoxMousePressed(MouseEvent event) {
@@ -100,8 +116,9 @@ public class Root {
      * Handles dragging the window across the screen after mouse pressing main's
      * top HBox.
      *
-     * @param event - the drag event caused by dragging the main window across
-     *        the screen
+     * @param event
+     *              - the drag event caused by dragging the main window across
+     *              the screen
      */
     @FXML
     void onMainTopHBoxMouseDragged(MouseEvent event) {
@@ -114,7 +131,8 @@ public class Root {
     /**
      * Handles actions coming from the top most close button.
      *
-     * @param event - the action event to handle
+     * @param event
+     *              - the action event to handle
      */
     @FXML
     void onCloseButtonAction(ActionEvent event) {
@@ -125,12 +143,13 @@ public class Root {
     /**
      * Handles actions on the top right most minimize button.
      *
-     * @param event - the action event to handle
+     * @param event
+     *              - the action event to handle
      */
     @FXML
     void onMinimizeButtonAction(ActionEvent event) {
-        Stage stage =
-            (Stage) ((Button) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Button) event.getSource()).getScene()
+            .getWindow();
         
         stage.setIconified(!stage.isIconified());
     }
@@ -138,12 +157,13 @@ public class Root {
     /**
      * Handles actions on the top right most maximize button.
      *
-     * @param event - the action event to handle
+     * @param event
+     *              - the action event to handle
      */
     @FXML
     void onMaximizeButtonAction(ActionEvent event) {
-        Stage stage =
-            (Stage) ((Button) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Button) event.getSource()).getScene()
+            .getWindow();
         
         stage.setMaximized(!stage.isMaximized());
     }
@@ -162,6 +182,7 @@ public class Root {
         switch (topButton.getId()) {
             case SETTINGS_BUTTON_ID:
                 settingsButtonActivated();
+                rootViewPane.setCenter(settingsView);
                 settingsActive = true;
                 logActive = false;
                 break;
@@ -219,17 +240,18 @@ public class Root {
      * &lt;/Button&gt;
      * </pre>
      *
-     * @param button - the button to change the state of, this argument cannot
-     *        be {@code null}
-     * @param state - the state to change to
+     * @param button
+     *               - the button to change the state of, this argument cannot
+     *               be {@code null}
+     * @param state
+     *               - the state to change to
      */
     void changeTopButtonState(Button button, int state) {
         Button btn = Objects.requireNonNull(button);
         
         // get the state nodes' parent container
-        ObservableList<Node> states =
-            ((Parent) btn.getChildrenUnmodifiable().get(0))
-                .getChildrenUnmodifiable();
+        ObservableList<Node> states = ((Parent) btn.getChildrenUnmodifiable()
+            .get(0)).getChildrenUnmodifiable();
         
         Node inactive = states.get(TOP_BTN_INACTIVE_STATE);
         Node selected = states.get(TOP_BTN_SELECTED_STATE);
@@ -262,7 +284,6 @@ public class Root {
     }
     
     
-    private static final String MONEY_LINE =
-        "https://classic.sportsbookreview.com/betting-odds/money-line/";
-
+    private static final String MONEY_LINE = "https://classic.sportsbookreview.com/betting-odds/money-line/";
+    
 }

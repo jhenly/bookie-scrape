@@ -27,12 +27,9 @@
 }
 
 
-.left .flat-button {
+.left .flat-button {  }
 
-}
-
-.left {
-}
+.left {  }
 
 .left .flat-button .icon {
     -fx-size: 12;
@@ -70,3 +67,6 @@
     
 }
 
+.right .scroll {
+    -fx-background-color: transparent;
+}

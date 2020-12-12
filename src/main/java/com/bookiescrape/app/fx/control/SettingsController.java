@@ -17,10 +17,11 @@ import javafx.stage.FileChooser;
  * @author Jonathan Henly
  */
 public class SettingsController {
-
+    
     // reference to main application
     private Main main;
-
+    
+    
     @FXML
     private TextField outputExcelFilePathFeild;
     
@@ -42,20 +43,21 @@ public class SettingsController {
     /**
      * Called by the main application to give a reference to itself.
      *
-     * @param mainRef - reference to Main's controller
+     * @param mainRef
+     *                - reference to Main's controller
      */
     public void setMain(Main mainRef) {
         main = mainRef;
-
+        
         // add observable list data to the table
         // personTable.setItems(mainApp.getPersonData());
     }
     
+    
     @FXML
     void selectOutputExcelFilePath(ActionEvent event) {
         if (outputExcelFilePathFeild.getText() != null
-            || !outputExcelFilePathFeild.getText().isEmpty())
-        {
+            || !outputExcelFilePathFeild.getText().isEmpty()) {
             File positivesCsvFile = exportExcelFile();
             if (positivesCsvFile != null) {
                 String anglesPath = positivesCsvFile.getAbsolutePath();
@@ -63,14 +65,14 @@ public class SettingsController {
             }
         }
     }
-
+    
     private File exportExcelFile() {
         File csvFile = null;
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(
             "Select Folder Where you want to save your Output Excel Sheet");
-        FileChooser.ExtensionFilter emaiLFilter =
-            new FileChooser.ExtensionFilter("Excel File", "*.xlsx");
+        FileChooser.ExtensionFilter emaiLFilter = new FileChooser.ExtensionFilter(
+            "Excel File", "*.xlsx");
         /* FileChooser.ExtensionFilter allFileFilter = new
          * FileChooser.ExtensionFilter( "All Files", "*.*"); */
         fileChooser.getExtensionFilters().add(emaiLFilter);
@@ -84,7 +86,7 @@ public class SettingsController {
         }
         return csvFile;
     }
-
+    
     @FXML
     void startWebScrapping(ActionEvent event) {
         if (!outputExcelFilePathFeild.getText().isEmpty()) {
@@ -98,5 +100,5 @@ public class SettingsController {
             alert.show();
         }
     }
-
+    
 }

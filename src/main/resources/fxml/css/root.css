@@ -101,15 +101,13 @@
 .header {
     -fx-text-fill: #202020;
     -fx-font-size: 24pt;
-    -fx-font-family: 'Nunito Sans';
-    -fx-font-style: 'Regular';
+    -fx-font-family: 'Nunito Sans Regular';
 }
 
 .sub-header {
     -fx-text-fill: #202020;
     -fx-font-size: 20pt;
-    -fx-font-family: 'Nunito Sans';
-    -fx-font-style: 'Regular';
+    -fx-font-family: 'Nunito Sans Regular';
 }
 
 .description { 

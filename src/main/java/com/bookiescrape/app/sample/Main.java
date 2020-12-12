@@ -2,6 +2,7 @@ package com.bookiescrape.app.sample;
 
 import java.io.IOException;
 
+import com.bookiescrape.app.fx.control.Root;
 import com.bookiescrape.app.fx.ui.FontUtils;
 import com.bookiescrape.app.fx.ui.ResizeHelper;
 
@@ -29,11 +30,12 @@ public class Main extends Application {
     /**
      * Entry point of the application.
      *
-     * @param args - command line arguments
+     * @param args
+     *             - command line arguments
      */
     public static void main(String[] args) { launch(args); }
-
-
+    
+    
     // the resulting font directory after packaging jar
     private static final String FONT_DIR_PATH = "/fxml/font/";
     
@@ -44,45 +46,63 @@ public class Main extends Application {
     private static final String LOG_FXML = "/fxml/LogLayout.fxml";
     
     private Stage primaryStage;
-
+    
     private Parent rootView;
     private Parent dashboardView;
     private Parent settingsView;
     private Parent logView;
-
+    
+    private Root rootController;
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-
+        
         // load fonts in '/fxml/font/'
         FontUtils.loadFontsFromResources(FONT_DIR_PATH);
-
+        
         // load the root layout's fxml file
-        rootView = FXMLLoader.load(getClass().getResource(ROOT_FXML));
-
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(ROOT_FXML));
+        rootView = loader.load();
+        
         // create window with no title bar or default min, max, close buttons
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(rootView));
-
+        
         // add listener to stage for window edge resizing
         ResizeHelper.addResizeListener(primaryStage);
-
+        
         primaryStage.show();
-
+        
         setPrimaryStageMinBounds();
-
+        
+        rootController = loader.getController();
+        
         // initialize all of the views
         initViews();
     }
-
+    
     /* initializes all of the views */
     private void initViews() throws IOException {
         // load all of the views
-        dashboardView = FXMLLoader.load(getClass().getResource(DASHBOARD_FXML));
-        settingsView = FXMLLoader.load(getClass().getResource(SETTINGS_FXML));
-        logView = FXMLLoader.load(getClass().getResource(LOG_FXML));
-
-
+        
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(SETTINGS_FXML));
+        settingsView = loader.load();
+        
+        rootController.setSettingsView(settingsView, loader.getController());
+        
+        
+        // logView = FXMLLoader.load(getClass().getResource(LOG_FXML));
+        // dashboardView =
+        // FXMLLoader.load(getClass().getResource(DASHBOARD_FXML));
+        
+        initSettingsView();
+    }
+    
+    private void initSettingsView() {
+        
     }
     
     /* enforces window to not become smaller than root's min bounds */
