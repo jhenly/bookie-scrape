@@ -1,60 +1,190 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
+<?import java.lang.String?>
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
+<?import org.controlsfx.control.ToggleSwitch?>
 
 <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.SettingsController">
    <children>
-      <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="SOMETIMES">
+      <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" styleClass="left" HBox.hgrow="ALWAYS">
          <children>
-            <Pane HBox.hgrow="ALWAYS" />
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+            <Pane maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets right="60.0" />
+               </padding></Pane>
+            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" HBox.hgrow="NEVER">
                <children>
-                  <Button mnemonicParsing="false" styleClass="flat-button" text="Button" VBox.vgrow="NEVER" />
+                  <Button mnemonicParsing="false" styleClass="flat-button" VBox.vgrow="NEVER">
+                     <graphic>
+                        <StackPane>
+                           <children>
+                              <HBox alignment="CENTER" fillHeight="false" StackPane.alignment="CENTER">
+                                 <children>
+                                    <Region HBox.hgrow="NEVER">
+                                       <styleClass>
+                                          <String fx:value="icon" />
+                                          <String fx:value="icon-sliders" />
+                                       </styleClass>
+                                    </Region>
+                                    <Label styleClass="button-label" text="General" HBox.hgrow="NEVER" />
+                                 </children>
+                                 <styleClass>
+                                    <String fx:value="selected" />
+                                    <String fx:value="container" />
+                                 </styleClass>
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </HBox>
+                              <HBox alignment="CENTER" fillHeight="false" visible="false" StackPane.alignment="CENTER">
+                                 <children>
+                                    <Region HBox.hgrow="NEVER">
+                                       <styleClass>
+                                          <String fx:value="icon" />
+                                          <String fx:value="icon-sliders" />
+                                       </styleClass>
+                                    </Region>
+                                    <Label styleClass="button-label" text="General" HBox.hgrow="NEVER" />
+                                 </children>
+                                 <styleClass>
+                                    <String fx:value="inactive" />
+                                    <String fx:value="container" />
+                                 </styleClass>
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                     </graphic>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin></Button>
+                  <Button mnemonicParsing="false" styleClass="flat-button">
+                     <graphic>
+                        <StackPane>
+                           <children>
+                              <HBox alignment="CENTER" fillHeight="false" StackPane.alignment="CENTER">
+                                 <children>
+                                    <Region HBox.hgrow="NEVER">
+                                       <styleClass>
+                                          <String fx:value="icon" />
+                                          <String fx:value="icon-sliders" />
+                                       </styleClass>
+                                    </Region>
+                                    <Label styleClass="button-label" text="Logging" HBox.hgrow="NEVER" />
+                                 </children>
+                                 <styleClass>
+                                    <String fx:value="selected" />
+                                    <String fx:value="container" />
+                                 </styleClass>
+                              </HBox>
+                              <HBox alignment="CENTER" fillHeight="false" StackPane.alignment="CENTER">
+                                 <children>
+                                    <Region HBox.hgrow="NEVER">
+                                       <styleClass>
+                                          <String fx:value="icon" />
+                                          <String fx:value="icon-sliders" />
+                                       </styleClass>
+                                    </Region>
+                                    <Label styleClass="button-label" text="Logging" HBox.hgrow="NEVER" />
+                                 </children>
+                                 <styleClass>
+                                    <String fx:value="inactive" />
+                                    <String fx:value="container" />
+                                 </styleClass>
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                     </graphic>
+                  </Button>
                </children>
             </VBox>
-            <Pane HBox.hgrow="ALWAYS" />
+            <Pane maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets left="60.0" />
+               </padding></Pane>
          </children>
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
       </HBox>
-      <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+      <HBox alignment="TOP_CENTER" styleClass="right" HBox.hgrow="ALWAYS">
          <children>
-            <VBox>
+            <StackPane alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0">
                <children>
-                  <HBox>
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
                      <children>
-                        <Label styleClass="roboto" text="Select Output File" textAlignment="CENTER">
+                        <Label styleClass="header" text="General" textAlignment="CENTER">
                            <font>
                               <Font name="Roboto Black" size="16.0" />
                            </font>
                         </Label>
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="sub-header" text="Adjust how Bookie Scrape behaves according your preferences." textOverrun="CLIP" wrapText="true" VBox.vgrow="NEVER" />
+                        <HBox spacing="16.0">
+                           <children>
+                              <CheckBox mnemonicParsing="false">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </CheckBox>
+                              <Label styleClass="sub-header" text="Start Bookie Scrape when you log in">
+                                 <HBox.margin>
+                                    <Insets top="-3.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
+                           <children>
+                              <TextField fx:id="outputExcelFilePathFeild" promptText="Select Output File Path where you want to store scrapped Data" />
+                              <Button ellipsisString="" onAction="#selectOutputExcelFilePath">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
-                  </HBox>
-                  <HBox>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                  </VBox>
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" visible="false">
                      <children>
-                        <TextField fx:id="outputExcelFilePathFeild" promptText="Select Output File Path where you want to store scrapped Data" />
-                        <JFXButton ellipsisString="" onAction="#selectOutputExcelFilePath">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </JFXButton>
+                        <Label styleClass="header" text="Logging" textAlignment="CENTER">
+                           <font>
+                              <Font name="Roboto Black" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label styleClass="sub-header" text="Label" />
+                        <ToggleSwitch />
+                        <HBox />
                      </children>
-                  </HBox>
+                  </VBox>
                </children>
-            </VBox>
+            </StackPane>
          </children>
       </HBox>
    </children>
    <stylesheets>
       <URL value="@css/root.css" />
       <URL value="@css/icons.css" />
+      <URL value="@css/settings.css" />
    </stylesheets>
 </HBox>

@@ -93,25 +93,34 @@
 }
 
 /* force font anti aliasing */
+
 .text { -fx-font-smoothing-type: gray; }
 
 /* Begin Text Styles */
 
-.text-head {
+.header {
     -fx-text-fill: #202020;
     -fx-font-size: 24pt;
     -fx-font-family: 'Nunito Sans';
+    -fx-font-style: 'Regular';
 }
 
-.text-sub-head {
+.sub-header {
     -fx-text-fill: #202020;
     -fx-font-size: 20pt;
     -fx-font-family: 'Nunito Sans';
+    -fx-font-style: 'Regular';
 }
 
-.text-desc { 
+.description { 
     -fx-text-fill: #71797e;
     -fx-font-size: 18pt;
+    -fx-font-family: 'Nunito Sans';
+}
+
+.sub-description {
+    -fx-text-fill: #71797e;
+    -fx-font-size: 16pt;
     -fx-font-family: 'Nunito Sans';
 }
 
@@ -120,7 +129,7 @@
 
 /* Begin Border Styles */
 
-.border-top-solid { -fx-border-style: solid none none none }
+.border-top-solid { -fx-border-style: solid }
 .border-left-solid { -fx-border-style: none solid none none }
 .border-bottom-solid { -fx-border-style: none none solid none }
 .border-right-solid { -fx-border-style: none none none solid }
@@ -138,26 +147,33 @@
 /* Begin Check Box Styles */
 
 .check-box {
-        selected-box-color: #007bff;
-        box-color: #70787d;
-        mark-color: #f4f4f6;
+    selected-box-color: #007bff;
+    box-color: #70787d;
+    mark-color: #f4f4f6;
 }
 
+/* background color for selected checkbox */
 .check-box:selected > .box {
-        /* background color for selected checkbox */
-        -fx-background-color: selected-box-color;
+    -fx-background-color: selected-box-color;
+    -fx-border-color: transparent;
 }
-
+/* background color of unselected checkbox */ /*
 .check-box > .box {
-        /* background color of unselected checkbox */
-        -fx-background-color: box-color;
+    -fx-background-color: box-color;
 }
+*/
+.check-box > .box {
+    -fx-background-color: transparent;
+    -fx-border-color: box-color;
+    -fx-border-style: solid;
+    -fx-border-radius: 1.9;
+    -fx-border-width: 1.7;
 
-.check-box:selected > .box > .mark,
-.check-box:indeterminate > .box > .mark {
-        /* modify mark color */
-        -fx-background-color: mark-color
+    -fx-padding: 1.6;
 }
+/* modify mark color */
+.check-box:selected > .box > .mark,
+.check-box:indeterminate > .box > .mark { -fx-background-color: mark-color }
 
 /* End Check Box Styles */
 
@@ -170,6 +186,16 @@
 }
 
 /* End Button Styles */
+
+/* Begin Input Box Styles */
+
+.flat-input-box {
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+/* End Input Box Style */
 
 /* --- Begin Main's Top Specific Layout Section --- */
 

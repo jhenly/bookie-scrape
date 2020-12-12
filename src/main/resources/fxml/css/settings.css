@@ -1,0 +1,72 @@
+
+
+.header {
+    -fx-text-fill: #202020;
+    -fx-font-size: 1.8em;
+    -fx-font-family: 'Nunito Sans Regular';
+    -fx-padding: 0 0 6 0;
+}
+
+.sub-header {
+    -fx-text-fill: #202020;
+    -fx-font-size: 1.4em;
+    -fx-font-family: 'Nunito Sans Regular';
+    -fx-padding: 0 0 16 0;
+}
+
+.description { 
+    -fx-text-fill: #71797e;
+    -fx-font-size: 14pt;
+    -fx-font-family: 'Nunito Sans';
+}
+
+.sub-description {
+    -fx-text-fill: #71797e;
+    -fx-font-size: 12pt;
+    -fx-font-family: 'Nunito Sans';
+}
+
+
+.left .flat-button {
+
+}
+
+.left {
+}
+
+.left .flat-button .icon {
+    -fx-size: 12;
+    -fx-min-width: -fx-size;
+    -fx-min-height: -fx-size;
+    -fx-max-width: -fx-size;
+    -fx-max-height: -fx-size;
+    -fx-background-color: #707071;
+}
+
+.left .flat-button .button-label {
+     -fx-font-size: 14;
+     -fx-font-family: 'Nunito Sans';
+}
+
+.left .flat-button .container {
+     -fx-padding: 10 140 10 20;
+     -fx-spacing: 20;
+}
+
+.left .flat-button .inactive:hover { -fx-background-color: #e6eff6 }
+
+.left .flat-button .inactive {
+    -fx-background-color: #f4f4f6;
+    -fx-border-style: solid;
+    -fx-border-width: 0 0 0 4;
+    -fx-border-color: #f4f4f6;
+}
+
+.left .flat-button .selected {
+    -fx-background-color: #d8eaf6;
+    -fx-border-style: solid;
+    -fx-border-width: 0 0 0 4;
+    -fx-border-color: #007bff;
+    
+}
+
