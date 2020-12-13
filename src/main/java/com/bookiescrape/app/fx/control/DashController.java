@@ -10,7 +10,7 @@ import javafx.fxml.FXML;
  *
  * @author Jonathan Henly
  */
-public class Dashboard {
+public class DashController {
     
     // reference to the main application.
     private Main main;
@@ -18,7 +18,7 @@ public class Dashboard {
     /**
      * Constructor is called before the initialize() method.
      */
-    public Dashboard() {}
+    public DashController() {}
     
     /**
      * Initializes the default controller class.

@@ -10,7 +10,7 @@ import javafx.fxml.FXML;
  *
  * @author Jonathan Henly
  */
-public class Log {
+public class LogController {
     
     // reference to main application
     private Main main;
@@ -18,7 +18,7 @@ public class Log {
     /**
      * Default empty constructor used by fxml.
      */
-    public Log() {}
+    public LogController() {}
 
     /**
      * Initializes the default controller class.

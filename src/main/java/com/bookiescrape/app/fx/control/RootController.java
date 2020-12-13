@@ -27,7 +27,7 @@ import javafx.stage.Stage;
  *
  * @author Jonathan Henly
  */
-public class Root {
+public class RootController {
     
     /* Package Private Constants */
     
