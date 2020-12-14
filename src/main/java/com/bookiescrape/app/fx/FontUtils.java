@@ -1,4 +1,4 @@
-package com.bookiescrape.app.fx.ui;
+package com.bookiescrape.app.fx;
 
 import java.io.File;
 import java.io.IOException;
