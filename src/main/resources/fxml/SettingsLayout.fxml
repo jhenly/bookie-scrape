@@ -225,7 +225,7 @@
          <children>
             <StackPane alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" HBox.hgrow="ALWAYS">
                <children>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minViewportHeight="160.0" pannable="true" prefViewportHeight="200.0" styleClass="scroll" visible="false" StackPane.alignment="TOP_LEFT">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minViewportHeight="160.0" pannable="true" prefViewportHeight="200.0" styleClass="scroll" StackPane.alignment="TOP_LEFT">
                      <content>
                         <VBox>
                            <children>
@@ -251,7 +251,7 @@
                               </HBox>
                               <HBox VBox.vgrow="NEVER">
                                  <children>
-                                    <TextField fx:id="outputExcelFilePathFeild" promptText="Select Output File Path where you want to store scrapped Data" />
+                                    <TextField fx:id="outputExcelFilePathFeild" promptText="Select Output File Path where you want to store scrapped Data" styleClass="flat-text-field" />
                                     <Button ellipsisString="" onAction="#selectOutputExcelFilePath">
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
@@ -263,7 +263,7 @@
                         </VBox>
                      </content>
                   </ScrollPane>
-                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" visible="false">
                      <children>
                         <Label styleClass="header" text="Logging" textAlignment="CENTER">
                            <font>

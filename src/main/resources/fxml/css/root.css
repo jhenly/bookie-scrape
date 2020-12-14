@@ -166,7 +166,6 @@
     -fx-border-style: solid;
     -fx-border-radius: 1.9;
     -fx-border-width: 1.7;
-
     -fx-padding: 1.6;
 }
 /* modify mark color */
@@ -228,10 +227,30 @@
 
 /* Begin Input Box Styles */
 
-.flat-input-box {
+.flat-text-field {
     -fx-background-radius: 0;
-    -fx-padding: 0;
+    -fx-padding: 2 0 4 0;
     -fx-background-color: transparent;
+    -fx-border-color: #8e8e8f;
+    -fx-border-width: 0 0 1 0;
+    -fx-prompt-text-fill: #70787d;
+    -fx-text-fill: #1f1f1f;
+}
+
+.flat-text-field:hover {
+    -fx-border-color: #202020;
+    -fx-border-width: 0 0 2 0;
+}
+
+.flat-text-field:focused {
+    -fx-highlight-fill: -fx-accent;
+    -fx-highlight-text-fill: white;
+    -fx-background-color: #ececee;
+    -fx-border-color: #007bff;
+    -fx-border-width: 0 0 2 0;
+    -fx-background-insets: -0.2, 1, -1.4, 3;
+    -fx-background-radius: 3, 2, 4, 0;
+    -fx-prompt-text-fill: transparent;
 }
 
 /* End Input Box Style */
