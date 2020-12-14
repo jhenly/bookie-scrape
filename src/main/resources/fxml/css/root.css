@@ -113,13 +113,13 @@
 .description { 
     -fx-text-fill: #71797e;
     -fx-font-size: 18pt;
-    -fx-font-family: 'Nunito Sans';
+    -fx-font-family: 'Nunito Sans Regular';
 }
 
 .sub-description {
     -fx-text-fill: #71797e;
     -fx-font-size: 16pt;
-    -fx-font-family: 'Nunito Sans';
+    -fx-font-family: 'Nunito Sans Regular';
 }
 
 
@@ -184,6 +184,47 @@
 }
 
 /* End Button Styles */
+
+/* Begin Toggle Switch Styles */
+
+.toggle-switch {}
+
+.toggle-switch-label {
+    -fx-text-fill: #202020;
+    -fx-font-size: 1em;
+    -fx-font-family: 'Nunito Sans Regular';
+    -fx-padding: -2 0 0 10
+}
+
+.toggle-switch .thumb {
+    -fx-background-color: #fafafa;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 1.0em;
+    -fx-padding: 0.75em;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 1, 0.1, 0.0, 1.0);
+}
+
+
+.toggle-switch .thumb-area {
+    -fx-background-radius: 1em;
+    -fx-background-color: #989899;
+    -fx-background-insets: 0, 1;
+    -fx-padding: 0.5em 1.333333em 0.5em 1.333333em;
+}
+
+.toggle-switch:selected .thumb {
+    -fx-background-color: #007bff;
+    -fx-background-insets: 0, 1;
+
+}
+
+.toggle-switch:selected .thumb-area {
+    -fx-background-color: #7ab7fa;
+    -fx-background-insets: 0, 1;
+
+}
+
+/* End Toggle Switch Styles */
 
 /* Begin Input Box Styles */
 

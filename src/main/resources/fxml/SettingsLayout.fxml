@@ -17,9 +17,9 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.ToggleSwitch?>
 
-<HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.SettingsController">
+<HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="settings-hbox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.SettingsController">
    <children>
-      <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" styleClass="left" HBox.hgrow="ALWAYS">
+      <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="411.0" styleClass="left" HBox.hgrow="ALWAYS">
          <children>
             <Pane maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                <padding>
@@ -221,11 +221,11 @@
             <Insets />
          </HBox.margin>
       </HBox>
-      <HBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" styleClass="right" HBox.hgrow="ALWAYS">
+      <HBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="530.0" styleClass="right" HBox.hgrow="ALWAYS">
          <children>
             <StackPane alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" HBox.hgrow="ALWAYS">
                <children>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pannable="true" styleClass="scroll" StackPane.alignment="TOP_LEFT">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minViewportHeight="160.0" pannable="true" prefViewportHeight="200.0" styleClass="scroll" visible="false" StackPane.alignment="TOP_LEFT">
                      <content>
                         <VBox>
                            <children>
@@ -263,7 +263,7 @@
                         </VBox>
                      </content>
                   </ScrollPane>
-                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" visible="false">
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
                         <Label styleClass="header" text="Logging" textAlignment="CENTER">
                            <font>
@@ -271,9 +271,10 @@
                            </font>
                         </Label>
                         <Label styleClass="sub-header" text="Label" />
-                        <HBox>
+                        <HBox styleClass="toggle-switch">
                            <children>
                               <ToggleSwitch />
+                              <Label styleClass="toggle-switch-label" text="Enable logging" />
                            </children></HBox>
                      </children>
                   </VBox>
