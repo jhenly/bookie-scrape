@@ -26,6 +26,9 @@
     -fx-font-family: 'Nunito Sans';
 }
 
+.settings-hbox {
+    -fx-background-color: #f4f4f6;
+}
 
 .left .flat-button {  }
 
