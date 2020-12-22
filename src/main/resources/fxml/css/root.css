@@ -92,20 +92,52 @@
 	-fx-font-family: 'Roboto Italic';
 }
 
+/* Begin Colors Section
+   --------------------- */
+* {
+    /* general colors */
+    -color-black: #202020;
+    -color-window-background: #f4f4f6;
+    -color-top-blue: #2496ed;
+    -color-button-blue: #007bff;
+    
+    /* label related colors */
+    -color-header-black: -color-black;
+    -color-description-gray: #71797e;
+    
+    /* textfield related colors */
+    -color-textfield-text: #1f1f1f;
+    -color-textfield-default-text: #709599;
+    -color-textfield-prompt-text: #b7bbbe;
+    -color-textfield-prompt-settled: #096bd4;
+    -color-textfield-prompt-border: #8e8e8f;
+    -color-textfield-invalid-red: #f44336;
+    
+    /* */
+    -color-primary:#d8d8d8;
+    -color-accent:#F44336;
+    -color-secondary:#1E88E5;
+    -color-dark-primary:#1d1d1d;
+    -color-amber:#ffc400;
+    -color-gray:#666666;
+}
+/* End Colors Section */
+
+
+/* Begin Text Styles */
+
 /* force font anti aliasing */
 
 .text { -fx-font-smoothing-type: gray; }
 
-/* Begin Text Styles */
-
 .header {
-    -fx-text-fill: #202020;
+    -fx-text-fill: -color-black;
     -fx-font-size: 24pt;
     -fx-font-family: 'Nunito Sans Regular';
 }
 
 .sub-header {
-    -fx-text-fill: #202020;
+    -fx-text-fill: -color-black;
     -fx-font-size: 20pt;
     -fx-font-family: 'Nunito Sans Regular';
 }
@@ -145,9 +177,9 @@
 /* Begin Check Box Styles */
 
 .check-box {
-    selected-box-color: #007bff;
+    selected-box-color: -color-button-blue;
     box-color: #70787d;
-    mark-color: #f4f4f6;
+    mark-color: -color-window-background;
 }
 
 /* background color for selected checkbox */
@@ -189,7 +221,7 @@
 .toggle-switch {}
 
 .toggle-switch-label {
-    -fx-text-fill: #202020;
+    -fx-text-fill: -color-black;
     -fx-font-size: 1em;
     -fx-font-family: 'Nunito Sans Regular';
     -fx-padding: -2 0 0 10
@@ -212,7 +244,7 @@
 }
 
 .toggle-switch:selected .thumb {
-    -fx-background-color: #007bff;
+    -fx-background-color: -color-button-blue;
     -fx-background-insets: 0, 1;
 
 }
@@ -220,7 +252,10 @@
 .toggle-switch:selected .thumb-area {
     -fx-background-color: #7ab7fa;
     -fx-background-insets: 0, 1;
+}
 
+.toggle-switch:disabled {
+	-fx-opacity: 0.4;
 }
 
 /* End Toggle Switch Styles */
@@ -258,10 +293,10 @@
 /* --- Begin Main's Top Specific Layout Section --- */
 
 #main-top-hbox {
-	-fx-background-color: #2496ed;
+	-fx-background-color: -color-top-blue;
 }
 
-.top-hbox { -fx-background-color: #2496ed }
+.top-hbox { -fx-background-color: -color-top-blue }
 
 .top-hbox .logo-label-left, .logo-label-right {
     -fx-font-family: "Roboto";
@@ -322,11 +357,11 @@
 /* --- Begin Main's Middle Specific Layout Section --- */
 
 #main-middle-vbox {
-	-fx-background-color: #f4f4f6;
+	-fx-background-color: -color-window-background;
 }
 
 .main-middle-hbox {
-    -fx-background-color: #f4f4f6;
+    -fx-background-color: -color-window-background;
 }
 
 .view-title-bar {}

@@ -234,7 +234,7 @@
                                     <Font name="Roboto Black" size="16.0" />
                                  </font>
                               </Label>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="sub-header" text="Adjust how Bookie Scrape behaves according your preferences." textOverrun="CLIP" wrapText="true" VBox.vgrow="NEVER" />
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="sub-header" text="Adjust how Bookie Scrape behaves according to your preferences." textOverrun="CLIP" wrapText="true" VBox.vgrow="NEVER" />
                               <HBox spacing="16.0">
                                  <children>
                                     <CheckBox mnemonicParsing="false">
