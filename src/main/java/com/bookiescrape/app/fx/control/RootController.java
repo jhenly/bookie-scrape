@@ -12,6 +12,7 @@ import com.bookiescrape.app.fx.FXMLReference;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
@@ -95,7 +96,7 @@ public class RootController {
     
     // root view reference
     private Parent rootView;
-
+    
     /* root view's sub views and their controllers */
     private Parent dashView;
     private DashController dashController;
@@ -103,13 +104,13 @@ public class RootController {
     private SettingsController settingsController;
     private Parent logView;
     private LogController logController;
-
+    
     // reference to the actively showing view
     private Parent activeView;
     
     @FXML
     private void initialize() {}
-
+    
     /**
      * Sets root's reference to the primary stage.
      *
@@ -127,7 +128,7 @@ public class RootController {
      * @see FXMLLoader#load()
      */
     public void setRootView(Parent rootView) { this.rootView = rootView; }
-
+    
     /**
      * Sets root's references to the dashboard view and dashboard controller.
      * <p>
@@ -157,7 +158,7 @@ public class RootController {
         settingsView = settingsReference.getView();
         settingsController = settingsReference.getController();
     }
-
+    
     /**
      * Sets root's references to the log view and log controller.
      * <p>
@@ -200,6 +201,10 @@ public class RootController {
         stage.setY(event.getScreenY() - stageYOffset);
     }
     
+    public void setCloseToTrayIcon(EventHandler<ActionEvent> handler) {
+        
+    }
+    
     /**
      * Handles actions coming from the top most close button.
      *
@@ -218,8 +223,7 @@ public class RootController {
      */
     @FXML
     void onMinimizeButtonAction(ActionEvent event) {
-        Stage stage =
-            (Stage) ((Button) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         
         stage.setIconified(!stage.isIconified());
     }
@@ -231,8 +235,7 @@ public class RootController {
      */
     @FXML
     void onMaximizeButtonAction(ActionEvent event) {
-        Stage stage =
-            (Stage) ((Button) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         
         stage.setMaximized(!stage.isMaximized());
     }
@@ -316,9 +319,7 @@ public class RootController {
         Button btn = Objects.requireNonNull(button);
         
         // get the state nodes' parent container
-        ObservableList<Node> states =
-            ((Parent) btn.getChildrenUnmodifiable().get(0))
-                .getChildrenUnmodifiable();
+        ObservableList<Node> states = ((Parent) btn.getChildrenUnmodifiable().get(0)).getChildrenUnmodifiable();
         
         Node inactive = states.get(TOP_BTN_INACTIVE_STATE);
         Node selected = states.get(TOP_BTN_SELECTED_STATE);
@@ -336,7 +337,7 @@ public class RootController {
         // change view to settings view
         rootViewPane.setCenter(settingsView);
         activeView = settingsView;
-
+        
         setPrimaryStageMinBounds();
     }
     
@@ -349,7 +350,7 @@ public class RootController {
         // change view to log view
         rootViewPane.setCenter(logView);
         activeView = logView;
-
+        
         setPrimaryStageMinBounds();
     }
     
@@ -379,8 +380,7 @@ public class RootController {
     }
     
     
-    private static final String MONEY_LINE =
-        "https://classic.sportsbookreview.com/betting-odds/money-line/";
+    private static final String MONEY_LINE = "https://classic.sportsbookreview.com/betting-odds/money-line/";
     
     /* enforces window to not become smaller than root's min bounds */
     private void setPrimaryStageMinBounds() {
@@ -388,23 +388,19 @@ public class RootController {
         Bounds rootPrefBounds = getPrefBounds(rootView);
         Bounds activePrefBounds = getPrefBounds(activeView);
         
-        double minWidth =
-            (rootPrefBounds.getWidth() - activePrefBounds.getWidth() > 0.0)
-                ? rootPrefBounds.getWidth() : activePrefBounds.getWidth();
-        double minHeight =
-            rootPrefBounds.getHeight() + activePrefBounds.getHeight();
-
+        double minWidth = (rootPrefBounds.getWidth() - activePrefBounds.getWidth() > 0.0) ? rootPrefBounds.getWidth()
+            : activePrefBounds.getWidth();
+        double minHeight = rootPrefBounds.getHeight() + activePrefBounds.getHeight();
+        
         primaryStage.setMinWidth(minWidth);
         primaryStage.setMinHeight(minHeight);
     }
-
+    
     private void printBounds(String name, Bounds toPrint) {
-        System.out.printf("%s bounds -  width: %.1f  height: %.1f%n", name,
-            toPrint.getWidth(), toPrint.getHeight());
+        System.out.printf("%s bounds -  width: %.1f  height: %.1f%n", name, toPrint.getWidth(), toPrint.getHeight());
         double deltaW = primaryStage.getWidth() - toPrint.getWidth();
         double deltaH = primaryStage.getHeight() - toPrint.getHeight();
-        System.out.printf("%s deltas -  deltaW: %.1f  deltaH: %.1f%n", name,
-            deltaW, deltaH);
+        System.out.printf("%s deltas -  deltaW: %.1f  deltaH: %.1f%n", name, deltaW, deltaH);
     }
     
     /**

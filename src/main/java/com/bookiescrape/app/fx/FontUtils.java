@@ -24,12 +24,16 @@ import javafx.scene.text.Font;
 
 /**
  * Utility class that consists exclusively of static methods pertaining to
- * fonts.
- *
+ * the loading of fonts.
+ * <p>
+ * The font file types that this utility class is currently able th load follow:
+ * <pre><code>.ttf .otf .ttc .woff .woff2</code></pre>
+ * 
  * @author Jonathan Henly
+ * @see javafx.scene.text.Font
  */
 public final class FontUtils {
-
+    
     // true type font file extension
     private static final String TTF_EXT = ".ttf";
     // open type font file extension
@@ -41,13 +45,16 @@ public final class FontUtils {
     // web font type
     private static final String WOFF2_EXT = ".woff2";
     // list of font file extensions
-    private static final List<String> VALID_FONT_EXTS =
-        List.of(TTF_EXT, OTF_EXT, TTC_EXT, WOFF_EXT, WOFF2_EXT);
-
+    private static final List<String> VALID_FONT_EXTS = List.of(TTF_EXT, OTF_EXT, TTC_EXT, WOFF_EXT, WOFF2_EXT);
+    
+    /* different file schemes */
+    private static final String FILE_SCHEME = "file://";
+    private static final String JAR_SCHEME = "jar";
+    
     // don't subclass this class
     private FontUtils() {}
-
-
+    
+    
     /**
      * Loads all of the valid font files in a specified directory.
      * <p>
@@ -62,13 +69,11 @@ public final class FontUtils {
      * @see Font#loadFont(InputStream, double)
      * @see Font#loadFonts(InputStream, double)
      */
-    public static List<Font> loadFontsInDirectory(File fontDir)
-        throws IOException
-    {
+    public static List<Font> loadFontsInDirectory(File fontDir) throws IOException {
         Path dir = validateDirectory(fontDir);
         return loadFontsInDirectoryHelper(dir);
     }
-
+    
     /**
      * Loads all of the valid font files in a specified directory.
      * <p>
@@ -84,18 +89,14 @@ public final class FontUtils {
      * @see Font#loadFont(InputStream, double)
      * @see Font#loadFonts(InputStream, double)
      */
-    public static List<Font> loadFontsInDirectory(Path fontDir)
-        throws IOException
-    {
+    public static List<Font> loadFontsInDirectory(Path fontDir) throws IOException {
         Path dir = validateDirectory(fontDir);
         return loadFontsInDirectoryHelper(dir);
     }
     
     /* helper method that loads fonts from a specified directory */
-    private static List<Font> loadFontsInDirectoryHelper(Path dir)
-        throws IOException
-    {
-        final List<String> fontFiles = getFontFilesInDirectory(dir, "file://");
+    private static List<Font> loadFontsInDirectoryHelper(Path dir) throws IOException {
+        final List<String> fontFiles = getFontFilesInDirectory(dir, FILE_SCHEME);
         return checkAndLogFontsFromDirectory(fontFiles, dir);
     }
     
@@ -114,71 +115,60 @@ public final class FontUtils {
      * @see Font#loadFont(InputStream, double)
      * @see Font#loadFonts(InputStream, double)
      */
-    public static List<Font> loadFontsFromResources(String resDir)
-        throws IOException
-    {
+    public static List<Font> loadFontsFromResources(String resDir) throws IOException {
         URI resUri = validateResourceDirectory(resDir);
         return loadFontsInResourcesDirectory(resDir, resUri);
     }
-
+    
+    
     /* loadFontsInResourcesDirectory helper method */
-    private static List<Font>
-    loadFontsInResourcesDirectory(String resDir, URI resUri) throws IOException
-    {
+    private static List<Font> loadFontsInResourcesDirectory(String resDir, URI resUri) throws IOException {
         final List<String> fontFiles;
         final Path resDirPath;
-        if (resUri.getScheme().equals("jar")) {
+        if (resUri.getScheme().equals(JAR_SCHEME)) {
             
             // get jar's font directory, jar file system needs to be closed
-            try (final FileSystem jarFile =
-                FileSystems.newFileSystem(resUri, Collections.emptyMap()))
-            {
-                System.out.println("IN JAR FILE");
+            try (final FileSystem jarFile = FileSystems.newFileSystem(resUri, Collections.emptyMap())) {
                 resDirPath = jarFile.getPath(resDir);
                 // load fonts from jar file's font directory
                 fontFiles = getFontFilesInDirectory(resDirPath, "");
             }
-
-            return checkAndLogFontsFromResources(fontFiles, resDirPath);
-        } else {
             
-            resDirPath = Paths.get(resUri);
-            fontFiles = getFontFilesInDirectory(resDirPath, "file://");
-
-            return checkAndLogFontsFromDirectory(fontFiles, resDirPath);
+            return checkAndLogFontsFromResources(fontFiles, resDirPath);
         }
+        
+        resDirPath = Paths.get(resUri);
+        fontFiles = getFontFilesInDirectory(resDirPath, FILE_SCHEME);
+        
+        return checkAndLogFontsFromDirectory(fontFiles, resDirPath);
         
     }
     
     /* helper method that gets the files in a specified directory */
-    private static List<String>
-    getFontFilesInDirectory(Path fontDir, String scheme) throws IOException
-    {
+    private static List<String> getFontFilesInDirectory(Path fontDir, String scheme) throws IOException {
         final List<String> fontFiles;
-
+        
         // build list of font files in specified font directory
         try (final Stream<Path> paths = Files.list(fontDir)) {
-
+            
             // only include files that have an extension in VALID_FONT_EXTS
-            fontFiles = paths.filter(p -> fontPathHasValidFileExtension(p))
-                .map(p -> scheme + p.toString()).collect(Collectors.toList());
-
+            fontFiles = paths.filter(p -> fontPathHasValidFileExtension(p)).map(p -> scheme + p.toString())
+                .collect(Collectors.toList());
+            
         }
         
         return fontFiles;
     }
     
     /* helper method that loads and if necessary, logs loaded fonts */
-    private static List<Font>
-    checkAndLogFontsFromDirectory(List<String> fontFiles, Path dir)
-    {
+    private static List<Font> checkAndLogFontsFromDirectory(List<String> fontFiles, Path dir) {
         final List<Font> loadedFonts;
         
         if (fontFiles != null && !fontFiles.isEmpty()) {
             loadedFonts = loadFontsFromDirectory(fontFiles);
         } else {
-            System.out.printf("no font files where loaded from [ %s ]%n",
-                dir.toString());
+            // TASK incorporate 3rd party logger
+            System.out.printf("no font files where loaded from [ %s ]%n", dir.toString());
             loadedFonts = Collections.emptyList();
         }
         
@@ -186,22 +176,20 @@ public final class FontUtils {
     }
     
     /* helper method that loads and if necessary, logs loaded fonts */
-    private static List<Font>
-    checkAndLogFontsFromResources(List<String> fontFiles, Path dir)
-    {
+    private static List<Font> checkAndLogFontsFromResources(List<String> fontFiles, Path dir) {
         final List<Font> loadedFonts;
         
         if (fontFiles != null && !fontFiles.isEmpty()) {
             loadedFonts = loadFontsFromResources(fontFiles);
         } else {
-            System.out.printf("no font files where loaded from [ %s ]%n",
-                dir.toString());
+            // TASK incorporate 3rd party logger
+            System.out.printf("no font files where loaded from [ %s ]%n", dir.toString());
             loadedFonts = Collections.emptyList();
         }
         
         return loadedFonts;
     }
-
+    
     /**
      * Fonts just need to be loaded in code, afterward they can be used with
      * CSS.
@@ -272,7 +260,7 @@ public final class FontUtils {
         
         return loadedFonts;
     }
-
+    
     // this value doesn't matter but it must be > 0
     private static final double ARBITRARY_DOUBLE = 12.0;
     
@@ -280,16 +268,18 @@ public final class FontUtils {
     private static Font[] loadTTCFont(InputStream is, String font) {
         // true type collection needs to use Font.loadFonts
         final Font[] ff = Font.loadFonts(is, ARBITRARY_DOUBLE);
-
+        
         // debug
         if (ff == null) {
             logFontNotLoaded(font);
         } else {
             for (Font f : ff) {
+                // TODO next line is used to figure out font family names in
+                // TTCs during development, remove in preproduction
                 System.out.printf("font: [%s] has [%s]%n", font, f.toString());
             }
         }
-
+        
         return ff;
     }
     
@@ -297,50 +287,60 @@ public final class FontUtils {
     private static Font[] loadTTCFont(String font) {
         // true type collection needs to use Font.loadFonts
         final Font[] ff = Font.loadFonts(font, ARBITRARY_DOUBLE);
-
+        
         // debug
         if (ff == null) {
             logFontNotLoaded(font);
         } else {
             for (Font f : ff) {
+                // TASK next line is used to figure out font family names in
+                // TTCs during development, remove in preproduction
                 System.out.printf("font: [%s] has [%s]%n", font, f.toString());
             }
         }
-
+        
         return ff;
     }
     
     /* loads non TTC fonts from resource stream */
     private static Font loadFont(InputStream is, String font) {
         final Font f = Font.loadFont(is, ARBITRARY_DOUBLE);
-
+        
         // debug
         if (f == null) {
             logFontNotLoaded(font);
         } else {
-            System.out.printf("font: [%s] has has been loaded as [%s]%n", font,
-                f.toString());
+            // TASK next line is used to figure out font family names during development,
+            // remove in preproduction
+            System.out.printf("font: [%s] has has been loaded as [%s]%n", font, f.toString());
         }
-
-        return f;
-    }
-
-    /* loads non TTC fonts from string url */
-    private static Font loadFont(String font) {
-        final Font f = Font.loadFont(font, ARBITRARY_DOUBLE);
-
-        // debug
-        if (f == null) {
-            logFontNotLoaded(font);
-        } else {
-            System.out.printf("font: [%s] has has been loaded as [%s]%n", font,
-                f.toString());
-        }
-
+        
         return f;
     }
     
-    /* logs that a font was not loaded */
+    /* loads non TTC fonts from string url */
+    private static Font loadFont(String font) {
+        final Font f = Font.loadFont(font, ARBITRARY_DOUBLE);
+        
+        // debug
+        if (f == null) {
+            logFontNotLoaded(font);
+        } else {
+            // TASK next line is used to figure out font family names during development,
+            // remove in preproduction
+            System.out.printf("font: [%s] has has been loaded as [%s]%n", font, f.toString());
+        }
+        
+        return f;
+    }
+    
+    // TODO incorporate 3rd party logger with different severity levels
+    // like severe, warning, info, ...
+    
+    /** 
+     * Logs that a font was not loaded, the JavaFX {@link Font} class does not 
+     * specify why so we can't either.
+     */
     private static void logFontNotLoaded(String font) {
         System.out.printf("the font [ %s ] was not loaded%n", font);
     }
@@ -352,7 +352,7 @@ public final class FontUtils {
         }
         return false;
     }
-
+    
     /* helper method that validates a path argument */
     private static Path validateDirectory(Path dirPath) {
         Path dir = Objects.requireNonNull(dirPath);
@@ -368,27 +368,25 @@ public final class FontUtils {
     private static Path validateDirectory(final File dirPath) {
         final File dir = Objects.requireNonNull(dirPath);
         final Path path;
-
+        
         try {
             path = dir.toPath();
         } catch (Exception e) {
-            throw new IllegalArgumentException(String.format(
-                "the path [ %s ] is not a valid path", dirPath.getPath()));
+            throw new IllegalArgumentException(String.format("the path [ %s ] is not a valid path", dirPath.getPath()));
         }
-
+        
         return validateDirectory(path);
     }
     
     /* helper method validates a resource directory path */
     private static URI validateResourceDirectory(String resPath) {
         final String path = Objects.requireNonNull(resPath);
-
+        
         final URL resource = FontUtils.class.getResource(path);
         if (resource == null) {
-            throw new IllegalArgumentException(String
-                .format("the resource directory [ %s ] does not exist", path));
+            throw new IllegalArgumentException(String.format("the resource directory [ %s ] does not exist", path));
         }
-
+        
         final URI resourceUri;
         try {
             resourceUri = resource.toURI();
@@ -402,17 +400,15 @@ public final class FontUtils {
     /* helper method that throws an IAException if a path does not exist */
     private static void throwIfPathDoesNotExist(Path path) {
         if (!Files.exists(path)) {
-            throw new IllegalArgumentException(String
-                .format("the path [ %s ] does not exist", path.toString()));
+            throw new IllegalArgumentException(String.format("the path [ %s ] does not exist", path.toString()));
         }
     }
     
-    /* helper method that throws if a path does not point to a driectory */
+    /* helper method that throws if a path does not point to a directory */
     private static void throwIfNonDirectory(Path dir) {
         if (!Files.isDirectory(dir)) {
             throw new IllegalArgumentException(
-                String.format("the path [ %s ] does not point to a directory",
-                    dir.toString()));
+                String.format("the path [ %s ] does not point to a directory", dir.toString()));
         }
     }
     
