@@ -18,6 +18,16 @@
     <maven.compiler.target>11</maven.compiler.target>
   </properties>
 
+  <repositories>
+  
+    <!-- local jui-fx repository -->
+    <repository>
+        <id>jui-fx</id>
+        <url>file:///${project.basedir}/jui-fx</url>
+    </repository>
+  
+  </repositories>
+  
   <!-- Good Maven Repository Site: https://mvnrepository.com -->
   
   <dependencies>
@@ -29,6 +39,16 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- Begin jui-fx Dependencies -->
+    <!-- local dependency located in ./jui-fx directory -->
+    <dependency>
+      <groupId>com.jhenly</groupId>
+      <artifactId>jui-fx</artifactId>
+      <version>0.0.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <!-- End jui-fx Dependencies -->
+    
     <!-- Begin HtmlUnit Dependencies -->
     <dependency>
       <groupId>net.sourceforge.htmlunit</groupId>

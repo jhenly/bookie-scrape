@@ -9,6 +9,7 @@ import com.bookiescrape.app.fx.ui.ResizeHelper;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -19,15 +20,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+
 /**
- * Abstract class that's used by {@link Main} to launch the
+ * Abstract class that's used by {@link Main} to launch and handle the
  * {@link javafx.application.Application}.
- * 
+ *
  * @author Jonathan Henly
  * @see Main
  *
  */
-abstract class FXLauncher extends Application {
+abstract class ApplicationHandler extends Application {
     
     // the font resource path
     private static final String FONT_RES_PATH = "/fxml/font/";
@@ -38,6 +40,10 @@ abstract class FXLauncher extends Application {
     private static final String SETTINGS_FXML = "/fxml/SettingsLayout.fxml";
     private static final String LOG_FXML = "/fxml/LogLayout.fxml";
     
+// TASK following code is used with SystemTray which does not currently work
+//      on Linux/Unix
+//    private SystemTrayController trayControl;
+
     private Stage primaryStage;
     
     private Parent rootView;
@@ -63,6 +69,17 @@ abstract class FXLauncher extends Application {
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(rootView));
         
+// TASK following code is used with SystemTray which does not currently work
+//      on Linux/Unix
+//
+//        System.out.println("PRE TRAY");
+//        try {
+//            trayControl = new SystemTrayController();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println("POST TRAY");
+
         // add listener to stage for window edge resizing
         ResizeHelper.addResizeListener(primaryStage);
         
@@ -79,6 +96,14 @@ abstract class FXLauncher extends Application {
         
         // finally show the dashboard
         rootController.showDashboard();
+
+    }
+    
+    @Override
+    public void stop() throws Exception {
+// TASK following code is used with SystemTray which does not currently work
+//      on Linux/Unix
+//        trayControl.shutdown();
     }
     
     /* load all of the views into FXMLReferences and give the references to the root
@@ -160,25 +185,31 @@ abstract class FXLauncher extends Application {
      *                                                                        *
      *************************************************************************/
     
-    /** 
-     * Returns an action handler that handle minimization of the
-     * application.
-     * 
-     * @param action - action resulting from an action on the application's
-     *        minimize button
+    /**
+     * Returns an event handler that handles actions on the applications
+     * minimize button.
+     *
+     * @return application's minimize button action event handler
      */
-    protected abstract void onApplicationMinimize(ActionEvent action);
+    protected abstract EventHandler<ActionEvent> getApplicationMinimizeHandler();
     
-    public Action
+    /**
+     * Returns an event handler that handles actions on the applications close
+     * button.
+     *
+     * @return application's close button action event handler
+     */
+    protected abstract EventHandler<ActionEvent> getApplicationCloseHandler();
+    
     
     /**************************************************************************
      *                                                                        *
-     * Package Private API                                                    *
+     * Protected API                                                    *
      *                                                                        *
      *************************************************************************/
-    
+    //
     /**
-    * No-arg constructor solely for implementing class(es).
-    */
-    protected FXLauncher() { super(); }
+     * No-arg constructor solely for implementing class(es).
+     */
+    public ApplicationHandler() {}
 }
