@@ -1,7 +1,5 @@
 package com.bookiescrape.app.fx.control;
 
-import com.bookiescrape.app.sample.Main;
-
 import javafx.fxml.FXML;
 
 
@@ -10,36 +8,19 @@ import javafx.fxml.FXML;
  *
  * @author Jonathan Henly
  */
-public class LogController {
+public class LogController extends MediatableController {
     
-    // reference to main application
-    private Main main;
-
     /**
      * Default empty constructor used by fxml.
      */
     public LogController() {}
-
+    
     /**
      * Initializes the default controller class.
      * <p>
      * This method is automatically called after the fxml file has been loaded.
      */
     @FXML
-    private void initialize() {
-        
-    }
-    
-    /**
-     * Called by the main application to give a reference to itself.
-     *
-     * @param mainRef - reference to Main's controller
-     */
-    public void setMain(Main mainRef) {
-        main = mainRef;
-        
-        // add observable list data to the table
-        // personTable.setItems(mainApp.getPersonData());
-    }
+    private void initialize() {}
     
 }

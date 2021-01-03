@@ -21,14 +21,14 @@ public class FXMLReference {
     private URL fxmlUrl;
     private Parent view;
     private Object controller;
-
+    
     /* loads an fxml view and controller */
     private FXMLReference(URL url, FXMLLoader loader) throws IOException {
         fxmlUrl = url;
         view = loader.load();
         controller = loader.getController();
     }
-
+    
     /**
      * Creates an instance of this class from calling
      * {@code FXMLLoader.setLocation(fxmlUrl)} and {@code FXMLLoader.load()}.
@@ -50,8 +50,7 @@ public class FXMLReference {
         
         return ref;
     }
-
-
+    
     /**
      * Returns the controller associated with the loaded view.
      *
@@ -62,7 +61,7 @@ public class FXMLReference {
      */
     @SuppressWarnings("unchecked")
     public <T> T getController() { return (T) controller; }
-
+    
     /**
      * Returns the view loaded from {@code FXMLLoader.load()}.
      *
@@ -70,13 +69,13 @@ public class FXMLReference {
      * @see FXMLLoader#load()
      */
     public Parent getView() { return view; }
-
+    
     /**
      * Gets the URL used to load this {@code FXMLReference} instance.
      *
      * @return the URL used to load this {@code FXMLReference} instance
      */
     public URL getUrl() { return fxmlUrl; }
-
+    
 }
 

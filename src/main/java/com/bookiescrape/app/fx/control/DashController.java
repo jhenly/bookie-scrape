@@ -1,7 +1,5 @@
 package com.bookiescrape.app.fx.control;
 
-import com.bookiescrape.app.sample.Main;
-
 import javafx.fxml.FXML;
 
 
@@ -10,10 +8,7 @@ import javafx.fxml.FXML;
  *
  * @author Jonathan Henly
  */
-public class DashController {
-    
-    // reference to the main application.
-    private Main main;
+public class DashController extends MediatableController {
     
     /**
      * Constructor is called before the initialize() method.
@@ -28,23 +23,11 @@ public class DashController {
     @FXML
     private void initialize() {
         // initialize the person table with the two columns.
-
+        
         // firstNameColumn.setCellValueFactory(cellData ->
         // cellData.getValue().firstNameProperty());
         // lastNameColumn.setCellValueFactory(cellData ->
         // cellData.getValue().lastNameProperty());
     }
     
-    /**
-     * Called by the main application to give a reference to itself.
-     *
-     * @param mainRef - reference to Main's controller
-     */
-    public void setMain(Main mainRef) {
-        main = mainRef;
-        
-        // add observable list data to the table
-        // personTable.setItems(mainApp.getPersonData());
-    }
-
 }

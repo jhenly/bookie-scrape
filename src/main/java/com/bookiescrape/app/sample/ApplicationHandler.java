@@ -4,13 +4,13 @@ import java.io.IOException;
 
 import com.bookiescrape.app.fx.FXMLReference;
 import com.bookiescrape.app.fx.FontUtils;
-import com.bookiescrape.app.fx.control.RootController;
+import com.bookiescrape.app.fx.control.ControllerMediator;
 import com.bookiescrape.app.fx.ui.ResizeHelper;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Orientation;
@@ -27,9 +27,8 @@ import javafx.stage.StageStyle;
  *
  * @author Jonathan Henly
  * @see Main
- *
  */
-abstract class ApplicationHandler extends Application {
+public abstract class ApplicationHandler extends Application {
     
     // the font resource path
     private static final String FONT_RES_PATH = "/fxml/font/";
@@ -40,98 +39,109 @@ abstract class ApplicationHandler extends Application {
     private static final String SETTINGS_FXML = "/fxml/SettingsLayout.fxml";
     private static final String LOG_FXML = "/fxml/LogLayout.fxml";
     
-// TASK following code is used with SystemTray which does not currently work
-//      on Linux/Unix
-//    private SystemTrayController trayControl;
-
     private Stage primaryStage;
     
-    private Parent rootView;
-    private Parent dashView;
-    private Parent settingsView;
-    private Parent logView;
+    private ControllerMediator controllerMediator;
     
-    private RootController rootController;
+    // used by stage's scene, set by loadFxmlAndCreateControllerMediator()
+    private Parent rootView;
+    
+    
+    /**
+     * JavaFX needed no-arg constructor .
+     */
+    public ApplicationHandler() {}
     
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public final void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
+        
+        try {
+            // load all of the fxml files and create controller mediator
+            controllerMediator = loadFxmlAndCreateControllerMediator();
+            
+        } catch (Exception e) {
+            // TODO properly notify user of unrecoverable exception
+            System.err.println(e.getMessage());
+            
+            e.printStackTrace();
+            /* exception is unrecoverable, exit javafx */
+            Platform.exit();
+        }
+        
+        // allow system tray supporting implementing classes to do their thing
+        setUpSystemTrayIfSupported();
+        
+        // configure and set up listeners in controller mediator
+        configureControllerMediator();
         
         // load fonts from resources
         FontUtils.loadFontsFromResources(FONT_RES_PATH);
-        
-        // load the root layout's fxml file
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource(ROOT_FXML));
-        rootView = loader.load();
         
         // create window with no title bar or default min, max, close buttons
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(rootView));
         
-// TASK following code is used with SystemTray which does not currently work
-//      on Linux/Unix
-//
-//        System.out.println("PRE TRAY");
-//        try {
-//            trayControl = new SystemTrayController();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        System.out.println("POST TRAY");
-
         // add listener to stage for window edge resizing
         ResizeHelper.addResizeListener(primaryStage);
         
         primaryStage.show();
         
+        // TODO hide stage if app should start minimized in system tray
+        
+        controllerMediator.requestShowDashboardView();
+        
         setPrimaryStageMinBounds();
-        
-        rootController = loader.getController();
-        rootController.setPrimaryStage(primaryStage);
-        rootController.setRootView(rootView);
-        
-        // initialize all of the fxml files
-        initFxmlReferences();
-        
-        // finally show the dashboard
-        rootController.showDashboard();
-
     }
     
-    @Override
-    public void stop() throws Exception {
-// TASK following code is used with SystemTray which does not currently work
-//      on Linux/Unix
-//        trayControl.shutdown();
+    
+    /** 
+     * Loads all of the fxmls into FXMLReferences and creates a
+     * ControllerMediator from them.
+     * <p>
+     * This must be called after the primary stage has been set.
+     */
+    private ControllerMediator loadFxmlAndCreateControllerMediator() throws IOException {
+        // load fxml references from fxml file
+        FXMLReference rootReference = loadReference(ROOT_FXML);
+        FXMLReference dashReference = loadReference(DASHBOARD_FXML);
+        FXMLReference settingsReference = loadReference(SETTINGS_FXML);
+        FXMLReference logReference = loadReference(LOG_FXML);
+        
+        // need this to init stage's scene
+        rootView = rootReference.getView();
+        
+        return new ControllerMediator(primaryStage, rootReference, dashReference, settingsReference, logReference);
     }
     
-    /* load all of the views into FXMLReferences and give the references to the root
-     * controller */
-    private void initFxmlReferences() throws IOException {
-        // load dashboard reference from fxml file
-        FXMLReference dashReference = FXMLReference.loadFxml(getClass().getResource(DASHBOARD_FXML));
-        // set dashboard reference in root
-        rootController.setDashReference(dashReference);
-        
-        // load settings reference from fxml file
-        FXMLReference settingsReference = FXMLReference.loadFxml(getClass().getResource(SETTINGS_FXML));
-        // set settings reference in root
-        rootController.setSettingsReference(settingsReference);
-        
-        // load log reference from fxml file
-        FXMLReference logReference = FXMLReference.loadFxml(getClass().getResource(LOG_FXML));
-        // set log reference in root
-        rootController.setLogReference(logReference);
+    /** Convenience helper that loads fxml references. */
+    private static FXMLReference loadReference(String ref) throws IOException {
+        return FXMLReference.loadFxml(ApplicationHandler.class.getResource(ref));
     }
     
-    private void initSettingsView() {
+    /**
+     * Helper method that configures and sets up handlers in controller
+     * mediator.
+     */
+    private void configureControllerMediator() {
+        /* set application control button handlers */
+        controllerMediator.setOnWindowCloseButtonActionHandler(getApplicationCloseButtonHandler());
+        controllerMediator.setOnWindowMinimizeButtonActionHandler(getApplicationMinimizeButtonHandler());
+        controllerMediator.setOnWindowMinimizeButtonActionHandler(getApplicationMaximizeButtonHandler());
+    }
+    
+    /** Allow system tray supporting implementing classes to do their thing. */
+    private void setUpSystemTrayIfSupported() {
+        // do nothing if system tray is not supported
+        if (!systemTrayIsSupported()) { return; }
         
-        Bounds rootBounds = getPrefBounds(rootView);
-        Bounds settingsBounds = getPrefBounds(settingsView);
-        System.out.printf("pref root width: %.1f  height: %.1f%n", rootBounds.getWidth(), rootBounds.getHeight());
-        System.out.printf("pref settings width: %.1f  height: %.1f%n", settingsBounds.getWidth(),
-            settingsBounds.getHeight());
+        try {
+            // call 'this' abstract method
+            setUpSystemTray();
+        } catch (Exception e) {
+            // TODO properly log any exception
+            System.err.println(e.getMessage());
+        }
     }
     
     /* enforces window to not become smaller than root's min bounds */
@@ -186,30 +196,83 @@ abstract class ApplicationHandler extends Application {
      *************************************************************************/
     
     /**
+     * Returns {@code true} if the system tray is supported, otherwise 
+     * {@code false}.
+     * 
+     * @return {@code true} if the system tray is supported, otherwise
+     *         {@code false}
+     */
+    public abstract boolean systemTrayIsSupported();
+    
+    /**
+     * Returns the {@code SystemTrayController} associated with this application
+     * launcher if one exists, otherwise this method returns {@code null}.
+     * <p>
+     * The {@link #systemTrayIsSupported()} method should be used before this
+     * method to check if this application launcher has an associated
+     * {@code SystemTrayController}.
+     * 
+     * @return the {@code SystemTrayController} associated with this application
+     *         launcher, or {@code null} if this application launcher does not
+     *         have an associated {@code SystemTrayController}
+     * @see SystemTrayController
+     */
+    protected abstract SystemTrayController getSystemTrayController();
+    
+    /**
+     * Called from the {@link #start(Stage)} method after assigning primary
+     * stage and loading fxml into the controller mediator.
+     * <p>
+     * Implementing classes that have system tray support should override this
+     * method to set up the system tray.
+     */
+    protected abstract void setUpSystemTray();
+    
+    /**************************************************************************
+     *                                                                        *
+     * Protected API                                                          *
+     *                                                                        *
+     *************************************************************************/
+    
+    /**
+     * Gets the controller mediator instance.
+     * @return the controller mediator
+     */
+    protected ControllerMediator getControllerMediator() { return controllerMediator; }
+    
+    /**
      * Returns an event handler that handles actions on the applications
      * minimize button.
-     *
+     * <p>
+     * By default the returned event handler just calls
+     * {@link Stage#setIconified(boolean) Stage.setIconified(true)}.
      * @return application's minimize button action event handler
      */
-    protected abstract EventHandler<ActionEvent> getApplicationMinimizeHandler();
+    protected EventHandler<ActionEvent> getApplicationMinimizeButtonHandler() {
+        return action -> getPrimaryStage().setIconified(true);
+    }
+    
+    /**
+     * Returns an event handler that handles actions on the applications
+     * maximize button.
+     * <p>
+     * By default the returned event handler just toggles the stage's maximized
+     * state.
+     * @return application's maximize button action event handler
+     */
+    protected EventHandler<ActionEvent> getApplicationMaximizeButtonHandler() {
+        return action -> getPrimaryStage().setMaximized(!getPrimaryStage().isMaximized());
+    }
+    
     
     /**
      * Returns an event handler that handles actions on the applications close
      * button.
-     *
+     * <p>
+     * By default the returned event handler just calls {@link Platform#exit()}.
      * @return application's close button action event handler
      */
-    protected abstract EventHandler<ActionEvent> getApplicationCloseHandler();
+    protected EventHandler<ActionEvent> getApplicationCloseButtonHandler() { return action -> Platform.exit(); }
     
     
-    /**************************************************************************
-     *                                                                        *
-     * Protected API                                                    *
-     *                                                                        *
-     *************************************************************************/
-    //
-    /**
-     * No-arg constructor solely for implementing class(es).
-     */
-    public ApplicationHandler() {}
-}
+} // class ApplicationHandler
