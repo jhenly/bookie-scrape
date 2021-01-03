@@ -276,17 +276,15 @@ public class SystemTrayController {
      *  toolkit icon image.
      */
     private Image loadIconImageOrUseDefault(URL iconImageUrl) {
-        Image icon = null;
+        // set icon to default icon image so it's used if something goes wrong
+        Image icon = Taskbar.getTaskbar().getIconImage();
         
         if (iconImageUrl != null) {
             try {
                 icon = Toolkit.getDefaultToolkit().createImage(iconImageUrl);
             } catch (Exception e) {
                 // TODO log if an exception occurred while loading the icon image
-                icon = Taskbar.getTaskbar().getIconImage();
             }
-        } else {
-            icon = Taskbar.getTaskbar().getIconImage();
         }
         
         return icon;
