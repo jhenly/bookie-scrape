@@ -1,6 +1,9 @@
 package com.bookiescrape.app.sample;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.bookiescrape.app.fx.FXMLReference;
 import com.bookiescrape.app.fx.FontUtils;
@@ -17,6 +20,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -80,6 +84,10 @@ public abstract class ApplicationHandler extends Application {
         
         // create window with no title bar or default min, max, close buttons
         primaryStage.initStyle(StageStyle.UNDECORATED);
+        
+        // load and set all application icon dimensions
+        setAllAppIconImages(primaryStage, Main.ICON_APP_BLUE);
+        
         primaryStage.setScene(new Scene(rootView));
         
         // add listener to stage for window edge resizing
@@ -154,6 +162,34 @@ public abstract class ApplicationHandler extends Application {
         Bounds prefBounds = getPrefBounds(rootView);
         primaryStage.setMinWidth(prefBounds.getWidth() + deltaW);
         primaryStage.setMinHeight(prefBounds.getHeight() + deltaH);
+    }
+    
+    /** Helper that loads and sets all of the application icons */
+    private static void setAllAppIconImages(Stage primaryStage, String[] iconResources) {
+        List<Image> appIcons = new ArrayList<>();
+        
+        for (String iconString : iconResources) {
+            Image iconImage = loadAppIconImage(iconString);
+            if (iconImage != null) {
+                appIcons.add(iconImage);
+            }
+        }
+        
+        primaryStage.getIcons().addAll(appIcons);
+    }
+    
+    /** Helper that loads the application's icon. */
+    private static Image loadAppIconImage(String resource) {
+        Image iconImage = null;
+        
+        try (InputStream resStream = Main.class.getResourceAsStream(resource)) {
+            iconImage = new Image(resStream);
+        } catch (Exception e) {
+            // TODO log the input stream exception
+            System.err.println(e.getMessage());
+        }
+        
+        return iconImage;
     }
     
     /**

@@ -53,13 +53,10 @@ public class WindowsLauncher extends ApplicationLauncher {
                 // TODO log this exception and launch app without system tray
                 uoe.printStackTrace();
             }
-            
-            // instruct JavaFX not to exit when last application window closes
-            
-            trayController.setToolTip(Main.APP_NAME);
             trayController.setAboutBrowserUrl(Main.BOOKIE_SCRAPE_URL);
             
             Platform.runLater(() -> {
+                // instruct JavaFX not to exit when last application window close
                 Platform.setImplicitExit(false);
                 
                 addSystemTrayMenuItemListeners(getControllerMediator());

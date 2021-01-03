@@ -262,8 +262,6 @@ public class SystemTrayController {
         
         // allow the system to auto-size the tray icon
         trayIcon.setImageAutoSize(true);
-        // set the tray icon's tool-tip
-        // trayIcon.get().setToolTip("");
         
         // add notification click listener to tray icon
         trayIcon.setActionCommand("notification-clicked");
