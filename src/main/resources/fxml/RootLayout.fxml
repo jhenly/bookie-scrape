@@ -53,7 +53,7 @@
                      </children>
                   </HBox>
                   <Pane maxWidth="1.7976931348623157E308" prefWidth="126.0" HBox.hgrow="ALWAYS" />
-                  <HBox alignment="CENTER" HBox.hgrow="NEVER">
+                  <HBox alignment="CENTER" minHeight="58.0" minWidth="214.0" HBox.hgrow="NEVER">
                      <children>
                         <HBox id="top-hbox-buttons" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" spacing="20.0" HBox.hgrow="NEVER">
                            <children>
@@ -329,7 +329,7 @@
                <children>
                   <HBox VBox.vgrow="NEVER">
                      <children>
-                        <Label fx:id="viewTitleLabel" styleClass="view-title" text="Settings" HBox.hgrow="NEVER" />
+                        <Label fx:id="subViewTitleLabel" styleClass="view-title" text="Settings" HBox.hgrow="NEVER" />
                         <Pane HBox.hgrow="ALWAYS" />
                         <StackPane>
                            <children>
@@ -346,6 +346,9 @@
                                     <String fx:value="close-view" />
                                     <String fx:value="flat-button" />
                                  </styleClass>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </Button>
                            </children>
                            <HBox.margin>

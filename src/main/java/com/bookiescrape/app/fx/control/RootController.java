@@ -65,7 +65,7 @@ public class RootController extends MediatableController {
     @FXML
     private Button viewClose;
     @FXML
-    private Label viewTitleLabel;
+    private Label subViewTitleLabel;
     
     // holds the currently selected top hbox button, if one is selected
     private Button activeTopButton;
@@ -109,7 +109,7 @@ public class RootController extends MediatableController {
         }
         
         viewClose.setVisible(isClosable);
-        viewTitleLabel.setText(viewTitle);
+        subViewTitleLabel.setText(viewTitle);
         rootViewPane.setCenter(view);
         activeView = view;
     }

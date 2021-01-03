@@ -76,9 +76,6 @@ public abstract class ApplicationHandler extends Application {
         // allow system tray supporting implementing classes to do their thing
         setUpSystemTrayIfSupported();
         
-        // configure and set up listeners in controller mediator
-        configureControllerMediator();
-        
         // load fonts from resources
         FontUtils.loadFontsFromResources(FONT_RES_PATH);
         
@@ -94,6 +91,9 @@ public abstract class ApplicationHandler extends Application {
         ResizeHelper.addResizeListener(primaryStage);
         
         primaryStage.show();
+        
+        // configure and set up listeners in controller mediator
+        configureControllerMediator();
         
         // TODO hide stage if app should start minimized in system tray
         
