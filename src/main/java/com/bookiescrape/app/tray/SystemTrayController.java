@@ -1,12 +1,12 @@
-package com.bookiescrape.app.sample;
+package com.bookiescrape.app.tray;
 
 import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.Image;
-import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.Taskbar;
+import java.awt.Taskbar.Feature;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
@@ -17,6 +17,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+
+import com.bookiescrape.app.sample.Main;
 
 import javafx.application.Platform;
 
@@ -29,17 +31,14 @@ import javafx.application.Platform;
  * @see SystemTray
  */
 public class SystemTrayController {
-    private SystemTray tray;
-    private TrayIcon trayIcon;
-    private Image defIcon;
-    private URI aboutUri;
     
-    private MenuItem about;
-    private MenuItem runScraper;
-    private MenuItem dashboard;
-    private MenuItem settings;
-    private MenuItem logs;
-    private MenuItem quit;
+    private static URI aboutUri;
+    private static SystemTray tray;
+    private static TrayIcon trayIcon;
+    
+    private Image defIcon;
+    
+    private TrayIconPopupMenu<?, ?> popupMenu;
     
     
     /**************************************************************************
@@ -146,9 +145,9 @@ public class SystemTrayController {
      * @see SystemTray#setImage(URL)
      */
     public void setIconImage(URL imageUrl) {
-        if (trayIcon == null) { return; }
-        
         runLater(() -> {
+            if (trayIcon == null) { return; }
+            
             defIcon = loadIconImageOrUseDefault(imageUrl);
             trayIcon.setImage(defIcon);
         });
@@ -176,7 +175,7 @@ public class SystemTrayController {
      * @param enabled - the enabled state of the 'Run Scraper' menu item
      */
     public void setRunScraperEnabled(boolean enabled) {
-        runLater(() -> runScraper.setEnabled(enabled));
+        runLater(() -> popupMenu.setRunScraperEnabled(enabled));
     }
     
     /**
@@ -184,7 +183,7 @@ public class SystemTrayController {
      * @param listener - the about selected listener
      */
     public void setOnAboutSelected(ActionListener listener) {
-        setMenuItemActionListener(about, listener);
+        runLater(() -> popupMenu.setOnAboutSelected(listener));
     }
     
     /**
@@ -192,7 +191,7 @@ public class SystemTrayController {
      * @param listener - the run scraper selected listener
      */
     public void setOnRunScraperSelected(ActionListener listener) {
-        setMenuItemActionListener(runScraper, listener);
+        runLater(() -> popupMenu.setOnRunScraperSelected(listener));
     }
     
     /**
@@ -200,7 +199,7 @@ public class SystemTrayController {
      * @param listener - the dashboard selected listener
      */
     public void setOnDashboardSelected(ActionListener listener) {
-        setMenuItemActionListener(dashboard, listener);
+        runLater(() -> popupMenu.setOnDashboardSelected(listener));
     }
     
     /**
@@ -208,7 +207,7 @@ public class SystemTrayController {
      * @param listener - the settings selected listener
      */
     public void setOnSettingsSelected(ActionListener listener) {
-        setMenuItemActionListener(settings, listener);
+        runLater(() -> popupMenu.setOnSettingsSelected(listener));
     }
     
     /**
@@ -216,7 +215,7 @@ public class SystemTrayController {
      * @param listener - the view logs selected listener
      */
     public void setOnViewLogsSelected(ActionListener listener) {
-        setMenuItemActionListener(logs, listener);
+        runLater(() -> popupMenu.setOnViewLogsSelected(listener));
     }
     
     /**
@@ -228,7 +227,7 @@ public class SystemTrayController {
      * @param listener - the quit selected listener
      */
     public void setOnQuitSelected(ActionListener listener) {
-        setMenuItemActionListener(quit, listener);
+        runLater(() -> popupMenu.setOnQuitSelected(listener));
     }
     
     
@@ -268,7 +267,45 @@ public class SystemTrayController {
         trayIcon.addActionListener(this::onNotificationClicked);
         
         // create and set tray icon's popup menu
-        trayIcon.setPopupMenu(createPopupMenu());
+        useSwingPopupMenu();
+        // useAWTPopupMenu();
+        
+        // set about and quit initial menu item action handlers
+        setInitialAboutActionHandler();
+        setInitialQuitActionHandler();
+    }
+    
+    /**  */
+    private void useSwingPopupMenu() { popupMenu = new SwingPopupMenu(trayIcon); }
+    
+    /**  */
+    private void useAWTPopupMenu() {
+        popupMenu = new AWTPopupMenu();
+        trayIcon.setPopupMenu((PopupMenu) popupMenu.getPopupMenu());
+    }
+    
+    /** Initial about handler opens aboutUri in a browser. */
+    private void setInitialAboutActionHandler() {
+        popupMenu.setOnAboutSelected(action -> {
+            try {
+                Desktop.getDesktop().browse(aboutUri);
+            } catch (IOException e) {
+                // TODO log browser exception rather than print stack trace
+                e.printStackTrace();
+            }
+        });
+    }
+    
+    /** Initial quit handler exits JavaFX and removes icon from system tray. */
+    private void setInitialQuitActionHandler() {
+        popupMenu.setOnQuitSelected(action -> {
+            System.out.println("Quit was selected");
+            
+            // exit JavaFX and remove system tray icon
+            Platform.exit();
+            tray.remove(trayIcon);
+            System.exit(0);
+        });
     }
     
     /**
@@ -276,14 +313,20 @@ public class SystemTrayController {
      *  toolkit icon image.
      */
     private Image loadIconImageOrUseDefault(URL iconImageUrl) {
-        // set icon to default icon image so it's used if something goes wrong
-        Image icon = Taskbar.getTaskbar().getIconImage();
+        Image icon = null;
         
         if (iconImageUrl != null) {
             try {
                 icon = Toolkit.getDefaultToolkit().createImage(iconImageUrl);
             } catch (Exception e) {
                 // TODO log if an exception occurred while loading the icon image
+            }
+        }
+        
+        // if something went wrong then try to set icon to OS default
+        if (icon == null) {
+            if (Taskbar.isTaskbarSupported() && Taskbar.getTaskbar().isSupported(Feature.ICON_IMAGE)) {
+                icon = Taskbar.getTaskbar().getIconImage();
             }
         }
         
@@ -330,85 +373,5 @@ public class SystemTrayController {
         javax.swing.SwingUtilities.invokeLater(toRun);
     }
     
-    /** Helper method used by setOn*Selected methods. */
-    private void setMenuItemActionListener(MenuItem menuItem, ActionListener listener) {
-        runLater(() -> {
-            // remove any action listeners from menu item
-            for (ActionListener al : menuItem.getActionListeners()) { menuItem.removeActionListener(al); }
-            // add specified action listener to menu item
-            menuItem.addActionListener(listener);
-        });
-    }
     
-    
-    /**************************************************************************
-     *                                                                        *
-     * Popup Menu Creation                                                    *
-     *                                                                        *
-     *************************************************************************/
-    
-    /** Creates the menu items and lays out the tray icon's popup menu. */
-    private PopupMenu createPopupMenu() {
-        // init the menu items before adding them to the menu
-        initMenuItems();
-        
-        PopupMenu menu = new PopupMenu();
-        
-        menu.add(about);
-        menu.add(runScraper);
-        menu.addSeparator();
-        menu.add(dashboard);
-        menu.add(settings);
-        menu.add(logs);
-        menu.addSeparator();
-        menu.add(quit);
-        
-        return menu;
-    }
-    
-    /** Initializes the popup menu's items. */
-    private void initMenuItems() {
-        runScraper = new MenuItem("Run Scraper");
-        dashboard = new MenuItem("Dashboard");
-        settings = new MenuItem("Settings");
-        logs = new MenuItem("View Logs");
-        
-        // about and quit have default action listeners
-        initAboutMenuItem();
-        initQuitMenuItem();
-    }
-    
-    /**
-     * Creates about menu item and sets its action listener to open a browser
-     * to the application's website.
-     */
-    private void initAboutMenuItem() {
-        about = new MenuItem("About");
-        about.addActionListener(e -> {
-            System.out.println("About was selected");
-            
-            try {
-                Desktop.getDesktop().browse(aboutUri);
-            } catch (IOException e1) {
-                // TODO log browser exception rather than print stack trace
-                e1.printStackTrace();
-            }
-        });
-    }
-    
-    /**
-     * Creates quit menu item and sets its action listener to handle exiting of
-     * the application and removal of the system tray icon.
-     */
-    private void initQuitMenuItem() {
-        quit = new MenuItem("Quit Bookie Scrape");
-        quit.addActionListener(e -> {
-            System.out.println("Quit was selected");
-            
-            Platform.exit();
-            tray.remove(trayIcon);
-        });
-    }
-    
-    
-} // class SystemTrayController
+}
