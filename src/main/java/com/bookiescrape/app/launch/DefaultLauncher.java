@@ -1,6 +1,6 @@
 package com.bookiescrape.app.launch;
 
-import com.bookiescrape.app.sample.SystemTrayController;
+import com.bookiescrape.app.tray.SystemTrayController;
 
 /**
  * Default application launcher.

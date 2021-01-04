@@ -9,6 +9,7 @@ import com.bookiescrape.app.fx.FXMLReference;
 import com.bookiescrape.app.fx.FontUtils;
 import com.bookiescrape.app.fx.control.ControllerMediator;
 import com.bookiescrape.app.fx.ui.ResizeHelper;
+import com.bookiescrape.app.tray.SystemTrayController;
 
 import javafx.application.Application;
 import javafx.application.Platform;

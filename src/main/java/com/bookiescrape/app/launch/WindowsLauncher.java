@@ -2,7 +2,7 @@ package com.bookiescrape.app.launch;
 
 import com.bookiescrape.app.fx.control.ControllerMediator;
 import com.bookiescrape.app.sample.Main;
-import com.bookiescrape.app.sample.SystemTrayController;
+import com.bookiescrape.app.tray.SystemTrayController;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
