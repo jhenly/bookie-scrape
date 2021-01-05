@@ -19,6 +19,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.scene.text.Font;
 
 
@@ -342,7 +345,7 @@ public final class FontUtils {
      * specify why so we can't either.
      */
     private static void logFontNotLoaded(String font) {
-        System.out.printf("the font [ %s ] was not loaded%n", font);
+        logFontNotLoadedWarning("the font [{}] was not loaded", font);
     }
     
     /* helper method that validates a passed in font path's file extension */
@@ -412,5 +415,18 @@ public final class FontUtils {
         }
     }
     
+    /**************************************************************************
+     *                                                                        *
+     * Logging                                                                *
+     *                                                                        *
+     *************************************************************************/
+    
+    private static final Logger LOG = LoggerFactory.getLogger(FontUtils.class);
+    
+    public static void logInfo(String msg) { LOG.info("info(event: {})", msg); }
+    public static void logWarn(String msg) { LOG.warn("warn(event: {})", msg); }
+    public static void logFontNotLoadedWarning(String msg, String font) { LOG.warn(msg, font); }
+    public static void logDebug(String msg) { LOG.debug("debug(event: {})", msg); }
+    public static void logError(String msg) { LOG.error("error(event: {})", msg); }
     
 }

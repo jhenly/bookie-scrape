@@ -1,6 +1,12 @@
 package com.bookiescrape.app.fx.control;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.bookiescrape.app.fx.log.LogAppender;
+
 import javafx.fxml.FXML;
+import javafx.scene.control.TextArea;
 
 
 /**
@@ -9,11 +15,10 @@ import javafx.fxml.FXML;
  * @author Jonathan Henly
  */
 public class LogController extends MediatableController {
+    private static final Logger LOG = LoggerFactory.getLogger(LogController.class);
     
-    /**
-     * Default empty constructor used by fxml.
-     */
-    public LogController() {}
+    @FXML
+    private TextArea logTextArea;
     
     /**
      * Initializes the default controller class.
@@ -21,6 +26,11 @@ public class LogController extends MediatableController {
      * This method is automatically called after the fxml file has been loaded.
      */
     @FXML
-    private void initialize() {}
+    private void initialize() {
+        LogAppender.setTextArea(logTextArea);
+    }
+    
+    /** Default empty constructor used by fxml. */
+    public LogController() {}
     
 }

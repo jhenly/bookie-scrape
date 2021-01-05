@@ -1,6 +1,10 @@
 package com.bookiescrape.app.fx.control;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bookiescrape.app.fx.FXMLReference;
+import com.bookiescrape.app.tray.SystemTrayController;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,6 +18,8 @@ import javafx.stage.Stage;
  * @author Jonathan Henly
  */
 public class ControllerMediator {
+    private static final Logger LOG = LoggerFactory.getLogger(ControllerMediator.class);
+    
     private static final String DASH_TITLE = "Dashboard";
     private static final String SETTINGS_TITLE = "Settings";
     private static final String LOG_TITLE = "View Logs";
@@ -29,6 +35,11 @@ public class ControllerMediator {
     private SettingsController settingsController;
     private Parent logView;
     private LogController logController;
+    
+    // system tray controller
+    private SystemTrayController sysTrayController;
+    // notification controller
+    private NotifierController notiController;
     
     // the currently active/showing sub view
     private Parent activeSubView;
@@ -55,12 +66,34 @@ public class ControllerMediator {
      */
     public ControllerMediator(Stage stage, FXMLReference root, FXMLReference dashboard, FXMLReference settings,
         FXMLReference log) {
+        this(stage, null, root, dashboard, settings, log);
+    }
+    
+    /**
+     * Constructs a {@code ControllerMediator} instance with system tray
+     * support.
+     * @param stage - primary stage reference
+     * @param sysTray - reference to the system tray controller
+     * @param root - the root fxml reference
+     * @param dashboard - the dashboard fxml reference
+     * @param settings - the settings fxml reference
+     * @param log - the log fxml reference
+     * @see ControllerMediator
+     */
+    public ControllerMediator(Stage stage, SystemTrayController sysTray, FXMLReference root, FXMLReference dashboard,
+        FXMLReference settings, FXMLReference log) {
         this.primaryStage = stage;
         
         setRootReference(root);
         setDashboardReference(dashboard);
         setSettingsReference(settings);
         setLogReference(log);
+        
+        sysTrayController = sysTray;
+        
+        createNotificationController();
+        
+        LOG.warn("ControllerMediator: finished creating all mediatable instances");
     }
     
     
@@ -125,6 +158,17 @@ public class ControllerMediator {
      */
     public void requestShowDashboardView() {
         requestShowSubView(dashView, DASH_TITLE, false, true, false);
+    }
+    
+    
+    /**************************************************************************
+     *                                                                        *
+     * Notification Requests                                                  *
+     *                                                                        *
+     *************************************************************************/
+    
+    public void requestInfoNotify(String caption, String message) {
+        notiController.infoNotify(caption, message);
     }
     
     
@@ -259,11 +303,34 @@ public class ControllerMediator {
     /** Helper that changes root's sub view. */
     private void showSubViewInRoot(Parent view, String viewTitle, boolean isClosable, boolean clearActiveTopBtns,
         boolean bottomBtns) {
+        
+        if (view == settingsView) {
+            rootController.setSettingsTopButtonActive();
+        } else if (view == logView) {
+            rootController.setLogsTopButtonActive();
+        }
+        
         rootController.setSubView(view, viewTitle, isClosable, clearActiveTopBtns, bottomBtns);
         activeSubView = view;
     }
     
-    private boolean subViewIsActive(Parent view) { return activeSubView == view; }
+    /** Helper that checks if a specified view is active. */
+    private boolean subViewIsActive(Parent view) {
+        return activeSubView == view;
+    }
+    
+    /**
+     * Creates the notification controller with system tray notification
+     * support, unless the system tray controller is {@code null}.
+     */
+    private void createNotificationController() {
+        if (sysTrayController != null) {
+            notiController = new NotifierController(primaryStage, sysTrayController);
+        } else {
+            notiController = new NotifierController(primaryStage);
+        }
+        notiController.setControllerMediator(this);
+    }
     
     /**
      * Sets the root controller and the root view.

@@ -186,10 +186,11 @@ public class RootController extends MediatableController {
         }
     }
     
-    
     /* helper to set top buttons active */
     private void setActiveTopButton(Button button) {
         Button btn = Objects.requireNonNull(button);
+        
+        if (activeTopButton == button) { return; }
         
         // if another button is active then set it to inactive
         if (activeTopButton != null) {
@@ -242,6 +243,10 @@ public class RootController extends MediatableController {
     
     @FXML
     void onViewCloseAction(ActionEvent action) { getControllerMediator().closeSubViewSelected(); }
+    
+    void setSettingsTopButtonActive() { setActiveTopButton(settingsButton); }
+    
+    void setLogsTopButtonActive() { setActiveTopButton(logButton); }
     
     private static final String MONEY_LINE = "https://classic.sportsbookreview.com/betting-odds/money-line/";
     
