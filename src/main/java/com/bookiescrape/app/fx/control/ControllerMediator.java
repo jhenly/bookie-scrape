@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bookiescrape.app.fx.FXMLReference;
+import com.bookiescrape.app.sample.ApplicationMediator;
 import com.bookiescrape.app.tray.SystemTrayController;
 
 import javafx.event.ActionEvent;
@@ -36,6 +37,7 @@ public class ControllerMediator {
     private Parent logView;
     private LogController logController;
     
+    private ApplicationMediator appMediator;
     // system tray controller
     private SystemTrayController sysTrayController;
     // notification controller
@@ -57,6 +59,7 @@ public class ControllerMediator {
     
     /**
      * Constructs a {@code ControllerMediator} instance.
+     * @param appMediator - the application mediator
      * @param stage - primary stage reference
      * @param root - the root fxml reference
      * @param dashboard - the dashboard fxml reference
@@ -64,14 +67,15 @@ public class ControllerMediator {
      * @param log - the log fxml reference
      * @see ControllerMediator
      */
-    public ControllerMediator(Stage stage, FXMLReference root, FXMLReference dashboard, FXMLReference settings,
-        FXMLReference log) {
-        this(stage, null, root, dashboard, settings, log);
+    public ControllerMediator(ApplicationMediator appMediator, Stage stage, FXMLReference root, FXMLReference dashboard,
+        FXMLReference settings, FXMLReference log) {
+        this(appMediator, stage, null, root, dashboard, settings, log);
     }
     
     /**
      * Constructs a {@code ControllerMediator} instance with system tray
      * support.
+     * @param appMediator - the application mediator
      * @param stage - primary stage reference
      * @param sysTray - reference to the system tray controller
      * @param root - the root fxml reference
@@ -80,8 +84,9 @@ public class ControllerMediator {
      * @param log - the log fxml reference
      * @see ControllerMediator
      */
-    public ControllerMediator(Stage stage, SystemTrayController sysTray, FXMLReference root, FXMLReference dashboard,
-        FXMLReference settings, FXMLReference log) {
+    public ControllerMediator(ApplicationMediator appMediator, Stage stage, SystemTrayController sysTray,
+        FXMLReference root, FXMLReference dashboard, FXMLReference settings, FXMLReference log) {
+        this.appMediator = appMediator;
         this.primaryStage = stage;
         
         setRootReference(root);
@@ -280,6 +285,10 @@ public class ControllerMediator {
         }
         
         showSubViewInRoot(view, title, isClosable, clearActiveTopBtns, bottomBtns);
+        if (view == settingsView) {
+            // initially show general settings in settings view
+            settingsController.setGeneralInitiallyActive();
+        }
     }
     
     /**

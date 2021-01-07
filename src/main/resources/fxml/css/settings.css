@@ -2,22 +2,23 @@
 
 .header {
     -fx-text-fill: #202020;
-    -fx-font-size: 1.8em;
-    -fx-font-family: 'Nunito Sans Regular';
-    -fx-padding: 0 0 6 0;
+    -fx-font-size: 1.7em;
+    -fx-font-family: 'Open Sans Regular';
+    -fx-padding: 0 0 10 0;
 }
 
 .sub-header {
     -fx-text-fill: #202020;
-    -fx-font-size: 1.4em;
-    -fx-font-family: 'Nunito Sans Regular';
-    -fx-padding: 0 0 16 0;
+    -fx-font-size: 1.333em;
+    -fx-font-family: 'Open Sans Regular';
+    -fx-padding: 4 0 14 0;
 }
 
 .description { 
     -fx-text-fill: #71797e;
-    -fx-font-size: 14pt;
-    -fx-font-family: 'Nunito Sans';
+    -fx-font-size: 1.1em;
+    -fx-font-family: 'Open Sans Regular';
+    -fx-padding: 10 0 14 0;
 }
 
 .sub-description {
@@ -45,7 +46,7 @@
 
 .left .flat-button .button-label {
      -fx-font-size: 14;
-     -fx-font-family: 'Nunito Sans';
+     -fx-font-family: 'Open Sans';
 }
 
 .left .flat-button .container {
@@ -73,3 +74,24 @@
 .right .scroll {
     -fx-background-color: transparent;
 }
+
+.right .check-box { -fx-padding: -3 0 0 0; }
+
+.right .top-prompt-text-field { -prompt-transition-duration: 100.0; }
+
+.right .top-prompt-text-field .text-field { -fx-background-insets: 0, 0 0 1 0; }
+
+.right .top-prompt-text-field .prompt-pane .prompt,
+.right .top-prompt-text-field .text-field {
+    -fx-font-size: 1.2em;
+    -fx-font-family: "Open Sans Regular";
+}
+
+.top-prompt-text-field .default-pane .default-stub,
+.top-prompt-text-field .default-pane .default-text {
+    -fx-font-size: 1em;
+    -fx-font-family: "Open Sans Regular"; 
+}
+
+.top-prompt-text-field .default-pane .default-stub { -fx-padding: 4 4 10 0; }
+

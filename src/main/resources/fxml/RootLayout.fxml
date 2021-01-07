@@ -22,10 +22,10 @@
   <children>
       <BorderPane id="main-border-pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <HBox id="main-top-hbox" fx:id="mainTopHBox" onMouseDragged="#onMainTopHBoxMouseDragged" onMousePressed="#onMainTopHBoxMousePressed" styleClass="top-hbox" BorderPane.alignment="TOP_CENTER">
+            <HBox id="main-top-hbox" fx:id="mainTopHBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#onMainTopHBoxMouseDragged" onMousePressed="#onMainTopHBoxMousePressed" styleClass="top-hbox" BorderPane.alignment="TOP_CENTER">
                <children>
-                  <Pane maxWidth="1.7976931348623157E308" prefWidth="340.0" HBox.hgrow="ALWAYS" />
-                  <HBox alignment="CENTER" minWidth="110.0" HBox.hgrow="NEVER">
+                  <Pane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="340.0" HBox.hgrow="ALWAYS" />
+                  <HBox alignment="CENTER" minWidth="-Infinity" prefWidth="110.0" HBox.hgrow="NEVER">
                      <children>
                         <Region HBox.hgrow="NEVER">
                            <styleClass>
@@ -35,12 +35,12 @@
                         </Region>
                         <VBox alignment="CENTER" HBox.hgrow="NEVER">
                            <children>
-                              <Label alignment="BOTTOM_CENTER" styleClass="logo-label-left" text="bookie" textFill="WHITE" textOverrun="CLIP" VBox.vgrow="NEVER">
+                              <Label alignment="BOTTOM_CENTER" styleClass="logo-label-top" text="bookie" textFill="WHITE" textOverrun="CLIP" VBox.vgrow="NEVER">
                                  <padding>
                                     <Insets left="4.0" top="2.0" />
                                  </padding>
                               </Label>
-                              <Label styleClass="logo-label-right" text="scrape" textFill="WHITE" textOverrun="CLIP" VBox.vgrow="NEVER">
+                              <Label styleClass="logo-label-bottom" text="scrape" textFill="WHITE" textOverrun="CLIP" VBox.vgrow="NEVER">
                                  <padding>
                                     <Insets left="4.0" />
                                  </padding>
@@ -52,10 +52,10 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <Pane maxWidth="1.7976931348623157E308" prefWidth="126.0" HBox.hgrow="ALWAYS" />
-                  <HBox alignment="CENTER" minHeight="58.0" minWidth="214.0" HBox.hgrow="NEVER">
+                  <Pane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="126.0" HBox.hgrow="ALWAYS" />
+                  <HBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="214.0" HBox.hgrow="NEVER">
                      <children>
-                        <HBox id="top-hbox-buttons" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" spacing="20.0" HBox.hgrow="NEVER">
+                        <HBox id="top-hbox-buttons" alignment="CENTER" spacing="20.0" HBox.hgrow="NEVER">
                            <children>
                             <Button fx:id="settingsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onTopButtonAction" styleClass="flat-button" HBox.hgrow="NEVER">
                                  <cursor>
@@ -185,13 +185,10 @@
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
-                           <padding>
-                              <Insets bottom="9.0" top="9.0" />
-                           </padding>
                         </HBox>
                         <HBox id="top-hbox-control-buttons" alignment="TOP_RIGHT" HBox.hgrow="NEVER">
                            <children>
-                              <Button alignment="TOP_RIGHT" cache="true" mnemonicParsing="false" onAction="#onMinimizeButtonAction">
+                              <Button fx:id="minButton" alignment="TOP_RIGHT" cache="true" mnemonicParsing="false" onAction="#onMinimizeButtonAction">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -211,7 +208,7 @@
                                     <String fx:value="flat-button" />
                                  </styleClass>
                               </Button>
-                            <Button alignment="TOP_RIGHT" cache="true" mnemonicParsing="false" onAction="#onMaximizeButtonAction" HBox.hgrow="ALWAYS">
+                            <Button fx:id="maxButton" alignment="TOP_RIGHT" cache="true" mnemonicParsing="false" onAction="#onMaximizeButtonAction" HBox.hgrow="ALWAYS">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -284,18 +281,18 @@
             </HBox>
          </top>
          <bottom>
-            <HBox id="main-bottom-hbox" BorderPane.alignment="BOTTOM_CENTER">
+            <HBox id="main-bottom-hbox" maxWidth="1.7976931348623157E308" BorderPane.alignment="BOTTOM_CENTER">
                <children>
-                  <HBox maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" HBox.hgrow="NEVER">
+                  <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" HBox.hgrow="NEVER">
                      <children>
                         <Circle id="scrape-status-circle" fx:id="scraperStatusCircle" fill="#cbcbcd" radius="6.0" stroke="TRANSPARENT" strokeType="INSIDE" HBox.hgrow="NEVER">
                            <HBox.margin>
-                              <Insets left="20.0" right="10.0" top="10.0" />
+                              <Insets />
                            </HBox.margin>
                         </Circle>
                         <VBox HBox.hgrow="NEVER">
                            <children>
-                              <Label id="bottom-hbox-bookie-scraper-label" alignment="BOTTOM_CENTER" text="Bookie Scraper" textFill="#202020" VBox.vgrow="NEVER">
+                              <Label alignment="BOTTOM_CENTER" styleClass="bookie-scraper" text="Bookie Scraper" textFill="#202020" VBox.vgrow="NEVER">
                                  <font>
                                     <Font name="Roboto Regular" size="14.0" />
                                  </font>
@@ -303,37 +300,56 @@
                                     <Insets bottom="-4.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label id="bottom-hbox-scraper-status" fx:id="scraperStatusLabel" alignment="BOTTOM_LEFT" text="running" textFill="#6b6b6b" VBox.vgrow="NEVER" />
+                              <Label id="bottom-hbox-scraper-status" fx:id="scraperStatusLabel" alignment="BOTTOM_LEFT" styleClass="bookie-scraper-status" text="running" textFill="#6b6b6b" VBox.vgrow="NEVER" />
                            </children>
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
                         </VBox>
                      </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
                      <padding>
-                        <Insets bottom="10.0" top="10.0" />
+                        <Insets left="20.0" />
                      </padding>
                   </HBox>
                   <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                  <HBox fx:id="bottomRightHBox" HBox.hgrow="NEVER" />
+                  <HBox fx:id="bottomBtnsHbox" alignment="CENTER_RIGHT" HBox.hgrow="NEVER">
+                     <children>
+                        <StackPane alignment="CENTER_LEFT">
+                           <children>
+                              <Button mnemonicParsing="false" styleClass="flat-button" text="Cancel" />
+                           </children>
+                        </StackPane>
+                        <StackPane alignment="CENTER_RIGHT">
+                           <children>
+                              <Button mnemonicParsing="false" styleClass="flat-button" text="Apply &amp; Restart" />
+                           </children>
+                        </StackPane>
+                     </children></HBox>
                </children>
                <styleClass>
                   <String fx:value="border-top-solid" />
+                  <String fx:value="root-bottom-hbox" />
                   <String fx:value="border-gray" />
                   <String fx:value="border-thin" />
                </styleClass>
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding>
             </HBox>
          </bottom>
          <center>
-            <VBox id="main-middle-vbox" BorderPane.alignment="CENTER">
+            <VBox id="main-middle-vbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" BorderPane.alignment="CENTER">
                <children>
-                  <HBox VBox.vgrow="NEVER">
+                  <HBox maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
                      <children>
                         <Label fx:id="subViewTitleLabel" styleClass="view-title" text="Settings" HBox.hgrow="NEVER" />
-                        <Pane HBox.hgrow="ALWAYS" />
-                        <StackPane>
+                        <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                        <StackPane HBox.hgrow="NEVER">
                            <children>
-                              <Button fx:id="viewClose" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onViewCloseAction">
+                              <Button fx:id="viewClose" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onViewCloseAction" StackPane.alignment="CENTER">
                                  <graphic>
                                     <StackPane>
                                        <children>
@@ -366,7 +382,7 @@
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                   </HBox>
-                  <BorderPane fx:id="rootViewPane" styleClass="view-display" VBox.vgrow="ALWAYS">
+                  <BorderPane fx:id="rootViewPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="view-display" VBox.vgrow="ALWAYS">
                      <padding>
                         <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
                      </padding></BorderPane>

@@ -116,8 +116,7 @@ final class UserProperties extends AbstractSettings {
      * @param propertiesFile
      *                       - path to a specified properties file
      */
-    UserProperties(String propertiesFile)
-        throws RequiredSettingNotFoundException, IOException {
+    UserProperties(String propertiesFile) throws RequiredSettingNotFoundException, IOException {
         this(propertiesFile, null);
     }
     
@@ -168,26 +167,23 @@ final class UserProperties extends AbstractSettings {
      *      SettingsKey, String, String) RequiredSettingNotFoundException(
      *      SettingsKey, String, String)
      */
-    UserProperties(String pathToExcelFile, boolean cannonFodder)
-        throws IOException, RequiredSettingNotFoundException {
+    UserProperties(String pathToExcelFile, boolean cannonFodder) throws IOException, RequiredSettingNotFoundException {
         this(null, DEFAULT_PROPERTIES_FILE, pathToExcelFile);
     }
     
     /* convenience constructor used by UserSettings */
-    UserProperties(Properties props, String propertiesFilePath)
-        throws RequiredSettingNotFoundException, IOException {
+    UserProperties(Properties props, String propertiesFilePath) throws RequiredSettingNotFoundException, IOException {
         this(props, propertiesFilePath, null);
     }
     
     /* main constructor that handles calls from all other constructors */
-    UserProperties(Properties newProps, String propertiesFilePath,
-        String pathToExcelFile)
+    UserProperties(Properties newProps, String propertiesFilePath, String pathToExcelFile)
         throws RequiredSettingNotFoundException, IOException {
         // assign propsFilePath in case it's needed to throw exceptions
         propsFilePath = propertiesFilePath;
         
-        /* DO NOT CHANGE THE ORDER OF CALLS IN THIS CONSTRUCTOR some calls
-         * depend on other calls happening prior */
+        /* DO NOT CHANGE THE ORDER OF CALLS IN THIS CONSTRUCTOR some calls depend on
+         * other calls happening prior */
         
         if (newProps == null) {
             // load properties from file if newProps is null
@@ -215,8 +211,7 @@ final class UserProperties extends AbstractSettings {
     
     
     /* loads properties from a passed in file */
-    private Properties loadPropertiesFromFile(String filePath)
-        throws IOException, FileNotFoundException {
+    private Properties loadPropertiesFromFile(String filePath) throws IOException, FileNotFoundException {
         
         Properties props = null;
         
@@ -231,13 +226,12 @@ final class UserProperties extends AbstractSettings {
     /* */
     private Properties loadDefaultProperties() throws IOException {
         Properties props = new Properties();
-        try (InputStream input = UserProperties.class.getClassLoader()
-            .getResourceAsStream(DEFAULT_PROPERTIES_FILE)) {
+        try (InputStream input = UserProperties.class.getClassLoader().getResourceAsStream(DEFAULT_PROPERTIES_FILE)) {
             
             if (input == null) {
                 // if input is null then a fatal error has occurred
-                throw new FileNotFoundException("Internal properties file '"
-                    + DEFAULT_PROPERTIES_FILE + "' does not exist.");
+                throw new FileNotFoundException(
+                    "Internal properties file '" + DEFAULT_PROPERTIES_FILE + "' does not exist.");
             }
             
             props.load(input);
@@ -246,11 +240,9 @@ final class UserProperties extends AbstractSettings {
         return props;
     }
     
-    /* if IOException (other than FileNotFoundException) is thrown, then it's
-     * from closing reader, which should very rarely (if ever) throw an
-     * IOException */
-    private Properties loadPropertiesFromExternalFile(String filePath)
-        throws FileNotFoundException, IOException {
+    /* if IOException (other than FileNotFoundException) is thrown, then it's from
+     * closing reader, which should very rarely (if ever) throw an IOException */
+    private Properties loadPropertiesFromExternalFile(String filePath) throws FileNotFoundException, IOException {
         Properties props = new Properties();
         
         File propertiesFile = new File(filePath);
@@ -271,14 +263,11 @@ final class UserProperties extends AbstractSettings {
     }
     
     /* splits comma separated sheet names to an unmodifiable list, or throws */
-    private List<String> initAllSheets()
-        throws RequiredSettingNotFoundException {
-        // will throw if ALL_SHEETS property is not in properties
-        String allSheetsStr = getRequiredPropertyOrThrow(ALL_SHEETS);
+    private List<String> initAllSheets() {
+        String allSheetsStr = getStrPropOrDefault(ALL_SHEETS);
         
         // convert non-empty comma delimited sheet names to List<String>
-        List<String> nonEmptySheetNames = Utils
-            .commaDelimitedStringToList(allSheetsStr);
+        List<String> nonEmptySheetNames = Utils.commaDelimitedStringToList(allSheetsStr);
         
         
         // return unmodifiable list, it should not be changed
@@ -294,21 +283,17 @@ final class UserProperties extends AbstractSettings {
     }
     
     /* overloaded helper method */
-    private String getRequiredPropertyOrThrow(SettingsKey pk)
-        throws RequiredSettingNotFoundException {
+    private String getRequiredPropertyOrThrow(SettingsKey pk) throws RequiredSettingNotFoundException {
         return getRequiredPropertyOrThrow(pk.key());
     }
     
     /* helper method used by methods retrieving required properties */
-    private String getRequiredPropertyOrThrow(String property)
-        throws RequiredSettingNotFoundException {
+    private String getRequiredPropertyOrThrow(String property) throws RequiredSettingNotFoundException {
         // try to get the required property
         String propValue = props.getProperty(property);
         
         // throw if required property is null
-        if (propValue == null) {
-            throw new RequiredSettingNotFoundException(property, propsFilePath);
-        }
+        if (propValue == null) { throw new RequiredSettingNotFoundException(property, propsFilePath); }
         
         return propValue;
     }

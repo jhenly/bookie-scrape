@@ -2,8 +2,6 @@ package com.bookiescrape.app.sample;
 
 import java.net.URL;
 
-import com.bookiescrape.app.launch.ApplicationLauncher;
-
 
 /**
  * Bookie Scrape's main overarching application class.
@@ -28,13 +26,14 @@ import com.bookiescrape.app.launch.ApplicationLauncher;
 public final class Main {
     /** The name of the application. */
     public static final String APP_NAME = "Bookie Scrape";
+    public static final String APP_DIR_NAME = "BookieScrape";
     public static final String BOOKIE_SCRAPE_URL = "https://github.com/jhenly/bookie-scrape#bookie-scrape";
     
     public static final URL ICON_TRAY_WHITE_32 = Main.class.getResource("icon-tray-white-32.png");
     private static final String ICON_APP_BLUE_NAME = "icon-app-blue-";
     public static final String[] ICON_APP_BLUE = createIconAppBlueArray();
     
-    /** Helper that creates ICON_APP_BLUE resource strings array */
+    /** Helper that creates ICON_APP_BLUE resource strings array. */
     private static String[] createIconAppBlueArray() {
         String i256 = createIconAppBlueString("256");
         String i128 = createIconAppBlueString("128");
@@ -55,13 +54,14 @@ public final class Main {
     /** */
     private Main() {}
     
+    
     /**
      * Entry point of the application.
      *
      * @param args - command line arguments
      */
     public static void main(String[] args) {
-        ApplicationLauncher.launchApplication();
+        ApplicationBooter.boot();
     }
     
 } // class Main

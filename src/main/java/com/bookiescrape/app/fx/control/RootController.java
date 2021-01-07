@@ -52,10 +52,14 @@ public class RootController extends MediatableController {
     @FXML
     private BorderPane rootViewPane;
     @FXML
-    private HBox bottomRightHBox;
+    private HBox bottomBtnsHbox; // holds the cancel and apply & restart buttons
     
     @FXML
     private Button closeButton;
+    @FXML
+    private Button maxButton;
+    @FXML
+    private Button minButton;
     
     @FXML
     private Button settingsButton;
@@ -101,7 +105,7 @@ public class RootController extends MediatableController {
      * @param clearActiveTopBtns
      * @param bottomBtns
      */
-    void setSubView(Parent view, String viewTitle, boolean isClosable, boolean clearActiveTopBtns, boolean bttomBtns) {
+    void setSubView(Parent view, String viewTitle, boolean isClosable, boolean clearActiveTopBtns, boolean bottomBtns) {
         if (clearActiveTopBtns && activeTopButton != null) {
             // make any active top button inactive
             changeTopButtonState(activeTopButton, TOP_BTN_INACTIVE_STATE);
@@ -110,6 +114,7 @@ public class RootController extends MediatableController {
         
         viewClose.setVisible(isClosable);
         subViewTitleLabel.setText(viewTitle);
+        bottomBtnsHbox.setVisible(bottomBtns);
         rootViewPane.setCenter(view);
         activeView = view;
     }

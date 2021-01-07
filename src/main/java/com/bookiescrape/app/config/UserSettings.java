@@ -6,6 +6,7 @@ import static com.bookiescrape.app.config.SettingsKey.SETTINGS_LAST_UPDATE;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -22,7 +23,7 @@ public final class UserSettings {
     // used to check if backing preferences data store is available
     private static final String BACKING_STORE_AVAIL = "BackingStoreAvail";
     // apps root directory in the backing preferences data store
-    private static final String PREF_NODE_NAME = "/com/sportsbookscraper/app";
+    private static final String PREF_NODE_NAME = "/com/bookiescrape/app";
     // preferences node to check for existing user preferences
     private static final String PREF_CHECK_FOR_EXISTING_NODE = "excel";
     
@@ -48,9 +49,7 @@ public final class UserSettings {
     private static Properties getUserProperties() { return userProps; }
     
     /* gets the current user properties file path, or null */
-    private static String getCurrentPropertiesFilePath() {
-        return curUserPropsFilePath;
-    }
+    private static String getCurrentPropertiesFilePath() { return curUserPropsFilePath; }
     
     /**
      * Convenience method to check for existing user preferences, do not call
@@ -62,11 +61,10 @@ public final class UserSettings {
     private static boolean userPreferencesExist() {
         boolean exists = false;
         try {
-            exists = getUserPreferences()
-                .nodeExists(PREF_CHECK_FOR_EXISTING_NODE);
+            exists = getUserPreferences().nodeExists(PREF_CHECK_FOR_EXISTING_NODE);
         } catch (BackingStoreException bse) {
-            /* swallow BackingStoreException, this method should only be called
-             * after checking if the backing store is available */
+            /* swallow BackingStoreException, this method should only be called after
+             * checking if the backing store is available */
             return false;
         }
         
@@ -106,6 +104,24 @@ public final class UserSettings {
         
     }
     
+    public static Settings loadSettings(Path propsFilePath, boolean isDefaultProps)
+        throws RequiredSettingNotFoundException, IOException {
+        boolean bstore = backingStoreIsAvailable();
+        boolean prefsExist = userPreferencesExist();
+        Settings settings = null;
+        
+        if (bstore && prefsExist) {
+            
+        } else if (!isDefaultProps) {
+            
+        } else {
+            UserProperties props = new UserProperties(propsFilePath.toString());
+            userProps = props.getProperties();
+        }
+        
+        return settings;
+    }
+    
     /**
      * Loads user settings from an OS specific data store.
      * <p>
@@ -126,9 +142,7 @@ public final class UserSettings {
      *                                          if an unforeseen I/O error
      *                                          occurs
      */
-    public static Settings loadSettings()
-        throws RequiredSettingNotFoundException, BackingStoreException,
-        IOException {
+    public static Settings loadSettings() throws RequiredSettingNotFoundException, BackingStoreException, IOException {
         // signal to loadSettings(String, String) to load preferences
         return loadUserSettings(null, null);
     }
@@ -152,8 +166,7 @@ public final class UserSettings {
      * @throws BackingStoreException
      */
     public static Settings loadSettings(String propertiesFile)
-        throws RequiredSettingNotFoundException, IOException,
-        BackingStoreException {
+        throws RequiredSettingNotFoundException, IOException, BackingStoreException {
         return loadUserSettings(propertiesFile, null);
     }
     
@@ -185,9 +198,8 @@ public final class UserSettings {
      *                                          preferences data store is not
      *                                          available
      */
-    public static Settings loadUserSettings(String propertiesFile,
-        String pathToExcelFile) throws RequiredSettingNotFoundException,
-        IOException, BackingStoreException {
+    public static Settings loadUserSettings(String propertiesFile, String pathToExcelFile)
+        throws RequiredSettingNotFoundException, IOException, BackingStoreException {
         
         Settings settings = null;
         boolean available = backingStoreIsAvailable();
@@ -198,8 +210,8 @@ public final class UserSettings {
             
             throwIfBSNotAvailableOrUserPrefsDoNotExist(available, exist);
             
-            /* if we get here then user preferences must exist, but might still
-             * throw RequiredSettingNotFoundException */
+            /* if we get here then user preferences must exist, but might still throw
+             * RequiredSettingNotFoundException */
             settings = new UserPreferences(getUserPreferences());
             
             // if we get this far then signal that we're using user prefs
@@ -260,8 +272,8 @@ public final class UserSettings {
                 }
             }
             
-            /* could not create settings from preferences for some reason so we
-             * carry on with properties */
+            /* could not create settings from preferences for some reason so we carry on
+             * with properties */
             
             // set static userProps
             userProps = props.getProperties();
@@ -278,15 +290,11 @@ public final class UserSettings {
     
     
     /* helper method that throws */
-    private static void throwIfBSNotAvailableOrUserPrefsDoNotExist(
-        boolean available, boolean exist)
+    private static void throwIfBSNotAvailableOrUserPrefsDoNotExist(boolean available, boolean exist)
         throws BackingStoreException, RequiredSettingNotFoundException {
         
         // throw if we can't access the preferences data store
-        if (!available) {
-            throw new BackingStoreException(
-                "The backing preferences data store is not available.");
-        }
+        if (!available) { throw new BackingStoreException("The backing preferences data store is not available."); }
         
         if (!exist) {
             // signal preferences don't exist with no arg exception
@@ -297,8 +305,8 @@ public final class UserSettings {
     
     
     /* */
-    private static Settings tryLoadingUserPreferences() throws IOException,
-        BackingStoreException, RequiredSettingNotFoundException {
+    private static Settings tryLoadingUserPreferences()
+        throws IOException, BackingStoreException, RequiredSettingNotFoundException {
         Preferences prefs = getUserPreferences();
         Settings settings = null;
         
@@ -310,8 +318,7 @@ public final class UserSettings {
     }
     
     /* copy key-value-s from java.util.Properties to java.util.Preferences */
-    private static void copyPropertiesToPreferences(UserProperties userProps)
-        throws BackingStoreException {
+    private static void copyPropertiesToPreferences(UserProperties userProps) throws BackingStoreException {
         Properties props = userProps.getProperties();
         Preferences prefs = getUserPreferences();
         
@@ -333,14 +340,12 @@ public final class UserSettings {
             if (okey instanceof String) {
                 String key = (String) okey;
                 
-                /* java.util.Properties stores keys and values as Object, so we
-                 * have to check what type of Object val is before we cast it
-                 * and put it in preferences */
+                /* java.util.Properties stores keys and values as Object, so we have to check
+                 * what type of Object val is before we cast it and put it in preferences */
                 if (val == null) {
-                    /* java.util.Preferences does not allow values to be null,
-                     * but java.util.Properties does, in this situation the
-                     * empty string will be used if a null value is retrieved
-                     * from properties */
+                    /* java.util.Preferences does not allow values to be null, but
+                     * java.util.Properties does, in this situation the empty string will be used if
+                     * a null value is retrieved from properties */
                     prefs.put(key, "");
                 } else if (val instanceof String) {
                     prefs.put(key, (String) val);
@@ -381,8 +386,7 @@ public final class UserSettings {
      * @param clazz
      *              - values class type
      */
-    public static <T> void changeApplicationSetting(SettingsKey key, T value,
-        Class<T> clazz) {
+    public static <T> void changeApplicationSetting(SettingsKey key, T value, Class<T> clazz) {
         StagedSettingChange.putStagedSettingChange(key, value, clazz);
     }
     
@@ -399,8 +403,7 @@ public final class UserSettings {
      * @param clazz
      *              - values class type
      */
-    public static <T> void changeSheetSetting(String sheet, SettingsKey key,
-        T value, Class<T> clazz) {
+    public static <T> void changeSheetSetting(String sheet, SettingsKey key, T value, Class<T> clazz) {
         StagedSettingChange.putStagedSettingChange(sheet, key, value, clazz);
     }
     
@@ -475,12 +478,11 @@ public final class UserSettings {
      * @see UserSettings#changeSheetSetting(String, SettingsKey, Object, Class)
      * @see UserSettings#clearQueuedSettingsChanges()
      */
-    public static Settings applySettingsChanges() throws BackingStoreException,
-        RequiredSettingNotFoundException, FileNotFoundException, IOException {
+    public static Settings applySettingsChanges()
+        throws BackingStoreException, RequiredSettingNotFoundException, FileNotFoundException, IOException {
         
         // get map of staged settings changes
-        HashMap<String, StagedSettingChange<?>> staged = StagedSettingChange
-            .getStagedChanges();
+        HashMap<String, StagedSettingChange<?>> staged = StagedSettingChange.getStagedChanges();
         
         if (staged == null || staged.isEmpty()) {
             if (usingPreferences) {
@@ -500,8 +502,7 @@ public final class UserSettings {
     }
     
     /* helper preferences method for applySettingsChanges() */
-    private static Settings applySettingsChanges(Preferences prefs,
-        HashMap<String, StagedSettingChange<?>> staged)
+    private static Settings applySettingsChanges(Preferences prefs, HashMap<String, StagedSettingChange<?>> staged)
         throws BackingStoreException, RequiredSettingNotFoundException {
         
         // iterate over queued settings changes and update preferences
@@ -524,8 +525,7 @@ public final class UserSettings {
     }
     
     /* */
-    private static void applyStagedChangeToPrefs(StagedSettingChange<?> ssc,
-        Preferences prefs) {
+    private static void applyStagedChangeToPrefs(StagedSettingChange<?> ssc, Preferences prefs) {
         // get StagedSettingChange class type
         Class<?> c = ssc.clazz();
         
@@ -546,8 +546,7 @@ public final class UserSettings {
     
     
     /* helper properties method for applySettingsChanges() */
-    private static Settings applySettingsChanges(Properties props,
-        HashMap<String, StagedSettingChange<?>> staged)
+    private static Settings applySettingsChanges(Properties props, HashMap<String, StagedSettingChange<?>> staged)
         throws RequiredSettingNotFoundException, IOException {
         
         // iterate over queued settings changes and update preferences
@@ -562,16 +561,14 @@ public final class UserSettings {
         clearQueuedSettingsChanges();
         
         // update-last updated time stamp
-        props.put(SETTINGS_LAST_UPDATE,
-            ((Long) System.currentTimeMillis()).toString());
+        props.put(SETTINGS_LAST_UPDATE, ((Long) System.currentTimeMillis()).toString());
         
         String curPropsFile = getCurrentPropertiesFilePath();
         // write properties to current properties file path, if it applies
-        if (curPropsFile != null
-            && curPropsFile != UserProperties.DEFAULT_PROPERTIES_FILE) {
+        if (curPropsFile != null && curPropsFile != UserProperties.DEFAULT_PROPERTIES_FILE) {
             try (FileWriter writer = new FileWriter(curPropsFile)) {
-                props.store(writer, "Created by an automated properties "
-                    + "writer, only edit if you know what you're doing.");
+                props.store(writer,
+                    "Created by an automated properties " + "writer, only edit if you know what you're doing.");
             }
         }
         
@@ -616,9 +613,7 @@ public final class UserSettings {
         /**
          * Internal static method, do not use this static method.
          */
-        private static <T> HashMap<String, StagedSettingChange<?>> getStagedChanges() {
-            return stagedChanges;
-        }
+        private static <T> HashMap<String, StagedSettingChange<?>> getStagedChanges() { return stagedChanges; }
         
         /**
          * Used by subclasses to instantiate the backing static staged changes
@@ -662,8 +657,7 @@ public final class UserSettings {
          * @param ssc
          *            - the staged settings change to add
          */
-        private static <T> void putStagedSettingChange(
-            StagedSettingChange<T> ssc) {
+        private static <T> void putStagedSettingChange(StagedSettingChange<T> ssc) {
             stagedChanges.put(ssc.key(), ssc);
         }
         
@@ -680,10 +674,8 @@ public final class UserSettings {
          * @param <T>
          *              - value's type
          */
-        private static <T> void putStagedSettingChange(SettingsKey key, T value,
-            Class<T> clazz) {
-            putStagedSettingChange(
-                new StagedApplicationSettingChange<T>(key, value, clazz));
+        private static <T> void putStagedSettingChange(SettingsKey key, T value, Class<T> clazz) {
+            putStagedSettingChange(new StagedApplicationSettingChange<T>(key, value, clazz));
         }
         
         /**
@@ -701,10 +693,8 @@ public final class UserSettings {
          * @param <T>
          *              - value's type
          */
-        private static <T> void putStagedSettingChange(String sheet,
-            SettingsKey key, T value, Class<T> clazz) {
-            putStagedSettingChange(
-                new StagedSheetSettingChange<T>(sheet, key, value, clazz));
+        private static <T> void putStagedSettingChange(String sheet, SettingsKey key, T value, Class<T> clazz) {
+            putStagedSettingChange(new StagedSheetSettingChange<T>(sheet, key, value, clazz));
         }
         
         /**
@@ -746,8 +736,7 @@ public final class UserSettings {
      * 
      * @author Jonathan Henly
      */
-    private static class StagedApplicationSettingChange<T>
-        extends StagedSettingChange<T> {
+    private static class StagedApplicationSettingChange<T> extends StagedSettingChange<T> {
         
         private String key;
         private T value;
@@ -763,8 +752,7 @@ public final class UserSettings {
          * @param clazz
          *              - values class type
          */
-        private StagedApplicationSettingChange(SettingsKey key, T value,
-            Class<T> clazz) {
+        private StagedApplicationSettingChange(SettingsKey key, T value, Class<T> clazz) {
             // make a call to super to initialize map if it needs to be
             super();
             
@@ -789,8 +777,7 @@ public final class UserSettings {
      * 
      * @author Jonathan Henly
      */
-    private static class StagedSheetSettingChange<T>
-        extends StagedSettingChange<T> {
+    private static class StagedSheetSettingChange<T> extends StagedSettingChange<T> {
         
         private String key;
         private T value;
@@ -808,8 +795,7 @@ public final class UserSettings {
          * @param clazz
          *              - values class type
          */
-        private StagedSheetSettingChange(String sheet, SettingsKey key, T value,
-            Class<T> clazz) {
+        private StagedSheetSettingChange(String sheet, SettingsKey key, T value, Class<T> clazz) {
             // make a call to super to initialize map if it needs to be
             super();
             

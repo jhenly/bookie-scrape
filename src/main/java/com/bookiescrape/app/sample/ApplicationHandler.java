@@ -97,7 +97,6 @@ public abstract class ApplicationHandler extends Application {
         configureControllerMediator();
         
         // TODO hide stage if app should start minimized in system tray
-        
         controllerMediator.requestShowDashboardView();
         
         setPrimaryStageMinBounds();
@@ -120,7 +119,13 @@ public abstract class ApplicationHandler extends Application {
         // need this to init stage's scene
         rootView = rootReference.getView();
         
-        return new ControllerMediator(primaryStage, rootReference, dashReference, settingsReference, logReference);
+        if (systemTrayIsSupported() && getSystemTrayController() != null) {
+            return new ControllerMediator(getApplicationMediator(), primaryStage, getSystemTrayController(),
+                rootReference, dashReference, settingsReference, logReference);
+        }
+        
+        return new ControllerMediator(getApplicationMediator(), primaryStage, rootReference, dashReference,
+            settingsReference, logReference);
     }
     
     /** Convenience helper that loads fxml references. */
@@ -276,6 +281,8 @@ public abstract class ApplicationHandler extends Application {
      * @return the controller mediator
      */
     protected ControllerMediator getControllerMediator() { return controllerMediator; }
+    
+    protected abstract ApplicationMediator getApplicationMediator();
     
     /**
      * Returns an event handler that handles actions on the applications

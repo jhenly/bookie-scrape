@@ -15,12 +15,12 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import org.controlsfx.control.ToggleSwitch?>
+<?import org.jhenly.juifx.control.InsetToggleSwitch?>
 <?import org.jhenly.juifx.control.TopPromptTextField?>
 
 <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="settings-hbox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.SettingsController">
    <children>
-      <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="411.0" styleClass="left" HBox.hgrow="ALWAYS">
+      <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="left" HBox.hgrow="ALWAYS">
          <children>
             <Pane maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                <padding>
@@ -30,7 +30,7 @@
                <children>
                   <HBox maxWidth="1.7976931348623157E308">
                      <children>
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="flat-button" HBox.hgrow="ALWAYS">
+                        <Button fx:id="generalBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSideButtonAction" styleClass="flat-button" HBox.hgrow="ALWAYS">
                            <graphic>
                               <StackPane>
                                  <children>
@@ -81,7 +81,154 @@
                   </HBox>
                   <HBox maxWidth="1.7976931348623157E308">
                      <children>
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="flat-button" HBox.hgrow="ALWAYS">
+                        <Button fx:id="scraperBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSideButtonAction" styleClass="flat-button" HBox.hgrow="ALWAYS">
+                           <graphic>
+                              <StackPane>
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
+                                       <children>
+                                          <Region HBox.hgrow="NEVER">
+                                             <styleClass>
+                                                <String fx:value="icon" />
+                                                <String fx:value="icon-scraper" />
+                                             </styleClass>
+                                          </Region>
+                                          <Label styleClass="button-label" text="Scraper" HBox.hgrow="NEVER" />
+                                       </children>
+                                       <styleClass>
+                                          <String fx:value="selected" />
+                                          <String fx:value="container" />
+                                       </styleClass>
+                                       <StackPane.margin>
+                                          <Insets />
+                                       </StackPane.margin>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
+                                       <children>
+                                          <Region HBox.hgrow="NEVER">
+                                             <styleClass>
+                                                <String fx:value="icon" />
+                                                <String fx:value="icon-scraper" />
+                                             </styleClass>
+                                          </Region>
+                                          <Label styleClass="button-label" text="Scraper" HBox.hgrow="NEVER" />
+                                       </children>
+                                       <styleClass>
+                                          <String fx:value="inactive" />
+                                          <String fx:value="container" />
+                                       </styleClass>
+                                       <StackPane.margin>
+                                          <Insets />
+                                       </StackPane.margin>
+                                    </HBox>
+                                 </children>
+                              </StackPane>
+                           </graphic>
+                        </Button>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </HBox>
+                  <HBox maxWidth="1.7976931348623157E308">
+                     <children>
+                        <Button fx:id="excelBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSideButtonAction" styleClass="flat-button" HBox.hgrow="ALWAYS">
+                           <graphic>
+                              <StackPane>
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
+                                       <children>
+                                          <Region HBox.hgrow="NEVER">
+                                             <styleClass>
+                                                <String fx:value="icon" />
+                                                <String fx:value="icon-brand-windows" />
+                                             </styleClass>
+                                          </Region>
+                                          <Label styleClass="button-label" text="Microsoft Excel" HBox.hgrow="NEVER" />
+                                       </children>
+                                       <styleClass>
+                                          <String fx:value="selected" />
+                                          <String fx:value="container" />
+                                       </styleClass>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
+                                       <children>
+                                          <Region HBox.hgrow="NEVER">
+                                             <styleClass>
+                                                <String fx:value="icon" />
+                                                <String fx:value="icon-brand-windows" />
+                                             </styleClass>
+                                          </Region>
+                                          <Label styleClass="button-label" text="Microsoft Excel" HBox.hgrow="NEVER" />
+                                       </children>
+                                       <styleClass>
+                                          <String fx:value="inactive" />
+                                          <String fx:value="container" />
+                                       </styleClass>
+                                       <StackPane.margin>
+                                          <Insets />
+                                       </StackPane.margin>
+                                    </HBox>
+                                 </children>
+                              </StackPane>
+                           </graphic>
+                        </Button>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </HBox>
+                  <HBox maxWidth="1.7976931348623157E308">
+                     <children>
+                        <Button fx:id="gsheetsBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSideButtonAction" styleClass="flat-button" HBox.hgrow="ALWAYS">
+                           <graphic>
+                              <StackPane>
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
+                                       <children>
+                                          <Region HBox.hgrow="NEVER">
+                                             <styleClass>
+                                                <String fx:value="icon" />
+                                                <String fx:value="icon-brand-goole" />
+                                             </styleClass>
+                                          </Region>
+                                          <Label styleClass="button-label" text="Google Sheets" HBox.hgrow="NEVER" />
+                                       </children>
+                                       <styleClass>
+                                          <String fx:value="selected" />
+                                          <String fx:value="container" />
+                                       </styleClass>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
+                                       <children>
+                                          <Region HBox.hgrow="NEVER">
+                                             <styleClass>
+                                                <String fx:value="icon" />
+                                                <String fx:value="icon-brand-goole" />
+                                             </styleClass>
+                                          </Region>
+                                          <Label styleClass="button-label" text="Google Sheets" HBox.hgrow="NEVER" />
+                                       </children>
+                                       <styleClass>
+                                          <String fx:value="inactive" />
+                                          <String fx:value="container" />
+                                       </styleClass>
+                                       <StackPane.margin>
+                                          <Insets />
+                                       </StackPane.margin>
+                                    </HBox>
+                                 </children>
+                              </StackPane>
+                           </graphic>
+                        </Button>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </HBox>
+                  <HBox maxWidth="1.7976931348623157E308">
+                     <children>
+                        <Button fx:id="loggingBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSideButtonAction" styleClass="flat-button" HBox.hgrow="ALWAYS">
                            <graphic>
                               <StackPane alignment="CENTER_LEFT">
                                  <children>
@@ -127,102 +274,6 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </HBox>
-                  <HBox maxWidth="1.7976931348623157E308">
-                     <children>
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="flat-button" HBox.hgrow="ALWAYS">
-                           <graphic>
-                              <StackPane>
-                                 <children>
-                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
-                                       <children>
-                                          <Region HBox.hgrow="NEVER">
-                                             <styleClass>
-                                                <String fx:value="icon" />
-                                                <String fx:value="icon-brand-windows" />
-                                             </styleClass>
-                                          </Region>
-                                          <Label styleClass="button-label" text="Microsoft Excel" HBox.hgrow="NEVER" />
-                                       </children>
-                                       <styleClass>
-                                          <String fx:value="selected" />
-                                          <String fx:value="container" />
-                                       </styleClass>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
-                                       <children>
-                                          <Region HBox.hgrow="NEVER">
-                                             <styleClass>
-                                                <String fx:value="icon" />
-                                                <String fx:value="icon-brand-windows" />
-                                             </styleClass>
-                                          </Region>
-                                          <Label styleClass="button-label" text="Microsoft Excel" HBox.hgrow="NEVER" />
-                                       </children>
-                                       <styleClass>
-                                          <String fx:value="inactive" />
-                                          <String fx:value="container" />
-                                       </styleClass>
-                                       <StackPane.margin>
-                                          <Insets />
-                                       </StackPane.margin>
-                                    </HBox>
-                                 </children>
-                              </StackPane>
-                           </graphic>
-                        </Button>
-                     </children>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </HBox>
-                  <HBox maxWidth="1.7976931348623157E308">
-                     <children>
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="flat-button" HBox.hgrow="ALWAYS">
-                           <graphic>
-                              <StackPane>
-                                 <children>
-                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
-                                       <children>
-                                          <Region HBox.hgrow="NEVER">
-                                             <styleClass>
-                                                <String fx:value="icon" />
-                                                <String fx:value="icon-brand-goole" />
-                                             </styleClass>
-                                          </Region>
-                                          <Label styleClass="button-label" text="Google Sheets" HBox.hgrow="NEVER" />
-                                       </children>
-                                       <styleClass>
-                                          <String fx:value="selected" />
-                                          <String fx:value="container" />
-                                       </styleClass>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT" fillHeight="false" StackPane.alignment="CENTER">
-                                       <children>
-                                          <Region HBox.hgrow="NEVER">
-                                             <styleClass>
-                                                <String fx:value="icon" />
-                                                <String fx:value="icon-brand-goole" />
-                                             </styleClass>
-                                          </Region>
-                                          <Label styleClass="button-label" text="Google Sheets" HBox.hgrow="NEVER" />
-                                       </children>
-                                       <styleClass>
-                                          <String fx:value="inactive" />
-                                          <String fx:value="container" />
-                                       </styleClass>
-                                       <StackPane.margin>
-                                          <Insets />
-                                       </StackPane.margin>
-                                    </HBox>
-                                 </children>
-                              </StackPane>
-                           </graphic>
-                        </Button>
-                     </children>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </HBox>
                </children>
             </VBox>
             <Pane maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS">
@@ -236,11 +287,11 @@
       </HBox>
       <HBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="530.0" styleClass="right" HBox.hgrow="ALWAYS">
          <children>
-            <StackPane alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" HBox.hgrow="ALWAYS">
-               <children>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minViewportHeight="160.0" pannable="true" prefViewportHeight="200.0" styleClass="scroll" StackPane.alignment="TOP_LEFT">
-                     <content>
-                        <VBox>
+            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minViewportHeight="200.0" pannable="true" prefViewportHeight="300.0" styleClass="scroll" HBox.hgrow="ALWAYS">
+               <content>
+                  <StackPane alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
+                     <children>
+                        <VBox fx:id="generalVbox">
                            <children>
                               <Label styleClass="header" text="General" textAlignment="CENTER">
                                  <font>
@@ -248,7 +299,7 @@
                                  </font>
                               </Label>
                               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="sub-header" text="Adjust how Bookie Scrape behaves according to your preferences." textOverrun="CLIP" wrapText="true" VBox.vgrow="NEVER" />
-                              <HBox spacing="16.0">
+                              <HBox spacing="16.0" styleClass="description">
                                  <children>
                                     <CheckBox mnemonicParsing="false">
                                        <HBox.margin>
@@ -258,7 +309,7 @@
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                     </CheckBox>
-                                    <Label styleClass="sub-header" text="Start Bookie Scrape when you log in">
+                                    <Label text="Start Bookie Scrape when you log in">
                                        <HBox.margin>
                                           <Insets top="-3.0" />
                                        </HBox.margin>
@@ -268,7 +319,7 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <HBox spacing="16.0">
+                              <HBox spacing="16.0" styleClass="description">
                                  <children>
                                     <CheckBox mnemonicParsing="false">
                                        <HBox.margin>
@@ -278,7 +329,7 @@
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                     </CheckBox>
-                                    <Label styleClass="sub-header" text="Start Bookie Scrape minimized in system tray">
+                                    <Label text="Start Bookie Scrape minimized in system tray">
                                        <HBox.margin>
                                           <Insets top="-3.0" />
                                        </HBox.margin>
@@ -305,25 +356,28 @@
                               </HBox>
                            </children>
                         </VBox>
-                     </content>
-                  </ScrollPane>
-                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" visible="false">
-                     <children>
-                        <Label styleClass="header" text="Logging" textAlignment="CENTER">
-                           <font>
-                              <Font name="Roboto Black" size="16.0" />
-                           </font>
-                        </Label>
-                        <Label styleClass="sub-header" text="Label" />
-                        <HBox styleClass="toggle-switch">
+                        <VBox fx:id="scraperVbox" prefHeight="200.0" prefWidth="100.0" visible="false" />
+                        <VBox fx:id="excelVbox" prefHeight="200.0" prefWidth="100.0" visible="false" />
+                        <VBox fx:id="gsheetsVbox" prefHeight="200.0" prefWidth="100.0" visible="false" />
+                        <VBox fx:id="loggingVbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" visible="false">
                            <children>
-                              <ToggleSwitch />
-                              <Label styleClass="toggle-switch-label" text="Enable logging" />
-                           </children></HBox>
+                              <Label styleClass="header" text="Logging" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Roboto Black" size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label styleClass="sub-header" text="Label" />
+                              <HBox styleClass="toggle-switch">
+                                 <children>
+                                    <InsetToggleSwitch styleClass="description" text="Enable logging" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
                      </children>
-                  </VBox>
-               </children>
-            </StackPane>
+                  </StackPane>
+               </content>
+            </ScrollPane>
          </children>
       </HBox>
    </children>

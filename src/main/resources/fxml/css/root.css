@@ -60,6 +60,63 @@
     src: url('../font/NotoSansKR-Bold.otf');
 }
 
+/* Open Sans KR - Fonts */
+@font-face {
+    src: url('../font/OpenSans-Regular.ttf');
+}
+@font-face {
+    src: url('../font/OpenSans-Italic.ttf');
+}
+@font-face {
+    src: url('../font/OpenSans-Bold.ttf');
+}
+@font-face {
+    src: url('../font/OpenSans-SemiBold.ttf');
+}
+@font-face {
+    src: url('../font/OpenSans-Light.ttf');
+}
+
+/* Raleway - Fonts */
+@font-face {
+    src: url('../font/Raleway-Regular.ttf');
+}
+@font-face {
+    src: url('../font/Raleway-Italic.ttf');
+}
+@font-face {
+    src: url('../font/Raleway-Bold.ttf');
+}
+@font-face {
+    src: url('../font/Raleway-BoldItalic.ttf');
+}
+@font-face {
+    src: url('../font/Raleway-Medium.ttf');
+}
+@font-face {
+    src: url('../font/Raleway-SemiBold.ttf');
+}
+@font-face {
+    src: url('../font/Raleway-Light.ttf');
+}
+@font-face {
+    src: url('../font/Raleway-Thin.ttf');
+}
+
+/* Confortaa - Fonts */
+@font-face {
+    src: url('../font/Comfortaa-Regular.ttf');
+}
+@font-face {
+    src: url('../font/Comfortaa-Medium.ttf');
+}
+@font-face {
+    src: url('../font/Comfortaa-Bold.ttf');
+}
+@font-face {
+    src: url('../font/Comfortaa-SemiBold.ttf');
+}
+
 /*
 @font-face {
     src: url('../font/Roboto-Italic.ttf');
@@ -133,25 +190,25 @@
 .header {
     -fx-text-fill: -color-black;
     -fx-font-size: 24pt;
-    -fx-font-family: 'Nunito Sans Regular';
+    -fx-font-family: 'Open Sans Regular';
 }
 
 .sub-header {
     -fx-text-fill: -color-black;
     -fx-font-size: 20pt;
-    -fx-font-family: 'Nunito Sans Regular';
+    -fx-font-family: 'Open Sans Regular';
 }
 
 .description { 
     -fx-text-fill: #71797e;
     -fx-font-size: 18pt;
-    -fx-font-family: 'Nunito Sans Regular';
+    -fx-font-family: 'Open Sans Regular';
 }
 
 .sub-description {
     -fx-text-fill: #71797e;
     -fx-font-size: 16pt;
-    -fx-font-family: 'Nunito Sans Regular';
+    -fx-font-family: 'Open Sans Regular';
 }
 
 
@@ -196,9 +253,9 @@
     -fx-background-color: transparent;
     -fx-border-color: box-color;
     -fx-border-style: solid;
-    -fx-border-radius: 1.9;
-    -fx-border-width: 1.7;
-    -fx-padding: 1.6;
+    -fx-border-radius: 1.5;
+    -fx-border-width: 1.8;
+    -fx-padding: 1;
 }
 /* modify mark color */
 .check-box:selected > .box > .mark,
@@ -223,7 +280,7 @@
 .toggle-switch-label {
     -fx-text-fill: -color-black;
     -fx-font-size: 1em;
-    -fx-font-family: 'Nunito Sans Regular';
+    -fx-font-family: 'Open Sans Regular';
     -fx-padding: -2 0 0 10
 }
 
@@ -290,6 +347,11 @@
 
 /* End Input Box Style */
 
+#main-anchor-pane {
+        -fx-background-color: transparent;
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 1, 0.1, 0.0, 1.0);
+}
+
 /* --- Begin Main's Top Specific Layout Section --- */
 
 #main-top-hbox {
@@ -298,8 +360,8 @@
 
 .top-hbox { -fx-background-color: -color-top-blue }
 
-.top-hbox .logo-label-left, .logo-label-right {
-    -fx-font-family: "Roboto";
+.top-hbox .logo-label-top, .logo-label-bottom {
+    -fx-font-family: "Comfortaa Bold";
     -fx-font-size: 16;
 }
 
@@ -368,7 +430,7 @@
 .view-title-bar .view-title {
     -fx-text-fill: #202020;
     -fx-font-size: 12pt;
-    -fx-font-family: 'Noto Sans KR';
+    -fx-font-family: 'Open Sans Regular';
 }
 .view-title-bar .close-view { }
 .view-title-bar .close-view .close-view-x {
@@ -387,16 +449,29 @@
     -fx-background-color: #fafafb;
 }
 
-.bottom-bar-background { -fx-background-color: #fafafb; }
+.root-bottom-hbox {
+    -fx-background-color: #fafafb;
+}
 
-#bottom-hbox-bookie-scraper-label {
+.root-bottom-hbox .bookie-scraper { 
+    -fx-font-family: 'Open Sans Regular';
+    -fx-font-size: 1.2em;
+}
+
+.root-bottom-hbox .bookie-scraper-status {
+    -fx-font-family: "Bellota Text Bold Italic";
+    -fx-font-size: 1.2em;
+    a-fx-font-size: 13;
+}
+
+.bottom-bar-background {  }
+
+a#bottom-hbox-bookie-scraper-label {
 	-fx-font-family: "Roboto Medium";
 	-fx-font-size: 14;
 }
 
 #bottom-hbox-scraper-status {
-	-fx-font-family: "Bellota Text Bold Italic";
-	-fx-font-size: 13;
 }
 
 /* --- End Main's Bottom Specific Layout Section --- */
