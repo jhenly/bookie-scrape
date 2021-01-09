@@ -30,75 +30,80 @@ import javafx.stage.Stage;
  * @author Jonathan Henly
  */
 public class RootController extends MediatableController {
-    
+
     /* Package Private Constants */
-    
+
     /** Constant representing the inactive state of a top button. */
     static int TOP_BTN_INACTIVE_STATE = 0;
     /** Constant representing the selected state of a top button. */
     static int TOP_BTN_SELECTED_STATE = 1;
-    
+
     /* Private Constants */
     private static final String SETTINGS_BUTTON_ID = "settingsButton";
     private static final String LOG_BUTTON_ID = "historyButton";
-    
+
     /* Private Members and FXML Members */
-    
+
     @FXML
     private ResourceBundle resources;
-    
+
     @FXML
     private HBox mainTopHBox;
     @FXML
     private BorderPane rootViewPane;
     @FXML
-    private HBox bottomBtnsHbox; // holds the cancel and apply & restart buttons
-    
+    private HBox bottomButtonsHbox; // holds the cancel and apply & restart buttons
+
     @FXML
     private Button closeButton;
     @FXML
     private Button maxButton;
     @FXML
     private Button minButton;
-    
+
     @FXML
     private Button settingsButton;
     @FXML
     private Button logButton;
-    
+
     @FXML
     private Button viewClose;
     @FXML
     private Label subViewTitleLabel;
     
-    // holds the currently selected top hbox button, if one is selected
-    private Button activeTopButton;
-    
     @FXML
     private Label scraperStatusLabel;
     @FXML
     private Circle scraperStatusCircle;
-    
+
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private Button applyButton;
+
+    // holds the currently selected top hbox button, if one is selected
+    private Button activeTopButton;
+
     private List<String> bookiesList = new ArrayList<>();
     private CellStyle style = null;
-    
+
     private double stageXOffset;
     private double stageYOffset;
-    
+
     // primary stage reference
     private Stage primaryStage;
-    
+
     // root view reference
     private Parent rootView;
-    
+
     // reference to the actively showing view
     private Parent activeView;
-    
+
     @FXML
     private void initialize() {}
-    
+
     /**
-     * 
+     *
      * @param view
      * @param viewTitle
      * @param isClosable
@@ -111,14 +116,14 @@ public class RootController extends MediatableController {
             changeTopButtonState(activeTopButton, TOP_BTN_INACTIVE_STATE);
             activeTopButton = null;
         }
-        
+
         viewClose.setVisible(isClosable);
         subViewTitleLabel.setText(viewTitle);
-        bottomBtnsHbox.setVisible(bottomBtns);
+        bottomButtonsHbox.setVisible(bottomBtns);
         rootViewPane.setCenter(view);
         activeView = view;
     }
-    
+
     /**
      * Used to record the start of dragging the main window across the screen.
      *
@@ -130,7 +135,7 @@ public class RootController extends MediatableController {
         stageXOffset = event.getSceneX();
         stageYOffset = event.getSceneY();
     }
-    
+
     /**
      * Handles dragging the window across the screen after mouse pressing main's
      * top HBox.
@@ -141,72 +146,70 @@ public class RootController extends MediatableController {
     @FXML
     void onMainTopHBoxMouseDragged(MouseEvent event) {
         Stage stage = (Stage) ((HBox) event.getSource()).getScene().getWindow();
-        
+
         stage.setX(event.getScreenX() - stageXOffset);
         stage.setY(event.getScreenY() - stageYOffset);
     }
-    
+
     /**
      * Handles actions coming from the top most close button.
      * @param action - the action event to handle
      */
     @FXML
     void onCloseButtonAction(ActionEvent action) { getControllerMediator().closeWindowSelected(action); }
-    
+
     /**
      * Handles actions on the top right most minimize button.
      * @param action - the action event to handle
      */
     @FXML
     void onMinimizeButtonAction(ActionEvent action) { getControllerMediator().minimizeWindowSelected(action); }
-    
+
     /**
      * Handles actions on the top right most maximize button.
      * @param action - the action event to handle
      */
     @FXML
     void onMaximizeButtonAction(ActionEvent action) { getControllerMediator().maximizeWindowSelected(action); }
-    
+
     @FXML
     void onTopButtonAction(ActionEvent event) {
         Button topButton = (Button) event.getSource();
-        
+
         // don't do anything if the button is already active
-        if (activeTopButton == topButton) { return; }
-        
+        if (activeTopButton == topButton) return;
+
         // set any active top button to inactive and set top button to selected
         setActiveTopButton(topButton);
-        
+
         // call on action method for the active button
         switch (topButton.getId()) {
             case SETTINGS_BUTTON_ID:
                 getControllerMediator().settingsButtonSelected();
                 break;
-            
+
             case LOG_BUTTON_ID:
                 getControllerMediator().viewLogsSelected();
                 break;
-            
+
             default:
         }
     }
-    
+
     /* helper to set top buttons active */
     private void setActiveTopButton(Button button) {
         Button btn = Objects.requireNonNull(button);
-        
-        if (activeTopButton == button) { return; }
-        
+
+        if (activeTopButton == button) return;
+
         // if another button is active then set it to inactive
-        if (activeTopButton != null) {
-            changeTopButtonState(activeTopButton, TOP_BTN_INACTIVE_STATE);
-        }
-        
+        if (activeTopButton != null) changeTopButtonState(activeTopButton, TOP_BTN_INACTIVE_STATE);
+
         // set the new active top hbox button and change its state to selected
         changeTopButtonState(btn, TOP_BTN_SELECTED_STATE);
         activeTopButton = btn;
     }
-    
+
     /**
      * Changes the visible state of a specified top button.
      * <p>
@@ -235,47 +238,47 @@ public class RootController extends MediatableController {
      */
     void changeTopButtonState(Button button, int state) {
         Button btn = Objects.requireNonNull(button);
-        
+
         // get the state nodes' parent container
         ObservableList<Node> states = ((Parent) btn.getChildrenUnmodifiable().get(0)).getChildrenUnmodifiable();
-        
+
         Node inactive = states.get(TOP_BTN_INACTIVE_STATE);
         Node selected = states.get(TOP_BTN_SELECTED_STATE);
-        
+
         inactive.setVisible(state == TOP_BTN_INACTIVE_STATE);
         selected.setVisible(state == TOP_BTN_SELECTED_STATE);
     }
-    
+
     @FXML
     void onViewCloseAction(ActionEvent action) { getControllerMediator().closeSubViewSelected(); }
-    
+
     void setSettingsTopButtonActive() { setActiveTopButton(settingsButton); }
-    
+
     void setLogsTopButtonActive() { setActiveTopButton(logButton); }
-    
+
     private static final String MONEY_LINE = "https://classic.sportsbookreview.com/betting-odds/money-line/";
-    
+
     /* enforces window to not become smaller than root's min bounds */
     private void setPrimaryStageMinBounds() {
         // get root and active view's bounds to calculate min width and height
         Bounds rootPrefBounds = getPrefBounds(rootView);
         Bounds activePrefBounds = getPrefBounds(activeView);
-        
+
         double minWidth = (rootPrefBounds.getWidth() - activePrefBounds.getWidth() > 0.0) ? rootPrefBounds.getWidth()
             : activePrefBounds.getWidth();
         double minHeight = rootPrefBounds.getHeight() + activePrefBounds.getHeight();
-        
+
         primaryStage.setMinWidth(minWidth);
         primaryStage.setMinHeight(minHeight);
     }
-    
+
     private void printBounds(String name, Bounds toPrint) {
         System.out.printf("%s bounds -  width: %.1f  height: %.1f%n", name, toPrint.getWidth(), toPrint.getHeight());
         double deltaW = primaryStage.getWidth() - toPrint.getWidth();
         double deltaH = primaryStage.getHeight() - toPrint.getHeight();
         System.out.printf("%s deltas -  deltaW: %.1f  deltaH: %.1f%n", name, deltaW, deltaH);
     }
-    
+
     /**
      * Method that calculates a specified node's preferred bounds.
      *
@@ -285,7 +288,7 @@ public class RootController extends MediatableController {
     public static Bounds getPrefBounds(Node node) {
         double prefWidth;
         double prefHeight;
-        
+
         Orientation bias = node.getContentBias();
         if (bias == Orientation.HORIZONTAL) {
             prefWidth = node.prefWidth(-1);
@@ -297,8 +300,8 @@ public class RootController extends MediatableController {
             prefWidth = node.prefWidth(-1);
             prefHeight = node.prefHeight(-1);
         }
-        
+
         return new BoundingBox(0, 0, prefWidth, prefHeight);
     }
-    
+
 }

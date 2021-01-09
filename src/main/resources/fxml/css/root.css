@@ -154,13 +154,38 @@
 * {
     /* general colors */
     -color-black: #202020;
+    -color-gray: #71797e;
+    -color-red: #f44336;
+    
+    /* window colors */
     -color-window-background: #f4f4f6;
+    -color-window-bottom: #fafafb;
+    -color-window-separator: #d6d6d8;
     -color-top-blue: #2496ed;
+    
+    /* button colors */
     -color-button-blue: #007bff;
+    -color-button-red: #e12b0c;
+    -color-outline-background: -color-window-background;
+    -color-outline-blue: -color-button-blue;
+    -color-outline-text-blue: -color-button-blue;
+    -color-outline-hover-blue: #e6f0fb;
+    -color-outline-red: -color-button-red;
+    -color-outline-text-red: -color-button-red;
+    -color-outline-hover-red: #f3e4e4;
+    -color-outline-disabled: #b5b5b6;
+    -color-solid-text: #ffffff;
+    -color-solid-background-blue: -color-button-blue;
+    -color-solid-hover-blue: #096bd4;
+    -color-solid-background-red: -color-button-red;
+    -color-solid-hover-red: -color-button-red;
+    -color-solid-disabled: #dcdcdc;
+    -color-solid-disabled-text: #a3a3a3;
     
     /* label related colors */
     -color-header-black: -color-black;
-    -color-description-gray: #71797e;
+    -color-description-gray: -color-gray;
+    -color-warning-red: -color-red;
     
     /* textfield related colors */
     -color-textfield-text: #1f1f1f;
@@ -168,7 +193,12 @@
     -color-textfield-prompt-text: #b7bbbe;
     -color-textfield-prompt-settled: #096bd4;
     -color-textfield-prompt-border: #8e8e8f;
-    -color-textfield-invalid-red: #f44336;
+    -color-textfield-invalid-red: -color-red;
+
+    /* setting's side button colors */
+    -color-side-button-hover: #e6eff6;
+    -color-side-button-selected: #d8eaf6;
+    -color-side-button-border: -color-button-blue;
     
     /* */
     -color-primary:#d8d8d8;
@@ -185,28 +215,28 @@
 
 /* force font anti aliasing */
 
-.text { -fx-font-smoothing-type: gray; }
+.text { a-fx-font-smoothing-type: gray; }
 
 .header {
-    -fx-text-fill: -color-black;
+    -fx-text-fill: -color-header-black;
     -fx-font-size: 24pt;
     -fx-font-family: 'Open Sans Regular';
 }
 
 .sub-header {
-    -fx-text-fill: -color-black;
+    -fx-text-fill: -color-header-black;
     -fx-font-size: 20pt;
     -fx-font-family: 'Open Sans Regular';
 }
 
 .description { 
-    -fx-text-fill: #71797e;
+    -fx-text-fill: -color-description-gray;
     -fx-font-size: 18pt;
     -fx-font-family: 'Open Sans Regular';
 }
 
 .sub-description {
-    -fx-text-fill: #71797e;
+    -fx-text-fill: -color-description-gray;
     -fx-font-size: 16pt;
     -fx-font-family: 'Open Sans Regular';
 }
@@ -265,10 +295,61 @@
 
 /* Begin Button Styles */
 
+    /* flat buttons */
 .flat-button {
     -fx-background-radius: 0;
     -fx-padding: 0;
     -fx-background-color: transparent;
+}
+
+    /* outline buttons */
+
+.blue-outline-button,
+.red-outline-button {
+	-fx-background-radius: 7, 6;
+	-fx-background-insets: 0, 2;
+	
+}
+
+.blue-outline-button {
+	-fx-background-color: -color-outline-blue, -color-outline-background;
+	-fx-text-fill: -color-outline-text-blue;
+}
+.blue-outline-button:hover {
+	-fx-background-color: -color-outline-blue, -color-outline-hover-blue;
+}
+
+.red-outline-button {
+    -fx-background-color: -color-outline-blue, -color-outline-background;
+    -fx-text-fill: -color-outline-text-red;
+}
+.red-outline-button:hover { -fx-background-color: -color-outline-red, -color-outline-hover-red; }
+
+.blue-outline-button:disabled,
+.red-outline-button:disabled {
+	-fx-opacity: 1.0;
+    -fx-background-color: -color-outline-disabled, -color-outline-background;
+    -fx-text-fill: -color-outline-disabled;
+}
+
+    /* solid buttons */
+.blue-solid-button,
+.red-solid-button {
+	-fx-background-radius: 7;
+	-fx-text-fill: -color-solid-text;
+}
+
+.blue-solid-button { -fx-background-color: -color-solid-background-blue; }
+.blue-solid-button:hover { -fx-background-color: -color-solid-hover-blue; }
+
+.red-solid-button { -fx-background-color: -color-solid-background-red; }
+.red-solid-button:hover { -fx-background-color: -color-solid-hover-red; }
+
+.blue-solid-button:disabled,
+.red-solid-button:disabled {
+	-fx-opacity: 1.0;
+	-fx-background-color: -color-solid-disabled;
+	-fx-text-fill: -color-solid-disabled-text;
 }
 
 /* End Button Styles */
@@ -281,7 +362,7 @@
     -fx-text-fill: -color-black;
     -fx-font-size: 1em;
     -fx-font-family: 'Open Sans Regular';
-    -fx-padding: -2 0 0 10
+    -fx-padding: -2 0 0 10;
 }
 
 .toggle-switch .thumb {
@@ -348,8 +429,8 @@
 /* End Input Box Style */
 
 #main-anchor-pane {
-        -fx-background-color: transparent;
-        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 1, 0.1, 0.0, 1.0);
+    -fx-background-color: transparent;
+    a-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.1, 0.0, 1.0);
 }
 
 /* --- Begin Main's Top Specific Layout Section --- */
@@ -403,10 +484,10 @@
     -fx-background-color: transparent;
 }
 .control-button-close:hover > .control-button-close-stack-pane > .control-button-box {
-	-fx-fill: #d51e37
+	-fx-fill: #d51e37;
 }
 .control-button-close:hover > .control-button-close-stack-pane > .control-button-close-x {
-	-fx-stroke: #ffffff;
+	-fx-stroke: white;
 }
 .control-button-close-x { -fx-stroke: #2e516b; }
 
@@ -428,50 +509,71 @@
 
 .view-title-bar {}
 .view-title-bar .view-title {
-    -fx-text-fill: #202020;
+    -fx-text-fill: -color-black;
     -fx-font-size: 12pt;
-    -fx-font-family: 'Open Sans Regular';
+    -fx-font-family: 'Open Sans SemiBold';
 }
-.view-title-bar .close-view { }
+
 .view-title-bar .close-view .close-view-x {
     -fx-stroke: #70787d;
     -fx-stroke-width: 1.6;
 }
 
-.view-title-bar .close-view:hover .close-view-x { -fx-stroke: #202020 }
+.view-title-bar .close-view:hover .close-view-x { -fx-stroke: -color-black; }
 
 /* --- End Main's Middle Layout Section --- */
 
 
 /* --- Begin Main's Bottom Specific Layout Section --- */
 
-#main-bottom-hbox { 
-    -fx-background-color: #fafafb;
-}
-
 .root-bottom-hbox {
-    -fx-background-color: #fafafb;
+    -fx-background-color: -color-window-separator, -color-window-bottom;
+    -fx-background-insets: 0, 2 0 0 0;
 }
 
 .root-bottom-hbox .bookie-scraper { 
     -fx-font-family: 'Open Sans Regular';
-    -fx-font-size: 1.2em;
+    -fx-font-size: 1.15em;
+    /* a-fx-font-size: 14; */
 }
 
 .root-bottom-hbox .bookie-scraper-status {
-    -fx-font-family: "Bellota Text Bold Italic";
-    -fx-font-size: 1.2em;
-    a-fx-font-size: 13;
+    -fx-font-family: 'Open Sans Italic'; /*"Bellota Text Bold Italic";*/
+    -fx-font-size: 1.1em;
+    /*-fx-font-size: 13;*/
 }
 
-.bottom-bar-background {  }
-
-a#bottom-hbox-bookie-scraper-label {
-	-fx-font-family: "Roboto Medium";
-	-fx-font-size: 14;
+.root-bottom-hbox .bottom-buttons {
+	-fx-font-size: 1.1em;
+	-fx-font-family: 'Open Sans SemiBold';
 }
 
-#bottom-hbox-scraper-status {
+.root-bottom-hbox .bottom-buttons .button {
+	-fx-padding: 7 15 7 15;
+    a-fx-background-color: -color-button-blue, -color-window-bottom;
+	a-fx-background-insets: 0, 1;
+	a-fx-background-radius: 7, 6;
+}
+
+a.root-bottom-hbox .bottom-buttons .cancel { a-fx-text-fill: -color-gray; }
+a.root-bottom-hbox .bottom-buttons .cancel:hover {
+	a-fx-background-color: -color-button-blue, -color-side-button-selected;
+	a-fx-text-fill: -color-button-blue;
+}
+
+a.root-bottom-hbox .bottom-buttons .apply {
+	a-fx-text-fill: -color-window-bottom;
+    a-fx-background-color: -color-button-blue;
+    a-fx-background-insets: 0;
+}
+
+a.root-bottom-hbox .bottom-buttons .apply:disabled {
+    a-fx-text-fill: -color-window-bottom;
+    a-fx-background-color: -color-gray;
+}
+
+.root-bottom-hbox .bottom-buttons .apply:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8.0, 10.0, 0.0, 5.0);
 }
 
 /* --- End Main's Bottom Specific Layout Section --- */

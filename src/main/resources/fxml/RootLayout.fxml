@@ -22,7 +22,7 @@
   <children>
       <BorderPane id="main-border-pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <HBox id="main-top-hbox" fx:id="mainTopHBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#onMainTopHBoxMouseDragged" onMousePressed="#onMainTopHBoxMousePressed" styleClass="top-hbox" BorderPane.alignment="TOP_CENTER">
+            <HBox id="main-top-hbox" fx:id="mainTopHBox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#onMainTopHBoxMouseDragged" onMousePressed="#onMainTopHBoxMousePressed" styleClass="top-hbox" BorderPane.alignment="TOP_CENTER">
                <children>
                   <Pane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="340.0" HBox.hgrow="ALWAYS" />
                   <HBox alignment="CENTER" minWidth="-Infinity" prefWidth="110.0" HBox.hgrow="NEVER">
@@ -281,7 +281,7 @@
             </HBox>
          </top>
          <bottom>
-            <HBox id="main-bottom-hbox" maxWidth="1.7976931348623157E308" BorderPane.alignment="BOTTOM_CENTER">
+            <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="root-bottom-hbox" BorderPane.alignment="BOTTOM_CENTER">
                <children>
                   <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" HBox.hgrow="NEVER">
                      <children>
@@ -310,38 +310,26 @@
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
                   </HBox>
                   <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                  <HBox fx:id="bottomBtnsHbox" alignment="CENTER_RIGHT" HBox.hgrow="NEVER">
+                  <HBox fx:id="bottomButtonsHbox" alignment="CENTER_RIGHT" spacing="30.0" styleClass="bottom-buttons" HBox.hgrow="NEVER">
                      <children>
-                        <StackPane alignment="CENTER_LEFT">
-                           <children>
-                              <Button mnemonicParsing="false" styleClass="flat-button" text="Cancel" />
-                           </children>
-                        </StackPane>
-                        <StackPane alignment="CENTER_RIGHT">
-                           <children>
-                              <Button mnemonicParsing="false" styleClass="flat-button" text="Apply &amp; Restart" />
-                           </children>
-                        </StackPane>
+                        <Button fx:id="cancelButton" mnemonicParsing="false" styleClass="blue-outline-button" text="Cancel" HBox.hgrow="NEVER" />
+                        <Button fx:id="applyButton" disable="true" mnemonicParsing="false" text="Apply &amp; Restart" HBox.hgrow="NEVER">
+                           <styleClass>
+                              <String fx:value="apply" />
+                              <String fx:value="blue-solid-button" />
+                           </styleClass>
+                        </Button>
                      </children></HBox>
                </children>
-               <styleClass>
-                  <String fx:value="border-top-solid" />
-                  <String fx:value="root-bottom-hbox" />
-                  <String fx:value="border-gray" />
-                  <String fx:value="border-thin" />
-               </styleClass>
                <padding>
-                  <Insets bottom="10.0" top="10.0" />
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                </padding>
             </HBox>
          </bottom>
          <center>
-            <VBox id="main-middle-vbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" BorderPane.alignment="CENTER">
+            <VBox id="main-middle-vbox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" BorderPane.alignment="CENTER">
                <children>
                   <HBox maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
                      <children>
