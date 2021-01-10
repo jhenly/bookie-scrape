@@ -18,11 +18,11 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="main-anchor-pane" depthTest="DISABLE" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #00000000;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.RootController">
+<AnchorPane id="main-anchor-pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.RootController">
   <children>
       <BorderPane id="main-border-pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <HBox id="main-top-hbox" fx:id="mainTopHBox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#onMainTopHBoxMouseDragged" onMousePressed="#onMainTopHBoxMousePressed" styleClass="top-hbox" BorderPane.alignment="TOP_CENTER">
+            <HBox id="main-top-hbox" fx:id="mainTopHBox" maxWidth="1.7976931348623157E308" onMouseDragged="#onMainTopHBoxMouseDragged" onMousePressed="#onMainTopHBoxMousePressed" styleClass="top-hbox" BorderPane.alignment="TOP_CENTER">
                <children>
                   <Pane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="340.0" HBox.hgrow="ALWAYS" />
                   <HBox alignment="CENTER" minWidth="-Infinity" prefWidth="110.0" HBox.hgrow="NEVER">
@@ -53,11 +53,11 @@
                      </children>
                   </HBox>
                   <Pane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="126.0" HBox.hgrow="ALWAYS" />
-                  <HBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="214.0" HBox.hgrow="NEVER">
+                  <HBox alignment="CENTER" minWidth="-Infinity" prefWidth="214.0" HBox.hgrow="NEVER">
                      <children>
-                        <HBox id="top-hbox-buttons" alignment="CENTER" spacing="20.0" HBox.hgrow="NEVER">
+                        <HBox id="top-hbox-buttons" alignment="CENTER" spacing="20.0">
                            <children>
-                            <Button fx:id="settingsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onTopButtonAction" styleClass="flat-button" HBox.hgrow="NEVER">
+                            <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#onTopButtonAction" styleClass="flat-button">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -72,50 +72,29 @@
                                        <children>
                                           <StackPane styleClass="inactive" StackPane.alignment="CENTER">
                                              <children>
-                                                <Circle radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER">
-                                                   <cursor>
-                                                      <Cursor fx:constant="HAND" />
-                                                   </cursor></Circle>
+                                                <Circle radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER" />
                                                 <Region StackPane.alignment="CENTER">
                                                    <styleClass>
                                                       <String fx:value="icon" />
                                                       <String fx:value="cog-icon" />
                                                    </styleClass>
-                                                   <cursor>
-                                                      <Cursor fx:constant="HAND" />
-                                                   </cursor>
                                                 </Region>
                                                 
                                              </children>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
                                           </StackPane>
                                           <StackPane styleClass="selected" visible="false" StackPane.alignment="CENTER">
                                              <children>
-                                                <Circle fill="WHITE" radius="1.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER">
-                                                   <cursor>
-                                                      <Cursor fx:constant="DEFAULT" />
-                                                   </cursor></Circle>
+                                                <Circle fill="WHITE" radius="1.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER" />
                                                 <Region StackPane.alignment="CENTER">
                                                    <styleClass>
                                                       <String fx:value="icon" />
                                                       <String fx:value="cog-icon" />
                                                    </styleClass>
-                                                   <cursor>
-                                                      <Cursor fx:constant="DEFAULT" />
-                                                   </cursor>
                                                 </Region>
                                              
                                              </children>
-                                             <cursor>
-                                                <Cursor fx:constant="DEFAULT" />
-                                             </cursor>
                                           </StackPane>
                                        </children>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
                                     </StackPane>
                                  </graphic>
                               </Button>
@@ -134,50 +113,29 @@
                                        <children>
                                           <StackPane styleClass="inactive" StackPane.alignment="CENTER">
                                              <children>
-                                                <Circle radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER">
-                                                   <cursor>
-                                                      <Cursor fx:constant="HAND" />
-                                                   </cursor></Circle>
+                                                <Circle radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER" />
                                                 <Region StackPane.alignment="CENTER">
                                                    <styleClass>
                                                       <String fx:value="icon" />
                                                       <String fx:value="book-dead-icon" />
                                                    </styleClass>
-                                                   <cursor>
-                                                      <Cursor fx:constant="HAND" />
-                                                   </cursor>
                                                 </Region>
                                                 
                                              </children>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
                                           </StackPane>
                                           <StackPane styleClass="selected" visible="false" StackPane.alignment="CENTER">
                                              <children>
-                                                <Circle fill="WHITE" radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER">
-                                                   <cursor>
-                                                      <Cursor fx:constant="DEFAULT" />
-                                                   </cursor></Circle>
+                                                <Circle fill="WHITE" radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER" />
                                                 <Region StackPane.alignment="CENTER">
                                                    <styleClass>
                                                       <String fx:value="icon" />
                                                       <String fx:value="book-dead-icon" />
                                                    </styleClass>
-                                                   <cursor>
-                                                      <Cursor fx:constant="DEFAULT" />
-                                                   </cursor>
                                                 </Region>
                                                 
                                              </children>
-                                             <cursor>
-                                                <Cursor fx:constant="DEFAULT" />
-                                             </cursor>
                                           </StackPane>
                                        </children>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
                                     </StackPane>
                                  </graphic>
                               </Button>
@@ -186,7 +144,7 @@
                               <Insets />
                            </HBox.margin>
                         </HBox>
-                        <HBox id="top-hbox-control-buttons" alignment="TOP_RIGHT" HBox.hgrow="NEVER">
+                        <HBox id="top-hbox-control-buttons" alignment="TOP_RIGHT">
                            <children>
                               <Button fx:id="minButton" alignment="TOP_RIGHT" cache="true" mnemonicParsing="false" onAction="#onMinimizeButtonAction">
                                  <cursor>
@@ -208,7 +166,7 @@
                                     <String fx:value="flat-button" />
                                  </styleClass>
                               </Button>
-                            <Button fx:id="maxButton" alignment="TOP_RIGHT" cache="true" mnemonicParsing="false" onAction="#onMaximizeButtonAction" HBox.hgrow="ALWAYS">
+                            <Button fx:id="maxButton" alignment="TOP_RIGHT" cache="true" mnemonicParsing="false" onAction="#onMaximizeButtonAction">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -237,7 +195,7 @@
                                     <String fx:value="flat-button" />
                                  </styleClass>
                               </Button>
-                              <Button fx:id="closeButton" alignment="TOP_RIGHT" cache="true" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onCloseButtonAction" HBox.hgrow="ALWAYS">
+                              <Button fx:id="closeButton" alignment="TOP_RIGHT" cache="true" graphicTextGap="0.0" mnemonicParsing="false" onAction="#onCloseButtonAction">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -272,16 +230,19 @@
                               <Insets bottom="16.0" />
                            </HBox.margin>
                            <padding>
-                              <Insets left="5.0" />
+                              <Insets left="5.0" top="-6.0" />
                            </padding>
                         </HBox>
                      </children>
                   </HBox>
                </children>
+               <padding>
+                  <Insets bottom="6.0" top="6.0" />
+               </padding>
             </HBox>
          </top>
          <bottom>
-            <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="root-bottom-hbox" BorderPane.alignment="BOTTOM_CENTER">
+            <HBox maxWidth="1.7976931348623157E308" styleClass="root-bottom-hbox" BorderPane.alignment="BOTTOM_CENTER">
                <children>
                   <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" HBox.hgrow="NEVER">
                      <children>
@@ -307,19 +268,22 @@
                            </HBox.margin>
                         </VBox>
                      </children>
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
                   </HBox>
                   <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                   <HBox fx:id="bottomButtonsHbox" alignment="CENTER_RIGHT" spacing="30.0" styleClass="bottom-buttons" HBox.hgrow="NEVER">
                      <children>
-                        <Button fx:id="cancelButton" mnemonicParsing="false" styleClass="blue-outline-button" text="Cancel" HBox.hgrow="NEVER" />
+                        <Button fx:id="cancelButton" mnemonicParsing="false" styleClass="blue-outline-button" text="Cancel" HBox.hgrow="NEVER">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Button>
                         <Button fx:id="applyButton" disable="true" mnemonicParsing="false" text="Apply &amp; Restart" HBox.hgrow="NEVER">
                            <styleClass>
                               <String fx:value="apply" />
                               <String fx:value="blue-solid-button" />
                            </styleClass>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </Button>
                      </children></HBox>
                </children>
@@ -337,7 +301,7 @@
                         <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                         <StackPane HBox.hgrow="NEVER">
                            <children>
-                              <Button fx:id="viewClose" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onViewCloseAction" StackPane.alignment="CENTER">
+                              <Button fx:id="closeSubViewButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onCloseSubViewAction" StackPane.alignment="CENTER">
                                  <graphic>
                                     <StackPane>
                                        <children>
@@ -370,10 +334,7 @@
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                   </HBox>
-                  <BorderPane fx:id="rootViewPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="view-display" VBox.vgrow="ALWAYS">
-                     <padding>
-                        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
-                     </padding></BorderPane>
+                  <StackPane fx:id="subViewStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
          </center>

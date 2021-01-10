@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bookiescrape.app.fx.FXMLReference;
+import com.bookiescrape.app.fx.view.SubView;
 import com.bookiescrape.app.sample.ApplicationMediator;
 import com.bookiescrape.app.tray.SystemTrayController;
 
@@ -21,32 +22,34 @@ import javafx.stage.Stage;
 public class ControllerMediator {
     private static final Logger LOG = LoggerFactory.getLogger(ControllerMediator.class);
     
+    /* root sub view titles */
     private static final String DASH_TITLE = "Dashboard";
     private static final String SETTINGS_TITLE = "Settings";
     private static final String LOG_TITLE = "View Logs";
     
     private Stage primaryStage;
     
-    /* views and their controllers */
+    /* root view and its controller */
     private Parent rootView;
     private RootController rootController;
-    private Parent dashView;
+    
+    /* root sub views and their controllers */
+    private SubView dashSubView;
     private DashController dashController;
-    private Parent settingsView;
+    private SubView settingsSubView;
     private SettingsController settingsController;
-    private Parent logView;
+    private SubView logSubView;
     private LogController logController;
     
     private ApplicationMediator appMediator;
-    // system tray controller
-    private SystemTrayController sysTrayController;
+    
     // notification controller
     private NotifierController notiController;
     
     // the currently active/showing sub view
-    private Parent activeSubView;
+    private SubView activeSubView;
     
-    /* application window's control buttons action handlers */
+    /* application window's control buttons' action handlers */
     private EventHandler<ActionEvent> onWindowCloseButtonActionHandler;
     private EventHandler<ActionEvent> onWindowMinButtonActionHandler;
     private EventHandler<ActionEvent> onWindowMaxButtonActionHandler;
@@ -89,16 +92,19 @@ public class ControllerMediator {
         this.appMediator = appMediator;
         this.primaryStage = stage;
         
+        // root reference must be set before any sub view reference
         setRootReference(root);
+        // set sub view references
         setDashboardReference(dashboard);
         setSettingsReference(settings);
         setLogReference(log);
         
-        sysTrayController = sysTray;
+        createNotificationController(sysTray);
         
-        createNotificationController();
+        // add sub views to root view
+        rootController.addSubViewsToSubViewStackPane(dashSubView, settingsSubView, logSubView);
         
-        LOG.warn("ControllerMediator: finished creating all mediatable instances");
+        LOG.info("ControllerMediator: finished creating all mediatable instances");
     }
     
     
@@ -138,6 +144,7 @@ public class ControllerMediator {
         onWindowMaxButtonActionHandler = handler;
     }
     
+    
     /**************************************************************************
      *                                                                        *
      * Sub View Requests                                                      *
@@ -147,23 +154,17 @@ public class ControllerMediator {
     /**
      * Request to change root's sub view to the settings sub view.
      */
-    public void requestShowSettingsView() {
-        requestShowSubView(settingsView, SETTINGS_TITLE, true, false, true);
-    }
+    public void requestShowSettingsView() { requestShowSubView(settingsSubView); }
     
     /**
      * Request to change root's sub view to the view logs sub view.
      */
-    public void requestShowViewLogsView() {
-        requestShowSubView(logView, LOG_TITLE, true, false, false);
-    }
+    public void requestShowViewLogsView() { requestShowSubView(logSubView); }
     
     /**
      * Request to change root's sub view to the dashboard sub view.
      */
-    public void requestShowDashboardView() {
-        requestShowSubView(dashView, DASH_TITLE, false, true, false);
-    }
+    public void requestShowDashboardView() { requestShowSubView(dashSubView); }
     
     
     /**************************************************************************
@@ -262,33 +263,27 @@ public class ControllerMediator {
      *************************************************************************/
     
     /**
-     * Helper method that shows a specified sub view in root.
+     * Helper method that shows a specified sub view in the root view.
      * <p>
      * This method shows, brings to the front and centers the primary stage if
-     * it's not showing. If the primary stage is showing and the specified view
-     * is already active, then this method just returns.
+     * it's not showing. If the the specified sub view is already active, then
+     * this method just returns.
      *  
-     * @param view - the sub view to show in root
-     * @param title - the sub view title to display
-     * @param isClosable - whether or not to display the sub view close button
-     * @param clearActiveTopBtns - whether or not to change root's top buttons
-     *        to their inactive state
-     * @param bottomBtns - whether or not to display root's 'Cancel' and 'Apply
-     *        &amp; Restart' buttons
+     * @param subView - the sub view to show in the root view
      */
-    private void requestShowSubView(Parent view, String title, boolean isClosable, boolean clearActiveTopBtns,
-        boolean bottomBtns) {
-        if (!primaryStage.isShowing()) {
-            showPrimaryStage(true);
-        } else {
-            if (subViewIsActive(view)) { return; }
-        }
+    private void requestShowSubView(SubView subView) {
+        // unhide stage if hidden and bring stage to front center
+        showPrimaryStage(true);
         
-        showSubViewInRoot(view, title, isClosable, clearActiveTopBtns, bottomBtns);
-        if (view == settingsView) {
+        // don't do anything if the sub view is already active
+        if (subViewIsActive(subView)) { return; }
+        
+        showSubViewInRoot(subView);
+        if (subView == settingsSubView) {
             // initially show general settings in settings view
             settingsController.setGeneralInitiallyActive();
         }
+        
     }
     
     /**
@@ -310,31 +305,23 @@ public class ControllerMediator {
     }
     
     /** Helper that changes root's sub view. */
-    private void showSubViewInRoot(Parent view, String viewTitle, boolean isClosable, boolean clearActiveTopBtns,
-        boolean bottomBtns) {
-        
-        if (view == settingsView) {
-            rootController.setSettingsTopButtonActive();
-        } else if (view == logView) {
-            rootController.setLogsTopButtonActive();
-        }
-        
-        rootController.setSubView(view, viewTitle, isClosable, clearActiveTopBtns, bottomBtns);
-        activeSubView = view;
+    private void showSubViewInRoot(SubView subView) {
+        rootController.showSubView(subView);
+        // activeSubView = view;
     }
     
-    /** Helper that checks if a specified view is active. */
-    private boolean subViewIsActive(Parent view) {
-        return activeSubView == view;
+    /** Helper that checks if a specified sub view is active. */
+    private boolean subViewIsActive(SubView subView) {
+        return rootController.getActiveSubView() == subView;
     }
     
     /**
      * Creates the notification controller with system tray notification
      * support, unless the system tray controller is {@code null}.
      */
-    private void createNotificationController() {
-        if (sysTrayController != null) {
-            notiController = new NotifierController(primaryStage, sysTrayController);
+    private void createNotificationController(SystemTrayController trayController) {
+        if (trayController != null) {
+            notiController = new NotifierController(primaryStage, trayController);
         } else {
             notiController = new NotifierController(primaryStage);
         }
@@ -356,7 +343,7 @@ public class ControllerMediator {
      * @param dashboardReference - the dashboard reference
      */
     private void setDashboardReference(FXMLReference dashboardReference) {
-        dashView = dashboardReference.getView();
+        dashSubView = new SubView(dashboardReference.getView(), DASH_TITLE);
         dashController = dashboardReference.getController();
         dashController.setControllerMediator(this);
     }
@@ -366,7 +353,8 @@ public class ControllerMediator {
      * @param settingsReference - the settings reference
      */
     private void setSettingsReference(FXMLReference settingsReference) {
-        settingsView = settingsReference.getView();
+        settingsSubView
+            = new SubView(settingsReference.getView(), SETTINGS_TITLE, RootController.SETTINGS_BUTTON_ID, true, true);
         settingsController = settingsReference.getController();
         settingsController.setControllerMediator(this);
     }
@@ -376,7 +364,7 @@ public class ControllerMediator {
      * @param logReference - the log reference
      */
     private void setLogReference(FXMLReference logReference) {
-        logView = logReference.getView();
+        logSubView = new SubView(logReference.getView(), LOG_TITLE, RootController.LOG_BUTTON_ID, true, false);
         logController = logReference.getController();
         logController.setControllerMediator(this);
     }
