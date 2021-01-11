@@ -36,13 +36,13 @@ import javafx.stage.StageStyle;
 public abstract class ApplicationHandler extends Application {
     
     // the font resource path
-    private static final String FONT_RES_PATH = "/fxml/font/";
+    private static final String FONT_RES_PATH = "../fx/view/font/";
     
-    // fxml layout file paths
-    private static final String ROOT_FXML = "/fxml/RootLayout.fxml";
-    private static final String DASHBOARD_FXML = "/fxml/DashLayout.fxml";
-    private static final String SETTINGS_FXML = "/fxml/SettingsLayout.fxml";
-    private static final String LOG_FXML = "/fxml/LogLayout.fxml";
+    // fxml view file paths
+    private static final String ROOT_FXML = "../fx/view/RootView.fxml";
+    private static final String DASHBOARD_FXML = "../fx/view/DashView.fxml";
+    private static final String SETTINGS_FXML = "../fx/view/SettingsView.fxml";
+    private static final String LOG_FXML = "../fx/view/LogView.fxml";
     
     private Stage primaryStage;
     
