@@ -28,8 +28,14 @@
 }
 
 .settings-hbox {
-    -fx-background-color: #f4f4f6;
+    -fx-background-color: -color-window-background;
 }
+
+/*****************************************************************************/
+/*                                                                           */
+/* --- Begin Setting's Left Section ---                                      */
+/*                                                                           */
+/*****************************************************************************/
 
 .left .flat-button {  }
 
@@ -50,7 +56,7 @@
 }
 
 .left .flat-button .container {
-     -fx-padding: 10 140 10 20;
+     -fx-padding: 10 74 10 20;
      -fx-spacing: 20;
 }
 
@@ -59,17 +65,23 @@
 .left .flat-button .inactive {
     -fx-background-color: #f4f4f6;
     -fx-border-style: solid;
-    -fx-border-width: 0 0 0 4;
+    -fx-border-width: 0 0 0 2.5;
     -fx-border-color: #f4f4f6;
 }
 
 .left .flat-button .selected {
     -fx-background-color: #d8eaf6;
     -fx-border-style: solid;
-    -fx-border-width: 0 0 0 4;
+    -fx-border-width: 0 0 0 2.5;
     -fx-border-color: #007bff;
     
 }
+
+/*****************************************************************************/
+/*                                                                           */
+/* --- Begin Setting's Right Section ---                                     */
+/*                                                                           */
+/*****************************************************************************/
 
 .right .scroll {
     -fx-background-color: transparent;
