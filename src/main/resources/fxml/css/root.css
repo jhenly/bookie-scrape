@@ -1,121 +1,140 @@
 
-@font-face {
-    src: url('../font/Roboto-Regular.ttf');
-}
+/*****************************************************************************/
+/*                                                                           */
+/* --- Begin Fonts Section ---                                               */
+/*                                                                           */
+/*****************************************************************************/
 
-@font-face {
-	src: url('../font/BellotaText-Regular.ttf');
-}
-@font-face {
-	src: url('../font/BellotaText-Bold.ttf');
-}
-@font-face {
-	src: url('../font/BellotaText-BoldItalic.ttf');
-}
+/* Roboto Fonts
+   ------------ */
+    @font-face {
+        src: url('../font/Roboto-Regular.ttf');
+    }
 
-@font-face {
-    src: url('../font/Gelasio-Regular.ttf');
-}
-@font-face {
-    src: url('../font/Gelasio-Medium.ttf');
-}
-@font-face {
-    src: url('../font/Gelasio-Bold.ttf');
-}
-@font-face {
-	src: url('../font/Gelasio-SemiBold.ttf');
-}
+/* BelottaText Fonts
+   ----------------- */
+    @font-face {
+    	src: url('../font/BellotaText-Regular.ttf');
+    }
+    @font-face {
+    	src: url('../font/BellotaText-Bold.ttf');
+    }
+    @font-face {
+    	src: url('../font/BellotaText-BoldItalic.ttf');
+    }
 
-/* NunitoSans - Fonts */
-@font-face {
-    src: url('../font/NunitoSans-Regular.ttf');
-}
-@font-face {
-    src: url('../font/NunitoSans-Italic.ttf');
-}
-@font-face {
-    src: url('../font/NunitoSans-Bold.ttf');
-}
-@font-face {
-    src: url('../font/NunitoSans-BoldItalic.ttf');
-}
-@font-face {
-    src: url('../font/NunitoSans-SemiBold.ttf');
-}
-@font-face {
-    src: url('../font/NunitoSans-SemiBoldItalic.ttf');
-}
+/* Gelasio Fonts
+   ------------- */
+    @font-face {
+        src: url('../font/Gelasio-Regular.ttf');
+    }
+    @font-face {
+        src: url('../font/Gelasio-Medium.ttf');
+    }
+    @font-face {
+        src: url('../font/Gelasio-Bold.ttf');
+    }
+    @font-face {
+    	src: url('../font/Gelasio-SemiBold.ttf');
+    }
 
-/* Noto Sans KR - Fonts */
-@font-face {
-    src: url('../font/NotoSansKR-Regular.otf');
-}
-@font-face {
-    src: url('../font/NotoSansKR-Medium.otf');
-}
-@font-face {
-    src: url('../font/NotoSansKR-Thin.otf');
-}
-@font-face {
-    src: url('../font/NotoSansKR-Bold.otf');
-}
+/* NunitoSans Fonts
+   ---------------- */
+    @font-face {
+        src: url('../font/NunitoSans-Regular.ttf');
+    }
+    @font-face {
+        src: url('../font/NunitoSans-Italic.ttf');
+    }
+    @font-face {
+        src: url('../font/NunitoSans-Bold.ttf');
+    }
+    @font-face {
+        src: url('../font/NunitoSans-BoldItalic.ttf');
+    }
+    @font-face {
+        src: url('../font/NunitoSans-SemiBold.ttf');
+    }
+    @font-face {
+        src: url('../font/NunitoSans-SemiBoldItalic.ttf');
+    }
 
-/* Open Sans KR - Fonts */
-@font-face {
-    src: url('../font/OpenSans-Regular.ttf');
-}
-@font-face {
-    src: url('../font/OpenSans-Italic.ttf');
-}
-@font-face {
-    src: url('../font/OpenSans-Bold.ttf');
-}
-@font-face {
-    src: url('../font/OpenSans-SemiBold.ttf');
-}
-@font-face {
-    src: url('../font/OpenSans-Light.ttf');
-}
+/* NotoSansKR Fonts
+   ---------------- */
+    @font-face {
+        src: url('../font/NotoSansKR-Regular.otf');
+    }
+    @font-face {
+        src: url('../font/NotoSansKR-Medium.otf');
+    }
+    @font-face {
+        src: url('../font/NotoSansKR-Thin.otf');
+    }
+    @font-face {
+        src: url('../font/NotoSansKR-Bold.otf');
+    }
 
-/* Raleway - Fonts */
-@font-face {
-    src: url('../font/Raleway-Regular.ttf');
-}
-@font-face {
-    src: url('../font/Raleway-Italic.ttf');
-}
-@font-face {
-    src: url('../font/Raleway-Bold.ttf');
-}
-@font-face {
-    src: url('../font/Raleway-BoldItalic.ttf');
-}
-@font-face {
-    src: url('../font/Raleway-Medium.ttf');
-}
-@font-face {
-    src: url('../font/Raleway-SemiBold.ttf');
-}
-@font-face {
-    src: url('../font/Raleway-Light.ttf');
-}
-@font-face {
-    src: url('../font/Raleway-Thin.ttf');
-}
+/* OpenSans Fonts
+   -------------- */
+    @font-face {
+        src: url('../font/OpenSans-Regular.ttf');
+    }
+    @font-face {
+        src: url('../font/OpenSans-Italic.ttf');
+    }
+    @font-face {
+        src: url('../font/OpenSans-Bold.ttf');
+    }
+    @font-face {
+        src: url('../font/OpenSans-SemiBold.ttf');
+    }
+    @font-face {
+        src: url('../font/OpenSans-Light.ttf');
+    }
 
-/* Confortaa - Fonts */
-@font-face {
-    src: url('../font/Comfortaa-Regular.ttf');
-}
-@font-face {
-    src: url('../font/Comfortaa-Medium.ttf');
-}
-@font-face {
-    src: url('../font/Comfortaa-Bold.ttf');
-}
-@font-face {
-    src: url('../font/Comfortaa-SemiBold.ttf');
-}
+/* Raleway Fonts
+   ------------- */
+    @font-face {
+        src: url('../font/Raleway-Regular.ttf');
+    }
+    @font-face {
+        src: url('../font/Raleway-Italic.ttf');
+    }
+    @font-face {
+        src: url('../font/Raleway-Bold.ttf');
+    }
+    @font-face {
+        src: url('../font/Raleway-BoldItalic.ttf');
+    }
+    @font-face {
+        src: url('../font/Raleway-Medium.ttf');
+    }
+    @font-face {
+        src: url('../font/Raleway-SemiBold.ttf');
+    }
+    @font-face {
+        src: url('../font/Raleway-Light.ttf');
+    }
+    @font-face {
+        src: url('../font/Raleway-Thin.ttf');
+    }
+
+/* Confortaa Fonts
+   --------------- */
+    @font-face {
+        src: url('../font/Comfortaa-Regular.ttf');
+    }
+    @font-face {
+        src: url('../font/Comfortaa-Medium.ttf');
+    }
+    @font-face {
+        src: url('../font/Comfortaa-Bold.ttf');
+    }
+    @font-face {
+        src: url('../font/Comfortaa-SemiBold.ttf');
+    }
+
+/* --- End Fonts Section --- */
 
 /*
 @font-face {
@@ -149,23 +168,40 @@
 	-fx-font-family: 'Roboto Italic';
 }
 
-/* Begin Colors Section
-   --------------------- */
+/*****************************************************************************/
+/*                                                                           */
+/* --- Begin Colors Section ---                                              */
+/*                                                                           */
+/*****************************************************************************/
+   
 * {
-    /* general colors */
+    
+    /* General Colors
+       -------------- */
+    -color-white: #ffffff;
     -color-black: #202020;
     -color-gray: #71797e;
     -color-red: #f44336;
     
-    /* window colors */
+    /* Window Colors
+       ------------- */
     -color-window-background: #f4f4f6;
     -color-window-bottom: #fafafb;
     -color-window-separator: #d6d6d8;
     -color-top-blue: #2496ed;
     
-    /* button colors */
+    /* Button Colors
+       ------------- */
     -color-button-blue: #007bff;
     -color-button-red: #e12b0c;
+    /* top buttons */
+    -color-top-button-circle: #1182d9;
+    -color-top-button-circle-hover: #0b6db8;
+    /* control buttons */
+    -color-control-stroke: #2e516b;
+    -color-control-hover: #1d78be;
+    -color-control-close-hover: #d51e37;
+    /* outline buttons */
     -color-outline-background: -color-window-background;
     -color-outline-blue: -color-button-blue;
     -color-outline-text-blue: -color-button-blue;
@@ -174,6 +210,7 @@
     -color-outline-text-red: -color-button-red;
     -color-outline-hover-red: #f3e4e4;
     -color-outline-disabled: #b5b5b6;
+    /* solid buttons */
     -color-solid-text: #ffffff;
     -color-solid-background-blue: -color-button-blue;
     -color-solid-hover-blue: #096bd4;
@@ -182,12 +219,14 @@
     -color-solid-disabled: #dcdcdc;
     -color-solid-disabled-text: #a3a3a3;
     
-    /* label related colors */
+    /* Label Colors
+       ------------ */
     -color-header-black: -color-black;
     -color-description-gray: -color-gray;
     -color-warning-red: -color-red;
     
-    /* textfield related colors */
+    /* Text Field Colors
+       ---------------- */
     -color-textfield-text: #1f1f1f;
     -color-textfield-default-text: #709599;
     -color-textfield-prompt-text: #b7bbbe;
@@ -195,27 +234,33 @@
     -color-textfield-prompt-border: #8e8e8f;
     -color-textfield-invalid-red: -color-red;
 
-    /* setting's side button colors */
+    /* Setting's Side Button Colors
+       ---------------------------- */
     -color-side-button-hover: #e6eff6;
     -color-side-button-selected: #d8eaf6;
     -color-side-button-border: -color-button-blue;
     
-    /* */
+    /* Other Colors
+       ------------ */
     -color-primary:#d8d8d8;
     -color-accent:#F44336;
     -color-secondary:#1E88E5;
     -color-dark-primary:#1d1d1d;
     -color-amber:#ffc400;
     -color-gray:#666666;
+    
 }
-/* End Colors Section */
 
+/* --- End Colors Section --- */
 
-/* Begin Text Styles */
+/*****************************************************************************/
+/*                                                                           */
+/* --- Begin Text Section ---                                                */
+/*                                                                           */
+/*****************************************************************************/
 
-/* force font anti aliasing */
-
-.text { a-fx-font-smoothing-type: gray; }
+/* force gray font anti aliasing */
+/* .text { a-fx-font-smoothing-type: gray; } */
 
 .header {
     -fx-text-fill: -color-header-black;
@@ -242,7 +287,7 @@
 }
 
 
-/* End Text Styles */
+/* --- End Text Section --- */
 
 /* Begin Border Styles */
 
@@ -261,63 +306,72 @@
 
 /* End Border Styles */
 
-/* Begin Check Box Styles */
+/*****************************************************************************/
+/*                                                                           */
+/* --- Begin Check Box Section ---                                           */
+/*                                                                           */
+/*****************************************************************************/
 
 .check-box {
     selected-box-color: -color-button-blue;
     box-color: #70787d;
-    mark-color: -color-window-background;
+    mark-color: -color-white;/*-color-window-background;*/
 }
-
 /* background color for selected checkbox */
 .check-box:selected > .box {
     -fx-background-color: selected-box-color;
-    -fx-border-color: transparent;
 }
-/* background color of unselected checkbox */ /*
+/* background color of unselected checkbox */
 .check-box > .box {
-    -fx-background-color: box-color;
-}
-*/
-.check-box > .box {
-    -fx-background-color: transparent;
-    -fx-border-color: box-color;
-    -fx-border-style: solid;
-    -fx-border-radius: 1.5;
-    -fx-border-width: 1.8;
-    -fx-padding: 1;
+    -fx-background-color: box-color, -color-window-background;
+    -fx-background-radius: 2, 1;
+    -fx-background-insets: 0, 1.75;
+    -fx-padding: 2;
 }
 /* modify mark color */
 .check-box:selected > .box > .mark,
 .check-box:indeterminate > .box > .mark { -fx-background-color: mark-color }
 
-/* End Check Box Styles */
+/* --- End Check Box Section --- */
 
-/* Begin Button Styles */
+/*****************************************************************************/
+/*                                                                           */
+/* --- Begin Button Section ---                                              */
+/*                                                                           */
+/*****************************************************************************/
 
-    /* flat buttons */
+/* Flat Buttons
+   ------------ */
 .flat-button {
     -fx-background-radius: 0;
     -fx-padding: 0;
     -fx-background-color: transparent;
 }
 
-    /* outline buttons */
+/* Outline and Solid Buttons
+   ------------------------- */
+.blue-outline-button,
+.red-outline-button,
+.blue-solid-button,
+.red-solid-button {
+    -fx-padding: 8 15;
+    -fx-font-size: 1.01em;
+    -fx-font-family: 'Open Sans SemiBold';
+}
 
+/* Outline Buttons
+   --------------- */
 .blue-outline-button,
 .red-outline-button {
-	-fx-background-radius: 7, 6;
-	-fx-background-insets: 0, 2;
-	
+	-fx-background-radius: 4, 3;
+	-fx-background-insets: 0, 1;
 }
 
 .blue-outline-button {
 	-fx-background-color: -color-outline-blue, -color-outline-background;
 	-fx-text-fill: -color-outline-text-blue;
 }
-.blue-outline-button:hover {
-	-fx-background-color: -color-outline-blue, -color-outline-hover-blue;
-}
+.blue-outline-button:hover { -fx-background-color: -color-outline-blue, -color-outline-hover-blue; }
 
 .red-outline-button {
     -fx-background-color: -color-outline-blue, -color-outline-background;
@@ -332,10 +386,11 @@
     -fx-text-fill: -color-outline-disabled;
 }
 
-    /* solid buttons */
+/* Solid Buttons
+   ------------- */
 .blue-solid-button,
 .red-solid-button {
-	-fx-background-radius: 7;
+	-fx-background-radius: 4;
 	-fx-text-fill: -color-solid-text;
 }
 
@@ -352,9 +407,13 @@
 	-fx-text-fill: -color-solid-disabled-text;
 }
 
-/* End Button Styles */
+/* --- End Button Section --- */
 
-/* Begin Toggle Switch Styles */
+/*****************************************************************************/
+/*                                                                           */
+/* --- Begin Toggle Switch Section ---                                       */
+/*                                                                           */
+/*****************************************************************************/
 
 .toggle-switch {}
 
@@ -372,7 +431,6 @@
     -fx-padding: 0.75em;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 1, 0.1, 0.0, 1.0);
 }
-
 
 .toggle-switch .thumb-area {
     -fx-background-radius: 1em;
@@ -396,9 +454,13 @@
 	-fx-opacity: 0.4;
 }
 
-/* End Toggle Switch Styles */
+/* --- End Toggle Switch Section --- */
 
-/* Begin Input Box Styles */
+/*****************************************************************************/
+/*                                                                           */
+/* --- Begin Text Field Section ---                                          */
+/*                                                                           */
+/*****************************************************************************/
 
 .flat-text-field {
     -fx-background-radius: 0;
@@ -417,7 +479,7 @@
 
 .flat-text-field:focused {
     -fx-highlight-fill: -fx-accent;
-    -fx-highlight-text-fill: white;
+    -fx-highlight-text-fill: -color-white;
     -fx-background-color: #ececee;
     -fx-border-color: #007bff;
     -fx-border-width: 0 0 2 0;
@@ -426,91 +488,90 @@
     -fx-prompt-text-fill: transparent;
 }
 
-/* End Input Box Style */
+/* --- End Text Field Section --- */
 
 #main-anchor-pane {
     -fx-background-color: transparent;
-    a-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.1, 0.0, 1.0);
 }
 
-/* --- Begin Main's Top Specific Layout Section --- */
-
-#main-top-hbox {
-	-fx-background-color: -color-top-blue;
+#main-border-pane {
+    -fx-background-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10.0, 0.1, 0.0, 0.0);
 }
 
-.top-hbox { -fx-background-color: -color-top-blue }
+/*****************************************************************************/
+/*                                                                           */
+/* --- Begin Root's Top Section ---                                          */
+/*                                                                           */
+/*****************************************************************************/
 
-.top-hbox .logo-label-top, .logo-label-bottom {
+.root-top-hbox { -fx-background-color: -color-top-blue; }
+
+.root-top-hbox .logo-label-top, .logo-label-bottom {
     -fx-font-family: "Comfortaa Bold";
     -fx-font-size: 16;
 }
-
-.top-hbox .logo-icon {
-    -fx-size: 34;
+.root-top-hbox .logo-icon {
+    -fx-size: 30;
     -fx-min-width: -fx-size;
 	-fx-min-height: -fx-size;
 	-fx-max-width: -fx-size;
 	-fx-max-height: -fx-size;
-	-fx-background-color: white;
+	-fx-background-color: -color-white;
 }
 
-.top-hbox .flat-button .icon {
+.root-top-hbox .top-button .icon {
 	-fx-size: 20;
 	-fx-min-width: -fx-size;
 	-fx-min-height: -fx-size;
 	-fx-max-width: -fx-size;
 	-fx-max-height: -fx-size;
 }
-
-.top-hbox .flat-button .circle {
+.root-top-hbox .top-button .circle {
     -fx-scale-x: 1.5em;
     -fx-scale-y: 1.5em;
 }
+.root-top-hbox .top-button .inactive .circle { -fx-fill: -color-top-button-circle; }
+.root-top-hbox .top-button:hover .inactive .circle { -fx-fill: -color-top-button-circle-hover; }
+.root-top-hbox .top-button .inactive .icon { -fx-background-color: -color-white; }
+.root-top-hbox .top-button .selected .circle { -fx-fill: -color-white; }
+.root-top-hbox .top-button .selected .icon { -fx-background-color: -color-top-blue; }
 
-.top-hbox .flat-button .inactive .circle { -fx-fill: #1182d9 }
-.top-hbox .flat-button:hover .inactive .circle { -fx-fill: #0b6db8 }
-.top-hbox .flat-button .inactive .icon { -fx-background-color: white }
-
-.top-hbox .flat-button .selected .circle { -fx-fill: white }
-.top-hbox .flat-button .selected .icon { -fx-background-color: #2496ed }
-
-.top-hbox .flat-button .inactive { }
-.top-hbox .flat-button .selected { }
-
-.control-button-close {
-    -fx-background-radius: 0;
-    -fx-padding: 0;
-    -fx-background-color: transparent;
+.root-top-hbox .control-button {
+    -cntrl-btn-width: 46;
+    -cntrl-btn-height: 30;
+    -fx-min-width: -cntrl-btn-width;
+    -fx-min-height: -cntrl-btn-height;
+    -fx-max-width: -cntrl-btn-width;
+    -fx-max-height: -cntrl-btn-height;
 }
-.control-button-close:hover > .control-button-close-stack-pane > .control-button-box {
-	-fx-fill: #d51e37;
+.root-top-hbox .control-button .icon-shape {
+    -fx-stroke: -color-control-stroke;
+    -fx-stroke-width: 1.5;
 }
-.control-button-close:hover > .control-button-close-stack-pane > .control-button-close-x {
-	-fx-stroke: white;
-}
-.control-button-close-x { -fx-stroke: #2e516b; }
+.root-top-hbox .control-button:hover { -fx-background-color: -color-control-hover; }
+.root-top-hbox .control-button-close:hover { -fx-background-color: -color-control-close-hover; }
+.root-top-hbox .control-button-close:hover .control-button-close-x { -fx-stroke: -color-white; }
 
-.control-button {}
-.control-button:hover { -fx-background-color: #1d78be }
+/* --- End Root's Top Section --- */
 
-/* --- End Main's Top Specific Layout Section --- */
+/*****************************************************************************/
+/*                                                                           */
+/* --- Begin Root's Middle Section ---                                       */
+/*                                                                           */
+/*****************************************************************************/
 
+.root-middle-vbox { -fx-background-color: -color-window-background; }
 
-/* --- Begin Main's Middle Specific Layout Section --- */
-
-#main-middle-vbox {
-	-fx-background-color: -color-window-background;
-}
-
-.main-middle-hbox {
-    -fx-background-color: -color-window-background;
+.view-title-bar {
+    /* gray separator above and below root's sub view title bar section */
+    -fx-background-color: -color-window-separator, -color-window-background;
+    -fx-background-insets: 0, 1 0 1 0;
 }
 
-.view-title-bar {}
 .view-title-bar .view-title {
     -fx-text-fill: -color-black;
-    -fx-font-size: 12pt;
+    -fx-font-size: 1.33em;
     -fx-font-family: 'Open Sans SemiBold';
 }
 
@@ -521,17 +582,21 @@
 
 .view-title-bar .close-view:hover .close-view-x { -fx-stroke: -color-black; }
 
-/* --- End Main's Middle Layout Section --- */
+/* --- End Root's Middle Section --- */
 
-
-/* --- Begin Main's Bottom Specific Layout Section --- */
+/*****************************************************************************/
+/*                                                                           */
+/* --- Begin Root's Bottom Section ---                                       */
+/*                                                                           */
+/*****************************************************************************/
 
 .root-bottom-hbox {
+    /* gray separator above root's bottom section */
     -fx-background-color: -color-window-separator, -color-window-bottom;
-    -fx-background-insets: 0, 2 0 0 0;
+    -fx-background-insets: 0, 1 0 0 0;
 }
 
-.root-bottom-hbox .bookie-scraper { 
+.root-bottom-hbox .bookie-scraper {
     -fx-font-family: 'Open Sans Regular';
     -fx-font-size: 1.15em;
     /* a-fx-font-size: 14; */
@@ -543,39 +608,10 @@
     /*-fx-font-size: 13;*/
 }
 
-.root-bottom-hbox .bottom-buttons {
-	-fx-font-size: 1.1em;
-	-fx-font-family: 'Open Sans SemiBold';
-}
-
-.root-bottom-hbox .bottom-buttons .button {
-	-fx-padding: 7 15 7 15;
-    a-fx-background-color: -color-button-blue, -color-window-bottom;
-	a-fx-background-insets: 0, 1;
-	a-fx-background-radius: 7, 6;
-}
-
-a.root-bottom-hbox .bottom-buttons .cancel { a-fx-text-fill: -color-gray; }
-a.root-bottom-hbox .bottom-buttons .cancel:hover {
-	a-fx-background-color: -color-button-blue, -color-side-button-selected;
-	a-fx-text-fill: -color-button-blue;
-}
-
-a.root-bottom-hbox .bottom-buttons .apply {
-	a-fx-text-fill: -color-window-bottom;
-    a-fx-background-color: -color-button-blue;
-    a-fx-background-insets: 0;
-}
-
-a.root-bottom-hbox .bottom-buttons .apply:disabled {
-    a-fx-text-fill: -color-window-bottom;
-    a-fx-background-color: -color-gray;
-}
-
 .root-bottom-hbox .bottom-buttons .apply:hover {
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8.0, 10.0, 0.0, 5.0);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10.0, 0.2, 0.0, 5.0);
 }
 
-/* --- End Main's Bottom Specific Layout Section --- */
+/* --- End Root's Bottom Section --- */
 
 
