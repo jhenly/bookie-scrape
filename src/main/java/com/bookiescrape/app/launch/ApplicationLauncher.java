@@ -2,6 +2,8 @@ package com.bookiescrape.app.launch;
 
 import com.bookiescrape.app.sample.ApplicationHandler;
 import com.bookiescrape.app.sample.ApplicationMediator;
+import com.bookiescrape.app.util.OperatingSystemUtils;
+import com.bookiescrape.app.util.OperatingSystemUtils.OperatingSystem;
 
 /**
  * Bookie Scrape application launcher.
@@ -30,10 +32,10 @@ public abstract class ApplicationLauncher extends ApplicationHandler {
         
         applicationMediator = appMediator;
         
-        OSType os = OSType.getDetectedOSType();
+        OperatingSystem os = OperatingSystemUtils.getDetectedOS();
         
         switch (os) {
-            case Windows:
+            case WINDOWS:
                 // if OS is windows then launch with system tray support
                 (new WindowsLauncher()).launch();
                 break;

@@ -11,8 +11,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.Properties;
 
-import com.bookiescrape.app.launch.OSType;
-
 /**
  * Utility class with file and directory utility methods.
  * @author Jonathan Henly
@@ -28,7 +26,9 @@ public final class FileUtils {
     private static Path configDir;
     
     
+    /** Utility class, don't subclass this class. */
     private FileUtils() {}
+    
     
     /**
      * Sets the application's directory name.
@@ -42,7 +42,7 @@ public final class FileUtils {
      */
     public static void setAppDirectoryName(String dirName) {
         String nonNullDirName = Objects.requireNonNull(dirName, "application directory name cannot be null.");
-        throwIfStringIsBlank(dirName, "application's directory name cannot be blank.");
+        throwIfStringIsBlank(nonNullDirName, "application's directory name cannot be blank.");
         
         appDirName = nonNullDirName;
     }
@@ -211,17 +211,17 @@ public final class FileUtils {
     
     /** Gets the OS specific application directory. */
     private static Path getOSUserAppsDirectory(Path userHome) {
-        switch (OSType.getDetectedOSType()) {
-            case Windows:
+        switch (OperatingSystemUtils.getDetectedOS()) {
+            case WINDOWS:
                 return getWindowsUserAppsDirectory(userHome);
-            case MacOS:
+            case MAC_OS:
                 return getMacUserAppsDirectory(userHome);
-            case Ubuntu:
-            case Unix:
-            case Linux:
+            case UBUNTU:
+            case UNIX:
+            case LINUX:
                 return getNixUserAppsDirectory(userHome);
             
-            case Other:
+            case OTHER:
             default:
                 return userHome;
         }
