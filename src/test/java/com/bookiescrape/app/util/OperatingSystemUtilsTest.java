@@ -2,6 +2,8 @@ package com.bookiescrape.app.util;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -9,6 +11,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import com.bookiescrape.app.util.OperatingSystemUtils.OperatingSystem;
 import com.bookiescrape.app.util.OperatingSystemUtilsTest.GetDetectedOS;
+
 
 @RunWith(Suite.class)
 @SuiteClasses({ GetDetectedOS.class })
@@ -27,6 +30,34 @@ public class OperatingSystemUtilsTest {
     private static String CENT_OS = "CentOS";
     private static String SOLARIS = "Solaris";
     
+    // stores the initial value retrieved from 'System.getProperty("os.name")'
+    private static InitialOsNameValue initialOsNameValue;
+
+    /** Runs once, before any tests have run. */
+    @BeforeClass
+    public static void setUpOnceBefore() {
+        // store the initial "os.name" system property so that we can restore
+        // it after testing OperatingSystemUtils
+        initialOsNameValue = new InitialOsNameValue(System.getProperty(OS_NAME_KEY));
+
+//      System.out.println("initial \"os.name\" value: " + initialOsNameValue.getInitialValue());
+    }
+    
+    /** Runs once, after all tests have finished. */
+    @AfterClass
+    public static void tearDownOnceAfter() {
+        // restore the initial "os.name" system property so that test classes
+        // that have yet to run are not effected
+        System.setProperty(OS_NAME_KEY, initialOsNameValue.getInitialValue());
+        
+//      System.out.println("Restored \"os.name\" value: " + System.getProperty(OS_NAME_KEY));
+        assertEquals(initialOsNameValue.getInitialValue(), System.getProperty(OS_NAME_KEY));
+    }
+
+
+    /**
+     * Tests the {@linkplain OperatingSystemUtils#getDetectedOS()} method.
+     */
     public static class GetDetectedOS {
         
         private static void test(String osName, OperatingSystem expected) {
@@ -35,7 +66,7 @@ public class OperatingSystemUtilsTest {
             assertEquals("System.getProperty(\"os.name\") != " + osName + ",", System.getProperty(OS_NAME_KEY, ""),
                 osName);
             
-            // get operating system from mock operating system, mock operating
+            // get OperatingSystem from MockOperatingSystem, mock operating
             // system will need to be updated if operating system is updated
             OperatingSystem detected = MockOperatingSystemUtils.getDetectedOS().getOperatingSystem();
             
@@ -83,6 +114,14 @@ public class OperatingSystemUtilsTest {
         }
         
     } // class GetDetectedOs
+    
+    /** Simple read-only string wrapper class. */
+    private static class InitialOsNameValue {
+        private final String initialValue;
+        
+        private InitialOsNameValue(String value) { initialValue = value; }
+        String getInitialValue() { return initialValue; }
+    } // class InitialOsNameValue
     
     
 } // class OperatingSystemUtilsTest
