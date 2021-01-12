@@ -25,21 +25,18 @@ import javafx.scene.text.Font;
 
 
 /**
- * Contains JUnit4 tests for {@linkplain com.bookiescrape.app.fx.TestUtils}.
+ * Contains JUnit4 tests for {@linkplain com.bookiescrape.app.fx.FontUtils}.
  *
  * @author Jonathan Henly
  */
 @RunWith(Suite.class)
-@SuiteClasses({ LoadFontsInDirectoryFile.class,
-                LoadFontsInDirectoryPath.class })
+@SuiteClasses({ LoadFontsInDirectoryFile.class, LoadFontsInDirectoryPath.class })
 public class FontUtilsTest {
     
-    private static final String TEST_FONT_DIR = "/fxml/font";
-    private static final String TEST_FONT_RES_PATH =
-        TestUtils.getTestResource(TEST_FONT_DIR).getAbsolutePath();
+    private static final String TEST_FONT_DIR = "fx/view/font";
+    private static final String TEST_FONT_RES_PATH = TestUtils.getTestResource(TEST_FONT_DIR).getAbsolutePath();
     private static final String NON_EXISTANT_DIR = TEST_FONT_RES_PATH + "/bla";
-    private static final String NON_DIR_FILE =
-        TEST_FONT_RES_PATH + "BellotaText-Bold.ttf";
+    private static final String NON_DIR_FILE = TEST_FONT_RES_PATH + "BellotaText-Bold.ttf";
     
     private static File nonExistantDir;
     private static File nonDirFile;
@@ -50,10 +47,9 @@ public class FontUtilsTest {
      */
     @BeforeClass
     public static void setUpOnceFirst() {
-        System.out.println(TEST_FONT_RES_PATH);
         nonExistantDir = new File(NON_EXISTANT_DIR);
         nonDirFile = new File(NON_DIR_FILE);
-
+        
         fontDir = new File(TEST_FONT_RES_PATH);
     }
     
@@ -79,15 +75,14 @@ public class FontUtilsTest {
     /* Functionality Testing */
     
     public static class LoadFontsInDirectoryPath {
-
-        // font names that are added from 'src/test/fxml/font/'
-        private static final List<String> FONT_NAMES_TO_ADD = List.of(
-            "Noto Sans KR", "Bellota Text Bold", "Noto Sans KR Medium",
-            "Nunito Sans Regular", "Nunito Sans SemiBold",
-            "Nunito Sans SemiBold Italic", "Nunito Sans Italic",
-            "Nunito Sans Bold", "Nunito Sans Bold Italic", "Gelasio Regular");
-
-
+        
+        // font names that are added from
+        // 'src/test/resources/com/bookiescrape/app/fx/view/font/'
+        private static final List<String> FONT_NAMES_TO_ADD = List.of("Noto Sans KR", "Bellota Text Bold",
+            "Noto Sans KR Medium", "Nunito Sans Regular", "Nunito Sans SemiBold", "Nunito Sans SemiBold Italic",
+            "Nunito Sans Italic", "Nunito Sans Bold", "Nunito Sans Bold Italic", "Gelasio Regular");
+        
+        
         @BeforeClass
         public static void setUpOnceFirst() {}
         
@@ -99,40 +94,32 @@ public class FontUtilsTest {
         
         
         @Test(expected = IllegalArgumentException.class)
-        public void should_throw_iae_when_path_does_not_exist()
-            throws IOException
-        {
+        public void should_throw_iae_when_path_does_not_exist() throws IOException {
             FontUtils.loadFontsInDirectory(nonExistantDir.toPath());
         }
         
         
         @Test(expected = IllegalArgumentException.class)
-        public void should_throw_iae_when_path_is_not_a_dir()
-            throws IOException
-        {
+        public void should_throw_iae_when_path_is_not_a_dir() throws IOException {
             FontUtils.loadFontsInDirectory(nonDirFile.toPath());
         }
-
+        
         @Test
-        public void passing_dir_containing_fonts_should_load_fonts_in_dir()
-            throws IOException
-        {
+        public void passing_dir_containing_fonts_should_load_fonts_in_dir() throws IOException {
             // load fonts in test font directory
             List<Font> fonts = FontUtils.loadFontsInDirectory(fontDir.toPath());
-
+            
             fonts.forEach(font -> {
-                assertTrue(
-                    "font names to add does not contain " + font.getName(),
+                assertTrue("font names to add does not contain " + font.getName(),
                     FONT_NAMES_TO_ADD.contains(font.getName()));
             });
-
+            
             // make sure that all test fonts were loaded
-            assertEquals("all of the fonts were not loaded", fonts.size(),
-                FONT_NAMES_TO_ADD.size());
+            assertEquals("all of the fonts were not loaded", fonts.size(), FONT_NAMES_TO_ADD.size());
         }
-
+        
     }
-
+    
     public static class LoadFontsInDirectoryFile {
         
         @Test(expected = NullPointerException.class)
@@ -141,24 +128,19 @@ public class FontUtilsTest {
             FontUtils.loadFontsInDirectory(nullFile);
         }
         
+        /* Exception Testing */
+        
         @Test(expected = IllegalArgumentException.class)
-        public void should_throw_iae_when_file_does_not_exist()
-            throws IOException
-        {
+        public void should_throw_iae_when_file_does_not_exist() throws IOException {
             FontUtils.loadFontsInDirectory(nonExistantDir);
         }
-
+        
         @Test(expected = IllegalArgumentException.class)
-        public void should_throw_iae_when_file_is_not_a_dir()
-            throws IOException
-        {
+        public void should_throw_iae_when_file_is_not_a_dir() throws IOException {
             FontUtils.loadFontsInDirectory(nonDirFile);
         }
-
+        
     }
-
-
-    /* Exception Testing */
-
-
+    
+    
 }

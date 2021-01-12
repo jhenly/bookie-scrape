@@ -10,14 +10,16 @@ import java.util.Objects;
 import org.junit.Test;
 
 
+/**
+ * Utility class that contains convenience methods for use by test classes.
+ * @author Jonathan Henly
+ */
 public final class TestUtils {
     private static final Class<TestUtils> CLASS = TestUtils.class;
     
     private static final String PROJECT_DIR = (new File("")).getAbsolutePath();
-    private static final String TEST_RES_PATH =
-        PROJECT_DIR + "/src/test/resources";
-    private static final String MAIN_RES_PATH =
-        PROJECT_DIR + "/src/main/resources";
+    private static final String TEST_RES_PATH = PROJECT_DIR + "/src/test/resources";
+    private static final String MAIN_RES_PATH = PROJECT_DIR + "/src/main/resources";
     
     /**
      * Gets the absolute path to the test resources directory.
@@ -94,8 +96,7 @@ public final class TestUtils {
             
             @Test
             public void project_directory_ends_with_project_name() {
-                final String msg = String.format(
-                    "The current working directory [ %s ] does not end with [ %s ]",
+                final String msg = String.format("The current working directory [ %s ] does not end with [ %s ]",
                     PROJECT_DIR, PROJECT_NAME);
                 assertTrue(msg, PROJECT_DIR.endsWith(PROJECT_NAME));
             }
@@ -160,8 +161,7 @@ public final class TestUtils {
             public void return_test_resource_dir_as_file() {
                 File testClasses = getTestResource(TEST_CLASSES_PATH);
                 
-                assertTrue(
-                    testClasses.getAbsolutePath().endsWith(TEST_CLASSES));
+                assertTrue(testClasses.getAbsolutePath().endsWith(TEST_CLASSES));
                 assertTrue(Files.isDirectory(testClasses.toPath()));
             }
             

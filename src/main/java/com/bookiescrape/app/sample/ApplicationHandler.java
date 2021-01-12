@@ -57,6 +57,14 @@ public abstract class ApplicationHandler extends Application {
      */
     public ApplicationHandler() {}
     
+    /**
+     * Gets the primary stage.
+     *
+     * @return the primary stage
+     */
+    public Stage getPrimaryStage() { return primaryStage; }
+    
+    
     @Override
     public final void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
@@ -223,13 +231,6 @@ public abstract class ApplicationHandler extends Application {
         return new BoundingBox(0, 0, prefWidth, prefHeight);
     }
     
-    /**
-     * Gets the primary stage.
-     *
-     * @return the primary stage
-     */
-    public Stage getPrimaryStage() { return primaryStage; }
-    
     
     /**************************************************************************
      *                                                                        *
@@ -307,7 +308,6 @@ public abstract class ApplicationHandler extends Application {
     protected EventHandler<ActionEvent> getApplicationMaximizeButtonHandler() {
         return action -> getPrimaryStage().setMaximized(!getPrimaryStage().isMaximized());
     }
-    
     
     /**
      * Returns an event handler that handles actions on the applications close
