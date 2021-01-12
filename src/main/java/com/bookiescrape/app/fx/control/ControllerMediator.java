@@ -46,9 +46,6 @@ public class ControllerMediator {
     // notification controller
     private NotifierController notiController;
     
-    // the currently active/showing sub view
-    private SubView activeSubView;
-    
     /* application window's control buttons' action handlers */
     private EventHandler<ActionEvent> onWindowCloseButtonActionHandler;
     private EventHandler<ActionEvent> onWindowMinButtonActionHandler;
@@ -173,6 +170,11 @@ public class ControllerMediator {
      *                                                                        *
      *************************************************************************/
     
+    /**
+     * Requests to notify the user with an info notification.
+     * @param caption - the info notification's caption
+     * @param message - the info notification's message
+     */
     public void requestInfoNotify(String caption, String message) {
         notiController.infoNotify(caption, message);
     }
