@@ -1,5 +1,8 @@
 package com.bookiescrape.app.launch;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bookiescrape.app.sample.ApplicationHandler;
 import com.bookiescrape.app.sample.ApplicationMediator;
 import com.bookiescrape.app.util.OperatingSystemUtils;
@@ -11,6 +14,7 @@ import com.bookiescrape.app.util.OperatingSystemUtils.OperatingSystem;
  * @author Jonathan Henly
  */
 public abstract class ApplicationLauncher extends ApplicationHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationHandler.class);
     
     /**************************************************************************
      *                                                                        *
@@ -23,23 +27,30 @@ public abstract class ApplicationLauncher extends ApplicationHandler {
     
     /**
      * Launches the application based on the detected operating system.
-     * @throws UnsupportedOperationException if this method is invoked again
-     *         after being invoked
+     * @throws RuntimeException if this method is invoked again after being
+     *         invoked
      */
     public final static void launchApplication(ApplicationMediator appMediator) {
-        if (hasLaunched) { throw new UnsupportedOperationException("application has already been launched."); }
+        if (hasLaunched) { logAndThrow(new RuntimeException("application has already been launched")); }
         hasLaunched = true;
         
         applicationMediator = appMediator;
         
+        LOG.info("beginning application launch");
+        
         OperatingSystem os = OperatingSystemUtils.getDetectedOS();
+        LOG.info("{} operating system detected", os);
         
         switch (os) {
             case WINDOWS:
+                LOG.info("launching application with the Windows launcher");
+                
                 // if OS is windows then launch with system tray support
                 (new WindowsLauncher()).launch();
                 break;
             default:
+                LOG.info("launching application with the default launcher");
+                
                 // if OS isn't windows then launch with no system tray support
                 (new DefaultLauncher()).launch();
                 break;
@@ -80,4 +91,11 @@ public abstract class ApplicationLauncher extends ApplicationHandler {
     
     @Override
     protected final ApplicationMediator getApplicationMediator() { return applicationMediator; }
+    
+    /** Convenience helper that logs and throws an exception. */
+    private static final void logAndThrow(RuntimeException e) {
+        LOG.error("{}", e);
+        throw e;
+    }
+    
 }
