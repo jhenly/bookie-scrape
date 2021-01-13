@@ -36,11 +36,17 @@ public final class FileUtils {
      * This method must be invoked before using any utility methods associated
      * with the application's directory.
      * @param dirName - the application's directory name
+     * @throws IllegalStateException if the application directory name has
+     *         already been set
      * @throws NullPointerException if the specified directory name is
      *         {@code null}
      * @throws IllegalArgumentException if the specified directory name is blank
      */
     public static void setAppDirectoryName(String dirName) {
+        if (appDirName != null) {
+            throw new IllegalStateException("cannot change the application directory name after it's been set");
+        }
+        
         String nonNullDirName = Objects.requireNonNull(dirName, "application directory name cannot be null.");
         throwIfStringIsBlank(nonNullDirName, "application's directory name cannot be blank.");
         
