@@ -16,7 +16,7 @@ import javafx.stage.FileChooser;
 
 
 /**
- * The controller class for {@code SettingsLayout.fxml}.
+ * The controller class associated with the {@code SettingsView.fxml} view.
  *
  * @author Jonathan Henly
  */
@@ -27,12 +27,17 @@ public class SettingsController extends MediatableController {
     static int SIDE_BTN_SELECTED_STATE = 0;
     
     private static final String GENERAL_BTN_ID = "generalBtn";
-    private static final String GENERAL_VBOX_ID = "generalVbox";
     private static final String SCRAPER_BTN_ID = "scraperBtn";
     private static final String EXCEL_BTN_ID = "excelBtn";
     private static final String GSHEETS_BTN_ID = "gsheetsBtn";
     private static final String LOGGING_BTN_ID = "loggingBtn";
     
+    
+    /**************************************************************************
+     *                                                                        *
+     * FXML Injected Members                                                  *
+     *                                                                        *
+     *************************************************************************/
     @FXML
     private Button generalBtn;
     @FXML
@@ -53,25 +58,50 @@ public class SettingsController extends MediatableController {
     private Button gsheetsBtn;
     @FXML
     private VBox gsheetsVbox;
+    @FXML
+    private TextField outputExcelFilePathFeild;
+    
+    
+    /**************************************************************************
+     *                                                                        *
+     * Private Members                                                        *
+     *                                                                        *
+     *************************************************************************/
+    
     
     private Button activeSideBtn;
     private VBox activeSideVbox;
     
-    @FXML
-    private TextField outputExcelFilePathFeild;
+    /**************************************************************************
+     *                                                                        *
+     * Constructor(s) / Initializer                                           *
+     *                                                                        *
+     *************************************************************************/
     
-    /**
-     * Default empty constructor used by fxml.
-     */
-    public SettingsController() {}
-    
-    /**
-     * Initializes the default controller class.
+    /** 
+     * Settings controller's constructor.
      * <p>
-     * This method is automatically called after the fxml file has been loaded.
+     * This constructor is automatically called before this controller's
+     * associated view ({@code SettingsView.fxml}) has been loaded.
+     */
+    public SettingsController() {
+        System.out.println("SettingsController::SettingsController()");
+        System.out.println("    generalBtn = " + generalBtn);
+    }
+    
+    /**
+     * Settings controller's initializer.
+     * <p>
+     * This method is automatically called after this controller's associated
+     * view ({@code SettingsView.fxml}) has been loaded.
      */
     @FXML
-    private void initialize() {}
+    private void initialize() {
+        System.out.println("SettingsController::initialize()");
+        System.out.println("    generalBtn = " + generalBtn);
+        
+        // setGeneralActive();
+    }
     
     @FXML
     void selectOutputExcelFilePath(ActionEvent event) {
@@ -117,18 +147,9 @@ public class SettingsController extends MediatableController {
     }
     
     /** Initially start with general side button active. */
-    void setGeneralInitiallyActive() {
-        if (activeSideBtn != null && activeSideBtn != generalBtn) {
-            // if another sid button is active then set it to inactive
-            changeSideButtonState(activeSideBtn, SIDE_BTN_INACTIVE_STATE);
-        }
-        activeSideBtn = generalBtn;
-        
-        if (activeSideVbox != null && activeSideVbox != generalVbox) {
-            // if another side vbox is active then set it to inactive
-            activeSideVbox.setVisible(false);
-        }
-        activeSideVbox = generalVbox;
+    void setGeneralActive() {
+        setActiveSideBtn(generalBtn);
+        setActiveSideVbox(generalBtn.getId());
     }
     
     @FXML
