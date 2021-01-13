@@ -6,6 +6,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +60,7 @@ public final class ApplicationBooter {
     private static boolean booted;
     private static Properties bootProps;
     private static ApplicationMediator appMediator;
+    private static Consumer<Exception> fatalHook;
     
     
     /**************************************************************************
@@ -68,10 +70,36 @@ public final class ApplicationBooter {
      *************************************************************************/
     
     /**
-     *  If necessary, installs application files into the user's OS dependent 
-     *  application directory, then boots the application.
-     *  
-     *  <b>Note:</b> invoking this method more than once will have no effect.
+     * Sets a hook that will be called if a fatal exception occurs during
+     * {@link #boot()}.
+     * <p>
+     * If a fatal exception occurs while booting up the application, then the
+     * hook set by this method will be invoked via 
+     * {@code hook.accept(fatalException)}, where {@code fatalException} is
+     * the fatal exception that was thrown during application boot.
+     * <p>
+     * <b>Note:</b> the hook must be set before invoking {@link #boot()}.
+     * @param hook - the consumer to call {@code accept(Throwable)} on if a
+     *        fatal exception occurs 
+     * @see #boot()
+     */
+    public static void setOnFatalExceptionHook(Consumer<Exception> hook) { fatalHook = hook; }
+    
+    /**
+     * If necessary, installs application files into the user's OS dependent 
+     * application directory, then boots up the application.
+     * <p>
+     * This method will not throw any exceptions that extend
+     * {@link java.lang.Exception}, therefore any exception encountered during
+     * the boot process is fatal.
+     * <p>
+     * A hook may be set, via {@link #setOnFatalExceptionHook(Consumer)}, to be
+     * executed if a fatal exception occurs when booting. This hook is to allow
+     * the caller to notify the user of a fatal exception.
+     * <p>
+     * <b>Note:</b> invoking this method more than once will have no effect.
+     * 
+     * @see #setOnFatalExceptionHook(Consumer)
      */
     public static void boot() {
         if (booted) { return; }
@@ -84,6 +112,12 @@ public final class ApplicationBooter {
         try {
             preBootSequence();
         } catch (Exception e) {
+            if (fatalHook != null) {
+                LOG.info("fatal hook set, calling 'fatalHook.accept(Exception)");
+                fatalHook.accept(e);
+                return;
+            }
+            
             e.printStackTrace();
         }
         
@@ -91,6 +125,12 @@ public final class ApplicationBooter {
         try {
             runBootSequence();
         } catch (Exception e) {
+            if (fatalHook != null) {
+                LOG.info("fatal hook set, calling 'fatalHook.accept(Exception)");
+                fatalHook.accept(e);
+                return;
+            }
+            
             e.printStackTrace();
         }
         
@@ -262,15 +302,6 @@ public final class ApplicationBooter {
     /** This class' logger. */
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationBooter.class);
     
-    
-    /** Logs and returns the exception thrown when calling boot multiple times. */
-    private static IllegalStateException logAndReturnTryingToBootMoreThanOnceException() {
-        String msg = "the application can only be booted once";
-        IllegalStateException ise = new IllegalStateException(msg);
-        LOG.error(msg, ise);
-        
-        return ise;
-    }
     
     /** Logs and returns the exception thrown when unable to create an application dir. */
     private static IOException logAndReturnUnableToCreateDirectoryException(IOException ioe, String whichDir,
