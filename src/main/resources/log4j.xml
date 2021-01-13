@@ -10,7 +10,7 @@
 
     <appender name="gui" class="com.bookiescrape.app.fx.log.LogAppender">
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p - %m%n" />
+            <param name="ConversionPattern" value="%d{MM/dd HH:mm:ss} %-5p %c{1}: %m%n" />
         </layout>
     </appender>
 
