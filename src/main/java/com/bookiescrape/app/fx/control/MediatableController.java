@@ -1,14 +1,14 @@
 package com.bookiescrape.app.fx.control;
 
 abstract class MediatableController {
-    protected ControllerMediator conMediator;
+    private ControllerMediator conMediator;
     
     /** No argument constructor used by JavaFX */
     protected MediatableController() {}
     
     /**
      * Sets the controller mediator.
-     * @param mediator - the controller mediator
+     * @param controllerMediator - the controller mediator
      */
     protected void setControllerMediator(ControllerMediator controllerMediator) { conMediator = controllerMediator; }
     

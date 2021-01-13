@@ -28,7 +28,7 @@ import javafx.stage.Stage;
 
 
 /**
- * The controller class for {@code RootLayout.fxml}.
+ * The controller class associated with the {@code RootView.fxml} view.
  *
  * @author Jonathan Henly
  */
@@ -48,6 +48,12 @@ public class RootController extends MediatableController {
     
     /* Private Constants */
     /* Private Members and FXML Members */
+    
+    /**************************************************************************
+     *                                                                        *
+     * FXML Injected Members                                                  *
+     *                                                                        *
+     *************************************************************************/
     
     @FXML
     private ResourceBundle resources;
@@ -108,8 +114,53 @@ public class RootController extends MediatableController {
     // reference to the actively showing sub view
     private SubView activeSubView;
     
+    /**************************************************************************
+     *                                                                        *
+     * FXML Injected Members                                                  *
+     *                                                                        *
+     *************************************************************************/
+    
+    
+    /**************************************************************************
+     *                                                                        *
+     * Private Members                                                        *
+     *                                                                        *
+     *************************************************************************/
+    
+    
+    /**************************************************************************
+     *                                                                        *
+     * Constructor(s) / Initializer                                           *
+     *                                                                        *
+     *************************************************************************/
+    
+    /** 
+     * Root controller's constructor.
+     * <p>
+     * This constructor is automatically called before this controller's
+     * associated view ({@code RootView.fxml}) has been loaded.
+     */
+    public RootController() {
+        System.out.println("RootController::RootController()");
+    }
+    
+    /**
+     * Root controller's initializer.
+     * <p>
+     * This method is automatically called after this controller's associated
+     * view ({@code RootView.fxml}) has been loaded.
+     */
     @FXML
-    private void initialize() {}
+    private void initialize() {
+        System.out.println("RootController::initialize()");
+    }
+    
+    
+    /**************************************************************************
+     *                                                                        *
+     * Package Private API                                                    *
+     *                                                                        *
+     *************************************************************************/
     
     /**
      * Gets the root view's active sub view.

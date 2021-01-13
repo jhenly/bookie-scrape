@@ -283,7 +283,7 @@ public class ControllerMediator {
         showSubViewInRoot(subView);
         if (subView == settingsSubView) {
             // initially show general settings in settings view
-            settingsController.setGeneralInitiallyActive();
+            settingsController.setGeneralActive();
         }
         
     }

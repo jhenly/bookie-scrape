@@ -4,21 +4,45 @@ import javafx.fxml.FXML;
 
 
 /**
- * The controller class for {@code DashboardLayout.fxml}.
+ * The controller class associated with the {@code DashView.fxml} view.
  *
  * @author Jonathan Henly
  */
 public class DashController extends MediatableController {
     
-    /**
-     * Constructor is called before the initialize() method.
+    /**************************************************************************
+     *                                                                        *
+     * FXML Injected Members                                                  *
+     *                                                                        *
+     *************************************************************************/
+    
+    
+    /**************************************************************************
+     *                                                                        *
+     * Private Members                                                        *
+     *                                                                        *
+     *************************************************************************/
+    
+    
+    /**************************************************************************
+     *                                                                        *
+     * Constructor(s) / Initializer                                           *
+     *                                                                        *
+     *************************************************************************/
+    
+    /** 
+     * Dashboard controller's constructor.
+     * <p>
+     * This constructor is automatically called before this controller's
+     * associated view ({@code DashView.fxml}) has been loaded.
      */
     public DashController() {}
     
     /**
-     * Initializes the default controller class.
+     * Dashboard controller's initializer.
      * <p>
-     * This method is automatically called after the fxml file has been loaded.
+     * This method is automatically called after the dashboard controller's
+     * associated view ({@code DashView.fxml}) has been loaded.
      */
     @FXML
     private void initialize() {
