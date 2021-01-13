@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -15,19 +16,35 @@ import com.bookiescrape.app.settings.UserSettings;
 import com.bookiescrape.app.util.FileUtils;
 
 /**
+ * Application booting handler class.
  * 
  * @author Jonathan Henly
+ * @see BootProperty
  */
 public final class ApplicationBooter {
-    private static final Logger LOG = LoggerFactory.getLogger(ApplicationBooter.class);
     
+    /** 
+     * Enum representing the boot properties keys.
+     * 
+     * @see BootProperty#VERSION
+     * @see BootProperty#USER_SETTINGS_FILE
+     */
     public static enum BootProperty {
-        VERSION("version"), USER_SETTINGS_FILE("user_settings_file");
+        /** Boot properties' version key. */
+        VERSION("version"),
+        /** Boot properties' user settings file key.*/
+        USER_SETTINGS_FILE("user_settings_file");
         
         private String key;
         
         BootProperty(String key) { this.key = key; }
-        String getKey() { return key; }
+        
+        /**
+         * Gets this {@code BootProperty} enum's key.
+         * @return this {@code BootProperty} enum's key
+         * @see BootProperty
+         */
+        public String getKey() { return key; }
     }
     
     private static final String APP_DIR = Main.APP_DIR_NAME;
@@ -40,9 +57,9 @@ public final class ApplicationBooter {
     
     
     private static boolean booted;
-    
     private static Properties bootProps;
     private static ApplicationMediator appMediator;
+    
     
     /**************************************************************************
      *                                                                        *
@@ -53,53 +70,68 @@ public final class ApplicationBooter {
     /**
      *  If necessary, installs application files into the user's OS dependent 
      *  application directory, then boots the application.
+     *  
+     *  <b>Note:</b> invoking this method more than once will have no effect.
      */
     public static void boot() {
-        if (booted) { throw new UnsupportedOperationException("the application can only be booted once."); }
+        if (booted) { return; }
         booted = true;
         
+        // set the application's directory name before doing anything else
         FileUtils.setAppDirectoryName(APP_DIR);
         
+        // install the application or replace any missing files before booting
         try {
             preBootSequence();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         
-        
+        // load boot settings and user settings
         try {
             runBootSequence();
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         
+        LOG.info("finished boot sequence");
         
         ApplicationLauncher.launchApplication(appMediator);
     }
+    
     
     /**************************************************************************
      *                                                                        *
      * Private API                                                            *
      *                                                                        *
-     * @throws IOException 
      *************************************************************************/
     
+    /** Helper that installs the application or replaces any missing files. */
     private static void preBootSequence() throws IOException {
-        Path userHome = FileUtils.getUserHomeDirectory();
-        System.out.println("User Home Dir: " + userHome);
-        
-        System.out.println("App Dir: " + FileUtils.getAppDirectory());
-        System.out.println("AppDir Exists: " + FileUtils.appDirectoryExists());
-        
         if (!FileUtils.appDirectoryExists()) {
             installApplication();
         } else {
             if (!FileUtils.fileExistsInAppDirectory(BOOT_PROPS_FILE)) { createBootProperties(); }
             if (!FileUtils.fileExistsInAppDirectory(USER_PROPS_FILE)) { createUserProperties(); }
-            if (!FileUtils.subAppDirectoryExists(LOGS_DIR)) { createLogs(); }
-            if (!FileUtils.subAppDirectoryExists(ICONS_DIR)) { createIcons(); }
+            if (!FileUtils.subAppDirectoryExists(LOGS_DIR)) { createLogsDirectory(); }
+            if (!FileUtils.subAppDirectoryExists(ICONS_DIR)) { createIconsDirectory(); }
         }
         
+    }
+    
+    /** Helper that creates all app directories and copies all files from jar. */
+    private static void installApplication() throws IOException {
+        try {
+            FileUtils.createAppDirectory();
+        } catch (IOException ioe) {
+            throw logAndReturnUnableToCreateDirectoryException(ioe, "application directory",
+                FileUtils.getAppDirectory());
+        }
+        
+        createBootProperties();
+        createUserProperties();
+        createLogsDirectory();
+        createIconsDirectory();
     }
     
     private static void runBootSequence() throws IOException {
@@ -112,69 +144,94 @@ public final class ApplicationBooter {
         Path userPropertiesFile = Path.of(propFilePath);
         
         Settings userSettings = null;
-        
         try {
             userSettings = UserSettings.loadSettings(userPropertiesFile);
         } catch (NoSuchFileException nsfe) {
-            String msg = "could not find user properties file \"" + nsfe.getLocalizedMessage() + "\".";
-            LOG.error(msg);
-            throw new NoSuchFileException(msg);
+            throw logAndReturnUserPropertiesNotFoundException(nsfe);
         }
         
         // create application mediator with user settings
         appMediator = new ApplicationMediator(userSettings);
     }
     
-    private static void installApplication() throws IOException {
-        FileUtils.createAppDirectory();
-        
-        createBootProperties();
-        createUserProperties();
-        createLogs();
-        createIcons();
-    }
-    
     private static void createBootProperties() throws IOException {
+        Path bootPropsFilePath = FileUtils.getAppDirectory().resolve(BOOT_PROPS_FILE);
+        
         // copy boot properties file from jar
         try (InputStream is = ApplicationBooter.class.getResourceAsStream(BOOT_PROPS_FILE)) {
-            Path bootPropsFile = FileUtils.getAppDirectory().resolve(BOOT_PROPS_FILE);
-            FileUtils.copyJarResourceToFile(is, bootPropsFile);
-            // load boot properties so we can edit them
-            bootProps = loadBootProperties(bootPropsFile);
-            // set user settings file to user properties file in app directory
-            setBootProperty(BootProperty.USER_SETTINGS_FILE,
-                FileUtils.getAppDirectory().resolve(USER_PROPS_FILE).toString());
+            
+            try {
+                FileUtils.copyJarResourceToFile(is, bootPropsFilePath);
+            } catch (IOException ioe) {
+                throw logAndReturnUnableToCopyPropertiesFromJarException(ioe, BOOT_PROPS_FILE, bootPropsFilePath);
+            }
+            
         }
         
+        // load boot properties so we can edit them
+        bootProps = loadBootProperties(bootPropsFilePath);
+        
+        // set user settings file to user properties file in app directory
+        setBootProperty(BootProperty.USER_SETTINGS_FILE,
+            FileUtils.getAppDirectory().resolve(USER_PROPS_FILE).toString());
     }
     
     private static void createUserProperties() throws IOException {
+        Path userPropsFilePath = FileUtils.getAppDirectory().resolve(USER_PROPS_FILE);
+        
         try (InputStream is = ApplicationBooter.class.getResourceAsStream(DEFAULT_PROPS_FILE)) {
-            FileUtils.copyJarResourceToFile(is, FileUtils.getAppDirectory().resolve(USER_PROPS_FILE));
+            FileUtils.copyJarResourceToFile(is, userPropsFilePath);
+        } catch (IOException ioe) {
+            throw logAndReturnUnableToCopyPropertiesFromJarException(ioe, DEFAULT_PROPS_FILE, userPropsFilePath);
         }
-    }
-    
-    private static void createLogs() throws IOException {
-        FileUtils.createSubAppDirectory(LOGS_DIR);
         
     }
     
-    private static void createIcons() throws IOException {
-        FileUtils.createSubAppDirectory(ICONS_DIR);
+    /** Helper that creates app's logs directory. */
+    private static void createLogsDirectory() throws IOException {
+        try {
+            FileUtils.createSubAppDirectory(LOGS_DIR);
+        } catch (IOException ioe) {
+            throw logAndReturnUnableToCreateDirectoryException(ioe, "logs directory",
+                FileUtils.getAppDirectory().resolve(LOGS_DIR));
+        }
         
     }
     
+    /** Helper that creates app's icons directory and copies icons from jar. */
+    private static void createIconsDirectory() throws IOException {
+        try {
+            FileUtils.createSubAppDirectory(ICONS_DIR);
+        } catch (IOException ioe) {
+            throw logAndReturnUnableToCreateDirectoryException(ioe, "icons directory",
+                FileUtils.getAppDirectory().resolve(LOGS_DIR));
+        }
+        
+    }
+    
+    /** Helper that loads boot properties from a file path. */
     private static Properties loadBootProperties(Path bootPropsPath) throws IOException {
-        return FileUtils.loadPropertiesFile(bootPropsPath);
+        Properties bprops = null;
+        
+        try {
+            bprops = FileUtils.loadPropertiesFile(bootPropsPath);
+        } catch (IOException ioe) {
+            throw logAndReturnUnableToLoadPropertiesException(ioe, "boot", bootPropsPath);
+        }
+        
+        return bprops;
     }
     
     /**
      * Gets the value of a specified boot property.
      * @param key - which boot property's value to get
      * @return the value associated with the specified boot property
+     * @throws NullPointerException if the specified key is {@code null}
      */
     public static String getBootProperty(BootProperty key) {
-        return bootProps.getProperty(key.getKey());
+        BootProperty nonNullKey = Objects.requireNonNull(key, "boot property key can not be null");
+        
+        return bootProps.getProperty(nonNullKey.getKey());
     }
     
     /**
@@ -182,15 +239,87 @@ public final class ApplicationBooter {
      * properties to file.
      * @param key - the boot property to set a new value for
      * @param value - the new boot property value
-     * @throws IOException if an I/O error ocurrs
+     * @throws IOException if an I/O error occurrs
+     * @throws NullPointerException if the specified key is {@code null}
      */
     public static void setBootProperty(BootProperty key, String value) throws IOException {
-        bootProps.setProperty(key.getKey(), value);
+        BootProperty nonNullKey = Objects.requireNonNull(key, "boot property key can not be null");
         
-        Path bootPropsFile = FileUtils.getAppDirectory().resolve(BOOT_PROPS_FILE);
+        bootProps.setProperty(nonNullKey.getKey(), value);
+        
         // write changes to boot properties file
+        Path bootPropsFile = FileUtils.getAppDirectory().resolve(BOOT_PROPS_FILE);
         FileUtils.writePropertiesToFile(bootProps, bootPropsFile);
     }
+    
+    
+    /**************************************************************************
+     *                                                                        *
+     * Logging and Exception Convenience Methods                              *
+     *                                                                        *
+     *************************************************************************/
+    
+    /** This class' logger. */
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationBooter.class);
+    
+    
+    /** Logs and returns the exception thrown when calling boot multiple times. */
+    private static IllegalStateException logAndReturnTryingToBootMoreThanOnceException() {
+        String msg = "the application can only be booted once";
+        IllegalStateException ise = new IllegalStateException(msg);
+        LOG.error(msg, ise);
+        
+        return ise;
+    }
+    
+    /** Logs and returns the exception thrown when unable to create an application dir. */
+    private static IOException logAndReturnUnableToCreateDirectoryException(IOException ioe, String whichDir,
+        Path dirPath) {
+        
+        String msg = String.format("could not create %s directory \"%s\" ", whichDir, dirPath);
+        
+        return logErrorMsgAndReturnIOException(msg, ioe);
+    }
+    
+    /** Logs and returns the exception thrown when unable to copy boot props from jar. */
+    private static IOException logAndReturnUnableToCopyPropertiesFromJarException(IOException ioe, String propsFile,
+        Path copyTo) {
+        
+        String msg = String.format("could not copy \"%s\" from JAR to \"%s\" ", propsFile, copyTo);
+        
+        return logErrorMsgAndReturnIOException(msg, ioe);
+    }
+    
+    /** Logs and returns the exception thrown when unable to load properties from file. */
+    private static IOException logAndReturnUnableToLoadPropertiesException(IOException ioe, String whichProps,
+        Path bootProps) {
+        
+        String msg = String.format("could not load %s properties from \"%s\" ", whichProps, bootProps);
+        
+        return logErrorMsgAndReturnIOException(msg, ioe);
+    }
+    
+    /** Logs and returns the exception thrown when user props can't be found. */
+    private static NoSuchFileException logAndReturnUserPropertiesNotFoundException(NoSuchFileException nsfe) {
+        String msg = "could not find user properties file ";
+        LOG.error(msg, nsfe);
+        
+        return new NoSuchFileException(String.format("%s \"%s\"", msg, nsfe.getLocalizedMessage()));
+    }
+    
+    
+    /** Helper that logs an error message and returns a new IOException. */
+    private static IOException logErrorMsgAndReturnIOException(String msg, IOException ioe) {
+        LOG.error(msg, ioe);
+        return new IOException(msg, ioe);
+    }
+    
+    
+    /**************************************************************************
+     *                                                                        *
+     * Private Constructor(s)                                                 *
+     *                                                                        *
+     *************************************************************************/
     
     /** This class should not be subclassed. */
     private ApplicationBooter() {}
