@@ -1,8 +1,5 @@
 package com.bookiescrape.app.sample;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import com.bookiescrape.app.settings.Settings;
 import com.bookiescrape.app.settings.SettingsKey;
 import com.bookiescrape.app.settings.UserSettings;
@@ -15,7 +12,7 @@ public class ApplicationMediator {
     
     private Settings settings;
     
-    public ApplicationMediator(Settings settings) throws FileNotFoundException, IOException {
+    public ApplicationMediator(Settings settings) {
         this.settings = settings;
     }
     
