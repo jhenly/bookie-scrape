@@ -30,7 +30,7 @@
                         <Region HBox.hgrow="NEVER">
                            <styleClass>
                               <String fx:value="logo-icon" />
-                              <String fx:value="user-secrets-icon" />
+                              <String fx:value="icon-user-secrets" />
                            </styleClass>
                            <HBox.margin>
                               <Insets />
@@ -53,7 +53,7 @@
                               </Label>
                            </children>
                            <padding>
-                              <Insets left="2.0" top="4.0" />
+                              <Insets left="2.0" />
                            </padding>
                         </VBox>
                      </children>
@@ -79,7 +79,7 @@
                                                 <Region StackPane.alignment="CENTER">
                                                    <styleClass>
                                                       <String fx:value="icon" />
-                                                      <String fx:value="cog-icon" />
+                                                      <String fx:value="icon-cog" />
                                                    </styleClass>
                                                 </Region>
                                                 
@@ -91,7 +91,7 @@
                                                 <Region StackPane.alignment="CENTER">
                                                    <styleClass>
                                                       <String fx:value="icon" />
-                                                      <String fx:value="cog-icon" />
+                                                      <String fx:value="icon-cog" />
                                                    </styleClass>
                                                 </Region>
                                              
@@ -118,7 +118,7 @@
                                                 <Region StackPane.alignment="CENTER">
                                                    <styleClass>
                                                       <String fx:value="icon" />
-                                                      <String fx:value="book-dead-icon" />
+                                                      <String fx:value="icon-book-dead" />
                                                    </styleClass>
                                                 </Region>
                                                 
@@ -130,7 +130,7 @@
                                                 <Region StackPane.alignment="CENTER">
                                                    <styleClass>
                                                       <String fx:value="icon" />
-                                                      <String fx:value="book-dead-icon" />
+                                                      <String fx:value="icon-book-dead" />
                                                    </styleClass>
                                                 </Region>
                                                 
