@@ -180,7 +180,7 @@
                                           <Region HBox.hgrow="NEVER">
                                              <styleClass>
                                                 <String fx:value="icon" />
-                                                <String fx:value="icon-brand-goole" />
+                                                <String fx:value="icon-brand-google" />
                                              </styleClass>
                                           </Region>
                                           <Label styleClass="button-label" text="Google Sheets" HBox.hgrow="NEVER" />
@@ -195,7 +195,7 @@
                                           <Region HBox.hgrow="NEVER">
                                              <styleClass>
                                                 <String fx:value="icon" />
-                                                <String fx:value="icon-brand-goole" />
+                                                <String fx:value="icon-brand-google" />
                                              </styleClass>
                                           </Region>
                                           <Label styleClass="button-label" text="Google Sheets" HBox.hgrow="NEVER" />
