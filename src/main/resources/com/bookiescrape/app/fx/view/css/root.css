@@ -507,18 +507,19 @@
 
 .root-top-hbox { -fx-background-color: -color-top-blue; }
 
+.root-top-hbox .logo-icon {
+    -fx-size: 32;
+    -fx-min-width: -fx-size;
+    -fx-min-height: -fx-size;
+    -fx-max-width: -fx-size;
+    -fx-max-height: -fx-size;
+    -fx-background-color: -color-white;
+}
 .root-top-hbox .logo-label-top, .logo-label-bottom {
     -fx-font-family: "Comfortaa Bold";
-    -fx-font-size: 16;
+    -fx-font-size: 1.4em;
 }
-.root-top-hbox .logo-icon {
-    -fx-size: 30;
-    -fx-min-width: -fx-size;
-	-fx-min-height: -fx-size;
-	-fx-max-width: -fx-size;
-	-fx-max-height: -fx-size;
-	-fx-background-color: -color-white;
-}
+
 
 .root-top-hbox .top-button .icon {
 	-fx-size: 20;
