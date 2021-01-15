@@ -1,14 +1,18 @@
 package com.bookiescrape.app.fx.control;
 
+import java.util.List;
+
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.bookiescrape.app.fx.log.LogAppender;
+import com.bookiescrape.app.util.LogUtils;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 
 /**
@@ -17,9 +21,10 @@ import javafx.scene.layout.HBox;
  * @author Jonathan Henly
  */
 public class LogController extends MediatableController {
-    private static final Logger LOG = LoggerFactory.getLogger(LogController.class);
+    private static final Logger LOG = LogUtils.getLogger(LogController.class);
     
-    private static final String[] LOG_LEVELS = {};
+    private static final List<String> LOG_LEVELS = LogUtils.LogLevel.getLogLevels();
+    private static final String RAW_LOG_OUTPUT = "Raw";
     
     /**************************************************************************
      *                                                                        *
@@ -27,12 +32,11 @@ public class LogController extends MediatableController {
      *                                                                        *
      *************************************************************************/
     
-    @FXML
-    private TextArea rawLogTextArea;
-    @FXML
-    private HBox rawLogHbox;
-    @FXML
-    private ChoiceBox<String> logLevelChoiceBox;
+    @FXML private TextArea rawLogTextArea;
+    @FXML private VBox logAreaVbox;
+    @FXML private HBox rawLogHbox;
+    @FXML private Label filterByLabel;
+    @FXML private ComboBox<String> filterByComboBox;
     
     
     /**************************************************************************
@@ -74,7 +78,9 @@ public class LogController extends MediatableController {
         // connect raw log text area with the log appender
         LogAppender.setTextArea(rawLogTextArea);
         
-        logLevelChoiceBox.getItems().addAll();
+        // add log levels and raw log output to log view's choice box
+        filterByComboBox.getItems().add(RAW_LOG_OUTPUT);
+        filterByComboBox.getItems().addAll(LOG_LEVELS);
     }
     
     
