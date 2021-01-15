@@ -1,7 +1,30 @@
 
+.log-vbox {
+    -fx-background-color: -color-window-background;
+}
 
-.text-area-text {
-    -fx-text-fill: #202020;
+.log-vbox .filter-by-label {
+    -fx-text-fill: -color-control-label;
+    -fx-font-size: 1.0em;
+    -fx-font-family: 'Open Sans'; 
+}
+
+.log-vbox .filter-by-selector {
+    -fx-text-fill: -color-control-label;
     -fx-font-size: 1.0em;
     -fx-font-family: 'Open Sans Regular';
+}
+
+.log-vbox .scroll {
+    -fx-background-color: transparent;
+}
+
+.log-vbox .raw-log-text-area {
+    -fx-text-fill: -color-control-label;
+    -fx-font-size: 1.0em;
+    -fx-font-family: 'Open Sans Regular';
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-background-color: -color-window-separator, -color-window-background;
+    -fx-background-insets: 0, 1 1 1 1;
 }
