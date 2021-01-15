@@ -73,6 +73,10 @@ public abstract class ApplicationHandler extends Application {
     public final void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         
+        LOG.info("loading fonts");
+        // load fonts from resources
+        FontUtils.loadFontsFromResources(FONT_RES_PATH);
+        
         try {
             LOG.info("creating controller mediator");
             
@@ -90,10 +94,6 @@ public abstract class ApplicationHandler extends Application {
         
         // allow system tray supporting implementing classes to do their thing
         setUpSystemTrayIfSupported();
-        
-        LOG.info("loading fonts");
-        // load fonts from resources
-        FontUtils.loadFontsFromResources(FONT_RES_PATH);
         
         // create window with no title bar or default min, max, close buttons
         primaryStage.initStyle(StageStyle.UNDECORATED);
