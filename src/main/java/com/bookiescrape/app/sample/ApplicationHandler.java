@@ -5,6 +5,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bookiescrape.app.fx.FXMLReference;
 import com.bookiescrape.app.fx.FontUtils;
 import com.bookiescrape.app.fx.control.ControllerMediator;
@@ -34,6 +37,7 @@ import javafx.stage.StageStyle;
  * @see Main
  */
 public abstract class ApplicationHandler extends Application {
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationHandler.class);
     
     // the font resource path
     private static final String FONT_RES_PATH = "../fx/view/font/";
@@ -70,6 +74,8 @@ public abstract class ApplicationHandler extends Application {
         this.primaryStage = primaryStage;
         
         try {
+            LOG.info("creating controller mediator");
+            
             // load all of the fxml files and create controller mediator
             controllerMediator = loadFxmlAndCreateControllerMediator();
             
@@ -85,6 +91,7 @@ public abstract class ApplicationHandler extends Application {
         // allow system tray supporting implementing classes to do their thing
         setUpSystemTrayIfSupported();
         
+        LOG.info("loading fonts");
         // load fonts from resources
         FontUtils.loadFontsFromResources(FONT_RES_PATH);
         
@@ -108,6 +115,8 @@ public abstract class ApplicationHandler extends Application {
         controllerMediator.requestShowDashboardView();
         
         setPrimaryStageMinBounds();
+        
+        LOG.info("finished application launch sequence\n");
     }
     
     
@@ -118,10 +127,14 @@ public abstract class ApplicationHandler extends Application {
      * This must be called after the primary stage has been set.
      */
     private ControllerMediator loadFxmlAndCreateControllerMediator() throws IOException {
-        // load fxml references from fxml file
+        // load fxml references from fxml view files
+        LOG.info("loading root view and controller");
         FXMLReference rootReference = loadReference(ROOT_FXML);
+        LOG.info("loading dashboard view and controller");
         FXMLReference dashReference = loadReference(DASHBOARD_FXML);
+        LOG.info("loading settings view and controller");
         FXMLReference settingsReference = loadReference(SETTINGS_FXML);
+        LOG.info("loading log view and controller");
         FXMLReference logReference = loadReference(LOG_FXML);
         
         // need this to init stage's scene
@@ -157,11 +170,15 @@ public abstract class ApplicationHandler extends Application {
         // do nothing if system tray is not supported
         if (!systemTrayIsSupported()) { return; }
         
+        LOG.info("setting up system tray");
         try {
             // call 'this' abstract method
             setUpSystemTray();
         } catch (Exception e) {
             // TODO properly log any exception
+            
+            LOG.error("system tray set up failed, {}", e);
+            
             System.err.println(e.getMessage());
         }
     }

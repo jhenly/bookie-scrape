@@ -14,7 +14,7 @@ import com.bookiescrape.app.util.OperatingSystemUtils.OperatingSystem;
  * @author Jonathan Henly
  */
 public abstract class ApplicationLauncher extends ApplicationHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(ApplicationHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationLauncher.class);
     
     /**************************************************************************
      *                                                                        *
@@ -27,6 +27,7 @@ public abstract class ApplicationLauncher extends ApplicationHandler {
     
     /**
      * Launches the application based on the detected operating system.
+     * @param appMediator - reference to the application mediator
      * @throws RuntimeException if this method is invoked again after being
      *         invoked
      */
@@ -36,7 +37,7 @@ public abstract class ApplicationLauncher extends ApplicationHandler {
         
         applicationMediator = appMediator;
         
-        LOG.info("beginning application launch");
+        LOG.info("starting application launch sequence");
         
         OperatingSystem os = OperatingSystemUtils.getDetectedOS();
         LOG.info("{} operating system detected", os);
@@ -69,6 +70,7 @@ public abstract class ApplicationLauncher extends ApplicationHandler {
      * Launches the application.
      */
     public final void launch() { implLaunch(); }
+    
     
     /**
      * Used by {@link ApplicationLauncher#launch()} to launch implementing classes.

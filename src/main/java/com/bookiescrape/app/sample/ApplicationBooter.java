@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.function.Consumer;
 
+import org.apache.log4j.FileAppender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,10 @@ import com.bookiescrape.app.util.FileUtils;
  * @see BootProperty
  */
 public final class ApplicationBooter {
+    
+    /** This class' logger. */
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationBooter.class);
+    
     
     /** 
      * Enum representing the boot properties keys.
@@ -58,6 +63,7 @@ public final class ApplicationBooter {
     
     
     private static boolean booted;
+    private static FileAppender bootLog;
     private static Properties bootProps;
     private static ApplicationMediator appMediator;
     private static Consumer<Exception> fatalHook;
@@ -104,6 +110,7 @@ public final class ApplicationBooter {
     public static void boot() {
         if (booted) { return; }
         booted = true;
+        LOG.info("starting application boot sequence");
         
         // set the application's directory name before doing anything else
         FileUtils.setAppDirectoryName(APP_DIR);
@@ -134,7 +141,7 @@ public final class ApplicationBooter {
             e.printStackTrace();
         }
         
-        LOG.info("finished boot sequence");
+        LOG.info("finished application boot sequence\n");
         
         ApplicationLauncher.launchApplication(appMediator);
     }
@@ -148,9 +155,13 @@ public final class ApplicationBooter {
     
     /** Helper that installs the application or replaces any missing files. */
     private static void preBootSequence() throws IOException {
+        LOG.info("checking for existence of application directory \"{}\"", FileUtils.getAppDirectory());
+        
         if (!FileUtils.appDirectoryExists()) {
+            LOG.info("application directory does not exist, installing bookie scrape");
             installApplication();
         } else {
+            LOG.info("application directory exists, checking files and sub directories");
             if (!FileUtils.fileExistsInAppDirectory(BOOT_PROPS_FILE)) { createBootProperties(); }
             if (!FileUtils.fileExistsInAppDirectory(USER_PROPS_FILE)) { createUserProperties(); }
             if (!FileUtils.subAppDirectoryExists(LOGS_DIR)) { createLogsDirectory(); }
@@ -162,12 +173,14 @@ public final class ApplicationBooter {
     /** Helper that creates all app directories and copies all files from jar. */
     private static void installApplication() throws IOException {
         try {
+            LOG.info("creating application directory \"{}\"", FileUtils.getAppDirectory());
             FileUtils.createAppDirectory();
         } catch (IOException ioe) {
             throw logAndReturnUnableToCreateDirectoryException(ioe, "application directory",
                 FileUtils.getAppDirectory());
         }
         
+        // create sub dir's and copy necessary files from jar
         createBootProperties();
         createUserProperties();
         createLogsDirectory();
@@ -181,15 +194,18 @@ public final class ApplicationBooter {
         
         // load user's properties files
         String propFilePath = getBootProperty(BootProperty.USER_SETTINGS_FILE);
-        Path userPropertiesFile = Path.of(propFilePath);
+        LOG.info("boot properties has user settings file path as \"{}\"", propFilePath);
         
+        Path userPropertiesFile = Path.of(propFilePath);
         Settings userSettings = null;
         try {
+            LOG.info("loading user settings from user settings file path");
             userSettings = UserSettings.loadSettings(userPropertiesFile);
         } catch (NoSuchFileException nsfe) {
             throw logAndReturnUserPropertiesNotFoundException(nsfe);
         }
         
+        LOG.info("creating application mediator with user settings");
         // create application mediator with user settings
         appMediator = new ApplicationMediator(userSettings);
     }
@@ -200,6 +216,7 @@ public final class ApplicationBooter {
         // copy boot properties file from jar
         try (InputStream is = ApplicationBooter.class.getResourceAsStream(BOOT_PROPS_FILE)) {
             
+            LOG.info("copying default boot properties from JAR to \"{}\"", bootPropsFilePath);
             try {
                 FileUtils.copyJarResourceToFile(is, bootPropsFilePath);
             } catch (IOException ioe) {
@@ -211,40 +228,51 @@ public final class ApplicationBooter {
         // load boot properties so we can edit them
         bootProps = loadBootProperties(bootPropsFilePath);
         
+        Path userPropsFilePath = FileUtils.getAppDirectory().resolve(USER_PROPS_FILE);
+        LOG.info("setting user settings file path in boot properties to \"{}\"", userPropsFilePath);
+        
         // set user settings file to user properties file in app directory
-        setBootProperty(BootProperty.USER_SETTINGS_FILE,
-            FileUtils.getAppDirectory().resolve(USER_PROPS_FILE).toString());
+        setBootProperty(BootProperty.USER_SETTINGS_FILE, userPropsFilePath.toString());
     }
     
     private static void createUserProperties() throws IOException {
         Path userPropsFilePath = FileUtils.getAppDirectory().resolve(USER_PROPS_FILE);
         
         try (InputStream is = ApplicationBooter.class.getResourceAsStream(DEFAULT_PROPS_FILE)) {
-            FileUtils.copyJarResourceToFile(is, userPropsFilePath);
-        } catch (IOException ioe) {
-            throw logAndReturnUnableToCopyPropertiesFromJarException(ioe, DEFAULT_PROPS_FILE, userPropsFilePath);
+            
+            LOG.info("copying default user properties from JAR to \"{}\"", userPropsFilePath);
+            try {
+                FileUtils.copyJarResourceToFile(is, userPropsFilePath);
+            } catch (IOException ioe) {
+                throw logAndReturnUnableToCopyPropertiesFromJarException(ioe, DEFAULT_PROPS_FILE, userPropsFilePath);
+            }
+            
         }
         
     }
     
     /** Helper that creates app's logs directory. */
     private static void createLogsDirectory() throws IOException {
+        Path logsDirPath = FileUtils.getAppDirectory().resolve(LOGS_DIR);
+        
+        LOG.info("creating application logs directory \"{}\"", logsDirPath);
         try {
             FileUtils.createSubAppDirectory(LOGS_DIR);
         } catch (IOException ioe) {
-            throw logAndReturnUnableToCreateDirectoryException(ioe, "logs directory",
-                FileUtils.getAppDirectory().resolve(LOGS_DIR));
+            throw logAndReturnUnableToCreateDirectoryException(ioe, "logs directory", logsDirPath);
         }
         
     }
     
     /** Helper that creates app's icons directory and copies icons from jar. */
     private static void createIconsDirectory() throws IOException {
+        Path iconsDirPath = FileUtils.getAppDirectory().resolve(ICONS_DIR);
+        
+        LOG.info("creating application icons directory \"{}\"", iconsDirPath);
         try {
             FileUtils.createSubAppDirectory(ICONS_DIR);
         } catch (IOException ioe) {
-            throw logAndReturnUnableToCreateDirectoryException(ioe, "icons directory",
-                FileUtils.getAppDirectory().resolve(LOGS_DIR));
+            throw logAndReturnUnableToCreateDirectoryException(ioe, "icons directory", iconsDirPath);
         }
         
     }
@@ -253,6 +281,7 @@ public final class ApplicationBooter {
     private static Properties loadBootProperties(Path bootPropsPath) throws IOException {
         Properties bprops = null;
         
+        LOG.info("loading application boot properties from \"{}\"", bootPropsPath);
         try {
             bprops = FileUtils.loadPropertiesFile(bootPropsPath);
         } catch (IOException ioe) {
@@ -298,10 +327,6 @@ public final class ApplicationBooter {
      * Logging and Exception Convenience Methods                              *
      *                                                                        *
      *************************************************************************/
-    
-    /** This class' logger. */
-    private static final Logger LOG = LoggerFactory.getLogger(ApplicationBooter.class);
-    
     
     /** Logs and returns the exception thrown when unable to create an application dir. */
     private static IOException logAndReturnUnableToCreateDirectoryException(IOException ioe, String whichDir,
