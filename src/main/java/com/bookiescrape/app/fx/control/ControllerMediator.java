@@ -101,7 +101,7 @@ public class ControllerMediator {
         // add sub views to root view
         rootController.addSubViewsToSubViewStackPane(dashSubView, settingsSubView, logSubView);
         
-        LOG.info("ControllerMediator: finished creating all mediatable instances");
+        LOG.info("finished creating all mediatable instances");
     }
     
     
