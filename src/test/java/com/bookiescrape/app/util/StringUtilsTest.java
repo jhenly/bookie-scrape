@@ -3,7 +3,11 @@ package com.bookiescrape.app.util;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -28,6 +32,133 @@ public class StringUtilsTest {
     private static final String SYMBOLS_STRING = "[{()}]!@#$%^&*_-+=`~\"',./<>?\\|;:";
     
     private static final int NOT_FOUND = -1;
+    
+    
+    private static List<String> EMPTY_LIST;
+    private static List<String> NULL_LIST;
+    
+    private static String COMMA_AND_WHITESPACE_STRING;
+    
+    private static List<String> LIST_OF_STRINGS;
+    private static String COMMA_DELIM_STRING_IN;
+    private static String COMMA_DELIM_STRING_OUT;
+    
+    private static List<String> LIST_OF_STRINGS_WITH_NULLS;
+    private static String COMMA_DELIM_STRING_FROM_LIST_OF_STRINGS_WITH_NULLS;
+    
+    private static List<Object> LIST_OF_OBJECTS_WITH_NULLS;
+    private static String COMMA_DELIM_STRING_FROM_LIST_OF_OBJECTS_WITH_NULLS;
+    
+    private static List<Object> LIST_OF_OBJECTS_WITH_NULLS_AND_EMPTY_STRINGS;
+    private static String COMMA_DELIM_STRING_FROM_LIST_OF_OBJECTS_WITH_NULLS_AND_EMPTY_STRINGS;
+    
+    /** Runs once before any tests, initializes static test variables. */
+    @BeforeClass
+    public static void setUpOnceFirst() {
+        EMPTY_LIST = Collections.emptyList();
+        NULL_LIST = null;
+        
+        COMMA_AND_WHITESPACE_STRING = ",\t\t,,\n, ,   ,, ,,  ,,\t  ,,\r, ,,,";
+        
+        // initialize list of strings and matching comma delimited string
+        String a = "a", boo = "boo", foo = "foo", doo = "doo", goo = "goo", loo = "loo";
+        LIST_OF_STRINGS = List.of(a, boo, foo, doo, goo, loo);
+        COMMA_DELIM_STRING_IN = a + ',' + boo + " , , , " + foo + "," + doo + ", " + goo + " , " + loo + ",, ,";
+        COMMA_DELIM_STRING_OUT = String.format("%s,%s,%s,%s,%s,%s", a, boo, foo, doo, goo, loo);
+        
+        // initialize list of strings with nulls and matching comma delimited string
+        LIST_OF_STRINGS_WITH_NULLS = Arrays.asList(new String[] { null, boo, foo, null, goo, loo, null });
+        COMMA_DELIM_STRING_FROM_LIST_OF_STRINGS_WITH_NULLS = String.format("%s,%s,%s,%s", boo, foo, goo, loo);
+        
+        // initialize list of objects with nulls and matching comma delimited string
+        Integer num = 123;
+        Character car = 'c';
+        LIST_OF_OBJECTS_WITH_NULLS = Arrays.asList(new Object[] { null, boo, car, foo, null, num, loo, null });
+        COMMA_DELIM_STRING_FROM_LIST_OF_OBJECTS_WITH_NULLS
+            = String.format("%s,%s,%s,%s,%s", boo, car.toString(), foo, num.toString(), loo);
+        
+        // initialize list of objects with nulls and empty string and matching comma
+        // delimited string
+        LIST_OF_OBJECTS_WITH_NULLS_AND_EMPTY_STRINGS
+            = Arrays.asList(new Object[] { null, boo, car, "", foo, null, num, "", loo, null });
+        COMMA_DELIM_STRING_FROM_LIST_OF_OBJECTS_WITH_NULLS_AND_EMPTY_STRINGS
+            = String.format("%s,%s,%s,%s,%s,%s,%s", boo, car.toString(), "", foo, num.toString(), "", loo);
+    }
+    
+    
+    /**
+     * Tests the {@link StringUtils#listToCommaDelimitedString(List)} method.
+     */
+    public static class ListToCommaDelimitedString {
+        
+        @Test
+        public void passing_a_null_or_empty_list_should_return_an_empty_string() {
+            assertEquals(EMPTY_STRING, call(NULL_LIST));
+            assertEquals(EMPTY_STRING, call(EMPTY_LIST));
+        }
+        
+        @Test
+        public void passing_valid_list_of_strings_should_return_valid_comma_delimited_string() {
+            String commaDelimStr = call(LIST_OF_STRINGS);
+            assertEquals(COMMA_DELIM_STRING_OUT, commaDelimStr);
+        }
+        
+        @Test
+        public void passing_valid_list_of_strings_with_nulls_should_return_valid_comma_delimited_string() {
+            String commaDelimStr = call(LIST_OF_STRINGS_WITH_NULLS);
+            assertEquals(COMMA_DELIM_STRING_FROM_LIST_OF_STRINGS_WITH_NULLS, commaDelimStr);
+        }
+        
+        @Test
+        public void passing_valid_list_of_objects_with_nulls_should_return_valid_comma_delimited_string() {
+            String commaDelimStr = call(LIST_OF_OBJECTS_WITH_NULLS);
+            assertEquals(COMMA_DELIM_STRING_FROM_LIST_OF_OBJECTS_WITH_NULLS, commaDelimStr);
+        }
+        
+        @Test
+        public void passing_valid_list_of_objects_with_nulls_and_empty_strings_should_return_valid_comma_delimited_string() {
+            String commaDelimStr = call(LIST_OF_OBJECTS_WITH_NULLS_AND_EMPTY_STRINGS);
+            assertEquals(COMMA_DELIM_STRING_FROM_LIST_OF_OBJECTS_WITH_NULLS_AND_EMPTY_STRINGS, commaDelimStr);
+        }
+        
+        private String call(List<?> list) {
+            return StringUtils.listToCommaDelimitedString(list);
+        }
+        
+    } // class ListToCommaDelimitedString
+    
+    
+    /**
+     * Tests the {@link StringUtils#commaDelimitedStringToList(String)} method.
+     */
+    public static class CommaDelimitedStringToList {
+        
+        @Test
+        public void passing_a_null_or_empty_string_should_return_an_empty_list() {
+            assertEquals(EMPTY_LIST, call(NULL_STRING));
+            assertEquals(EMPTY_LIST, call(EMPTY_STRING));
+        }
+        
+        @Test
+        public void passing_valid_comma_delimited_string_should_return_valid_list_of_strings() {
+            assertEquals(LIST_OF_STRINGS, call(COMMA_DELIM_STRING_OUT));
+        }
+        
+        @Test
+        public void passing_rough_but_valid_comma_delimited_string_should_return_valid_list_of_strings() {
+            assertEquals(LIST_OF_STRINGS, call(COMMA_DELIM_STRING_IN));
+        }
+        
+        @Test
+        public void passing_a_string_with_only_commas_and_whitespace_returns_an_empty_list() {
+            assertEquals(EMPTY_LIST, call(COMMA_AND_WHITESPACE_STRING));
+        }
+        
+        private List<String> call(String string) {
+            return StringUtils.commaDelimitedStringToList(string);
+        }
+        
+    } // class CommaDelimitedStringToList
     
     
     /** Tests the {@linkplain StringUtils#capitalizeFirstAlphabeticChar(String)} method. */

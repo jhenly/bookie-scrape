@@ -31,7 +31,7 @@ import java.util.Properties;
 
 import com.bookiescrape.app.config.UserSettings;
 import com.bookiescrape.app.util.FileUtils;
-import com.bookiescrape.app.util.SettingsUtils;
+import com.bookiescrape.app.util.StringUtils;
 
 
 /**
@@ -84,7 +84,7 @@ final class UserProperties extends AbstractSettings {
         if (allSheetsStr == null) { return Collections.emptyList(); }
         
         // convert non-empty comma delimited sheet names to List<String>
-        List<String> nonEmptySheetNames = SettingsUtils.commaDelimitedStringToList(allSheetsStr);
+        List<String> nonEmptySheetNames = StringUtils.commaDelimitedStringToList(allSheetsStr);
         
         
         // return unmodifiable list, it should not be changed
