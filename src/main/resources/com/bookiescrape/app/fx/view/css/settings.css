@@ -1,5 +1,50 @@
 
 
+
+.section {
+    -fx-text-fill: -color-text-black;
+    -fx-font-family: 'Open Sans Regular';
+}
+
+.section > .title {
+    -fx-font-size: 1.7em;
+    -fx-padding: 0;
+}
+
+.section > .sub-title {
+    -fx-font-size: 1.333em;
+    -fx-padding: 6 0 10 0;
+}
+
+.section > .sub-section {
+    -fx-padding: 8 0 8 0;
+}
+
+.section > .sub-section > .title {
+    -fx-font-size: 1.233em;
+    -fx-padding: 12 0 0 0;
+}
+
+.section .sub-section .item {
+    -fx-padding: 14 0 0 0;
+}
+.section > .sub-section > .item {
+    -fx-padding: 22 0 0 0;
+}
+
+.section > .sub-section > .item-text {
+    -fx-font-size: 1.1em;
+}
+
+.section > .sub-section > .description {
+    -fx-padding: 0;
+}
+.section > .sub-section > .description-text {
+    -fx-text-fill: #71797e;
+    -fx-font-family: 'Nunito Sans';
+    -fx-font-size: 12pt;
+}
+
 .header {
     -fx-text-fill: #202020;
     -fx-font-size: 1.7em;
@@ -8,23 +53,17 @@
 }
 
 .sub-header {
-    -fx-text-fill: #202020;
-    -fx-font-size: 1.333em;
-    -fx-font-family: 'Open Sans Regular';
-    -fx-padding: 4 0 14 0;
 }
 
 .description { 
     -fx-text-fill: #71797e;
-    -fx-font-size: 1.1em;
+    
     -fx-font-family: 'Open Sans Regular';
-    -fx-padding: 10 0 14 0;
+    
 }
 
 .sub-description {
-    -fx-text-fill: #71797e;
-    -fx-font-size: 12pt;
-    -fx-font-family: 'Nunito Sans';
+    
 }
 
 .settings-hbox {

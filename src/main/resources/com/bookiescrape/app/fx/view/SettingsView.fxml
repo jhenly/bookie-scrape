@@ -9,6 +9,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
@@ -20,7 +21,7 @@
 
 <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="settings-hbox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.SettingsController">
    <children>
-      <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="left" HBox.hgrow="ALWAYS">
+      <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="left" HBox.hgrow="SOMETIMES">
          <children>
             <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="36.0" HBox.hgrow="ALWAYS" />
             <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="74.0" HBox.hgrow="SOMETIMES">
@@ -275,28 +276,47 @@
       </HBox>
       <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="496.0" styleClass="right" HBox.hgrow="ALWAYS">
          <children>
-            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minViewportHeight="200.0" pannable="true" prefViewportHeight="300.0" styleClass="scroll" HBox.hgrow="ALWAYS">
+            <ScrollPane fitToHeight="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" prefViewportHeight="300.0" styleClass="scroll" HBox.hgrow="ALWAYS">
                <content>
                   <StackPane alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
                      <children>
-                        <VBox fx:id="generalVbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                        <VBox fx:id="generalVbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="section" StackPane.alignment="TOP_LEFT">
                            <children>
-                              <Label styleClass="header" text="General" textAlignment="CENTER">
+                              <Label maxWidth="1.7976931348623157E308" styleClass="title" text="General" textAlignment="CENTER">
                                  <font>
                                     <Font name="Roboto Black" size="16.0" />
                                  </font>
                               </Label>
-                              <Label lineSpacing="2.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="sub-header" text="Adjust how Bookie Scrape behaves according to your preferences." textOverrun="CLIP" wrapText="true" VBox.vgrow="NEVER">
+                              <Label lineSpacing="2.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="sub-title" text="Adjust how Bookie Scrape behaves according to your preferences." textOverrun="CLIP" wrapText="true" VBox.vgrow="NEVER">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets></Label>
-                              <CheckBox lineSpacing="2.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="sub-header" text="Start Bookie Scrape when you log in" wrapText="true">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </CheckBox>
-                              <HBox spacing="16.0" styleClass="description" />
-                              <HBox spacing="16.0" styleClass="description">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="sub-section">
+                                 <children>
+                                    <Label styleClass="title" text="Start up settings" />
+                                    <CheckBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Start Bookie Scrape when you log in" wrapText="true">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <styleClass>
+                                          <String fx:value="item" />
+                                          <String fx:value="item-text" />
+                                       </styleClass>
+                                    </CheckBox>
+                                    <CheckBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Run Bookie Scrape minimized in system tray" wrapText="true">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <styleClass>
+                                          <String fx:value="item" />
+                                          <String fx:value="item-text" />
+                                       </styleClass>
+                                    </CheckBox>
+                                    <Label styleClass="title" text="Settings persistence" />
+                                    <TopPromptTextField TFText="/home/henly/.local/share/BookieScrape/user.properties" defaultStubText="default:" defaultValueText="{user.home}" promptText="User settings file" styleClass="item" useDefaultValue="true" usePromptAsPromptText="true" />
+                                 </children>
+                              </VBox>
+                              <HBox spacing="16.0" styleClass="description" visible="false" VBox.vgrow="NEVER">
                                  <children>
                                     <CheckBox mnemonicParsing="false">
                                        <HBox.margin>
@@ -323,20 +343,19 @@
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
+                                       <tooltip>
+                                          <Tooltip text="Open file explorer" />
+                                       </tooltip>
                                     </Button>
                                  </children>
                               </HBox>
-                              <HBox>
-                                 <children>
-                                    <TopPromptTextField promptText="Excel File Location" usePromptAsPromptText="true" HBox.hgrow="ALWAYS" />
-                                 </children>
-                              </HBox>
+                              <HBox VBox.vgrow="NEVER" />
                            </children>
                         </VBox>
-                        <VBox fx:id="scraperVbox" prefHeight="200.0" prefWidth="100.0" visible="false" />
-                        <VBox fx:id="excelVbox" prefHeight="200.0" prefWidth="100.0" visible="false" />
-                        <VBox fx:id="gsheetsVbox" prefHeight="200.0" prefWidth="100.0" visible="false" />
-                        <VBox fx:id="loggingVbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" visible="false">
+                        <VBox fx:id="scraperVbox" prefHeight="200.0" prefWidth="100.0" styleClass="section" visible="false" />
+                        <VBox fx:id="excelVbox" prefHeight="200.0" prefWidth="100.0" styleClass="section" visible="false" />
+                        <VBox fx:id="gsheetsVbox" prefHeight="200.0" prefWidth="100.0" styleClass="section" visible="false" />
+                        <VBox fx:id="loggingVbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="section" visible="false">
                            <children>
                               <Label styleClass="header" text="Logging" textAlignment="CENTER">
                                  <font>
