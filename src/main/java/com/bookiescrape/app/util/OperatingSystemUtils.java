@@ -11,7 +11,7 @@ import java.util.Locale;
  * 
  * @author Jonathan Henly
  * @see #getDetectedOS()
- * @see OperatingSystem
+ * @see OperatingSystemUtils.OperatingSystem
  * @see System#getProperty(String)
  */
 public final class OperatingSystemUtils {
@@ -22,7 +22,7 @@ public final class OperatingSystemUtils {
      * @see OperatingSystemUtils
      * @see OperatingSystemUtils#getDetectedOS()
      */
-    public enum OperatingSystem {
+    public static enum OperatingSystem {
         /** Mac operating system. */
         MAC_OS("mac", "darwin"),
         /** Windows operating system. */
@@ -39,7 +39,7 @@ public final class OperatingSystemUtils {
         
         private final String[] keys;
         
-        /** Constructs an OSType enum. */
+        /** Constructs an OperatingSystem enum. */
         private OperatingSystem(String... keys) { this.keys = keys; }
         
     } // enum OperatingSystem
