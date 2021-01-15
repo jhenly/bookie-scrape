@@ -6,7 +6,9 @@ import org.slf4j.LoggerFactory;
 import com.bookiescrape.app.fx.log.LogAppender;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
 
 
 /**
@@ -17,6 +19,8 @@ import javafx.scene.control.TextArea;
 public class LogController extends MediatableController {
     private static final Logger LOG = LoggerFactory.getLogger(LogController.class);
     
+    private static final String[] LOG_LEVELS = {};
+    
     /**************************************************************************
      *                                                                        *
      * FXML Injected Members                                                  *
@@ -24,7 +28,11 @@ public class LogController extends MediatableController {
      *************************************************************************/
     
     @FXML
-    private TextArea logTextArea;
+    private TextArea rawLogTextArea;
+    @FXML
+    private HBox rawLogHbox;
+    @FXML
+    private ChoiceBox<String> logLevelChoiceBox;
     
     
     /**************************************************************************
@@ -48,7 +56,8 @@ public class LogController extends MediatableController {
      */
     public LogController() {
         System.out.println("LogController::LogController()");
-        System.out.println("    logTextArea = " + logTextArea);
+        System.out.println("    logTextArea = " + rawLogTextArea);
+        
     }
     
     /**
@@ -60,9 +69,12 @@ public class LogController extends MediatableController {
     @FXML
     private void initialize() {
         System.out.println("LogController::initialize()");
-        System.out.println("    logTextArea = " + logTextArea);
+        System.out.println("    logTextArea = " + rawLogTextArea);
         
-        LogAppender.setTextArea(logTextArea);
+        // connect raw log text area with the log appender
+        LogAppender.setTextArea(rawLogTextArea);
+        
+        logLevelChoiceBox.getItems().addAll();
     }
     
     
