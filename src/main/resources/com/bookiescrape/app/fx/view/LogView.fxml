@@ -2,6 +2,7 @@
 
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -11,13 +12,21 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="log-vbox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.LogController">
+<VBox fx:id="filterByComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="log-vbox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.LogController">
    <children>
       <HBox alignment="CENTER" maxWidth="1.7976931348623157E308">
          <children>
             <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-            <Label fx:id="filterByLabel" styleClass="filter-by-label" text="Filter by" />
-            <ComboBox fx:id="filterByComboBox" styleClass="filter-by-selector" />
+            <StackPane styleClass="filter-by-stack-pane">
+               <children>
+                  <ComboBox fx:id="filterByComboBox" styleClass="filter-by-selector" StackPane.alignment="CENTER_RIGHT" />
+                  <Label fx:id="filterByLabel" onMouseClicked="#onFilterByLabelMouseSelectAction" onMouseReleased="#onFilterByLabelMouseSelectAction" styleClass="filter-by-label" stylesheets="@css/log.css" text="Filter by" StackPane.alignment="CENTER_RIGHT">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+               </children>
+            </StackPane>
          </children>
          <VBox.margin>
             <Insets />
@@ -41,11 +50,11 @@
          </children>
       </StackPane>
    </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
    <stylesheets>
       <URL value="@css/root.css" />
       <URL value="@css/log.css" />
    </stylesheets>
-   <padding>
-      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-   </padding>
 </VBox>

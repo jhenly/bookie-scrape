@@ -1,18 +1,30 @@
 
+
 .log-vbox {
     -fx-background-color: -color-window-background;
 }
 
-.log-vbox .filter-by-label {
-    -fx-text-fill: -color-control-label;
-    -fx-font-size: 1.0em;
-    -fx-font-family: 'Open Sans'; 
+.log-vbox .filter-by-stack-pane {
+    -color-filter-by: -color-combobox-label;
 }
 
-.log-vbox .filter-by-selector {
-    -fx-text-fill: -color-control-label;
-    -fx-font-size: 1.0em;
-    -fx-font-family: 'Open Sans Regular';
+.log-vbox .filter-by-stack-pane > .filter-by-label {
+    -fx-text-fill: -color-filter-by;
+    -fx-font-size: 1.133em;
+    -fx-font-family: 'Noto Sans KR';
+    -fx-padding: 0 24 0 0;
+}
+
+.log-vbox .filter-by-stack-pane > .filter-by-selector > .list-cell {
+    a-fx-opaque: 0.0;
+}
+
+.log-vbox .filter-by-stack-pane > .filter-by-selector > .arrow-button > .arrow {
+    -fx-background-color: -color-filter-by;
+}
+
+.log-vbox .filter-by-stack-pane:hover {
+    -color-filter-by: -color-black;
 }
 
 .log-vbox .scroll {

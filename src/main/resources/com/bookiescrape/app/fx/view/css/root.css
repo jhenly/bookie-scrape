@@ -250,6 +250,7 @@
     /* Combo Box Colors
        ---------------- */
     -color-combobox-text: -color-text-black-alt;
+    -color-combobox-label: #70787d;
     -color-combobox-background-focused: #ececee;
     -color-combobox-default-arrow: #70787d;
     -color-combobox-hover-arrow: -color-black;
@@ -284,7 +285,7 @@
 /*****************************************************************************/
 
 /* force gray font anti aliasing */
-/* .text { a-fx-font-smoothing-type: gray; } */
+.text { -fx-font-smoothing-type: gray; }
 
 .header {
     -fx-text-fill: -color-header-black;
@@ -590,21 +591,17 @@
 }
 
 .combo-box > .arrow-button > .arrow {
-	a-fx-background-color: -fx-mark-highlight-color, -color-combobox-default-arrow;
-	a-fx-background-insets: 0 0 -1 0, 0;
 	-fx-background-color: -color-combobox-default-arrow;
     -fx-background-insets: 0;
-	-fx-shape: "M7.071,1L8.5,1.002L4.5,4l-4-2.998L1.93,1L4.5,2.976L7.071,1z";
-	-fx-padding: 0.222em 0.533em 0.188em 0.533em;
+    -fx-shape: "M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z";
+    -fx-padding: 4.5 5.5 2 5;
 }
 
 .combo-box:hover > .arrow-button > .arrow {
-    a-fx-background-color: -fx-mark-highlight-color, -color-combobox-hover-arrow;
     -fx-background-color: -color-combobox-hover-arrow;
 }
 
 .combo-box:showing > .arrow-button > .arrow {
-	a-fx-background-color: -fx-mark-highlight-color, -color-combobox-showing-arrow;
 	-fx-background-color: -color-combobox-showing-arrow;
 }
 
