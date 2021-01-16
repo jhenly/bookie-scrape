@@ -16,8 +16,8 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import org.jhenly.juifx.control.InsetToggleSwitch?>
-<?import org.jhenly.juifx.control.TopPromptTextField?>
+<?import com.jhenly.juifx.control.InsetToggleSwitch?>
+<?import com.jhenly.juifx.control.TopPromptTextField?>
 
 <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="settings-hbox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.SettingsController">
    <children>
