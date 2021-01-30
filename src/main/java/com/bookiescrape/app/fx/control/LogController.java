@@ -91,4 +91,6 @@ public class LogController extends MediatableController {
     
     @FXML
     void onFilterByLabelMouseSelectAction(MouseEvent event) { filterByComboBox.show(); }
+    
+    
 }
