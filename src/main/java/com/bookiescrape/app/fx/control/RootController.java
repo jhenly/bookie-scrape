@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import org.apache.poi.ss.usermodel.CellStyle;
 
 import com.bookiescrape.app.fx.view.SubView;
+import com.jhenly.juifx.control.FillButton;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -80,6 +81,11 @@ public class RootController extends MediatableController {
     private Button settingsButton;
     @FXML
     private Button logButton;
+    
+    @FXML
+    private FillButton settingsButton2;
+    @FXML
+    private FillButton logButton2;
     
     @FXML
     private Label subViewTitleLabel;

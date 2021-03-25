@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jhenly.juifx.control.FillButton?>
+<?import com.jhenly.juifx.layout.SelectHBox?>
 <?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
@@ -18,303 +20,355 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="main-anchor-pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.RootController">
-  <children>
-      <BorderPane id="main-border-pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <top>
-            <HBox fx:id="mainTopHBox" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" onMouseDragged="#onMainTopHBoxMouseDragged" onMousePressed="#onMainTopHBoxMousePressed" prefHeight="58.0" styleClass="root-top-hbox" BorderPane.alignment="TOP_CENTER">
-               <children>
-                  <Pane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="353.0" prefWidth="473.0" HBox.hgrow="ALWAYS" />
-                  <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="110.0" HBox.hgrow="NEVER">
-                     <children>
-                        <Region HBox.hgrow="NEVER">
-                           <styleClass>
-                              <String fx:value="logo-icon" />
-                              <String fx:value="icon-user-secrets" />
-                           </styleClass>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Region>
-                        <VBox alignment="CENTER" HBox.hgrow="NEVER">
-                           <children>
-                              <Label alignment="BOTTOM_CENTER" styleClass="logo-label-top" text="bookie" textFill="WHITE" textOverrun="CLIP" VBox.vgrow="NEVER">
-                                 <VBox.margin>
-                                    <Insets top="2.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label styleClass="logo-label-bottom" text="scrape" textFill="WHITE" textOverrun="CLIP" VBox.vgrow="NEVER">
-                                 <VBox.margin>
-                                    <Insets top="-6.0" />
-                                 </VBox.margin>
-                                 <padding>
-                                    <Insets left="3.0" />
-                                 </padding>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets left="2.0" />
-                           </padding>
-                        </VBox>
-                     </children>
-                  </HBox>
-                  <Pane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="99.0" prefWidth="219.0" HBox.hgrow="ALWAYS" />
-                  <HBox alignment="TOP_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="238.0" HBox.hgrow="NEVER">
-                     <children>
-                        <HBox spacing="24.0">
-                           <children>
-                            <Button fx:id="settingsButton" cache="true" mnemonicParsing="false" onAction="#onTopButtonAction">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <HBox.margin>
-                                    <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
-                                 </HBox.margin>
-                                 <graphic>
-                                    <StackPane>
-                                       <children>
-                                          <StackPane styleClass="inactive" StackPane.alignment="CENTER">
-                                             <children>
-                                                <Circle radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER" />
-                                                <Region StackPane.alignment="CENTER">
-                                                   <styleClass>
-                                                      <String fx:value="icon" />
-                                                      <String fx:value="icon-cog" />
-                                                   </styleClass>
-                                                </Region>
-                                                
-                                             </children>
-                                          </StackPane>
-                                          <StackPane styleClass="selected" visible="false" StackPane.alignment="CENTER">
-                                             <children>
-                                                <Circle fill="WHITE" radius="1.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER" />
-                                                <Region StackPane.alignment="CENTER">
-                                                   <styleClass>
-                                                      <String fx:value="icon" />
-                                                      <String fx:value="icon-cog" />
-                                                   </styleClass>
-                                                </Region>
-                                             
-                                             </children>
-                                          </StackPane>
-                                       </children>
-                                    </StackPane>
-                                 </graphic>
-                                 <styleClass>
-                                    <String fx:value="flat-button" />
-                                    <String fx:value="top-button" />
-                                 </styleClass>
-                              </Button>
-                              <Button fx:id="logButton" cache="true" mnemonicParsing="false" onAction="#onTopButtonAction">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <graphic>
-                                    <StackPane>
-                                       <children>
-                                          <StackPane styleClass="inactive" StackPane.alignment="CENTER">
-                                             <children>
-                                                <Circle radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER" />
-                                                <Region StackPane.alignment="CENTER">
-                                                   <styleClass>
-                                                      <String fx:value="icon" />
-                                                      <String fx:value="icon-book-dead" />
-                                                   </styleClass>
-                                                </Region>
-                                                
-                                             </children>
-                                          </StackPane>
-                                          <StackPane styleClass="selected" visible="false" StackPane.alignment="CENTER">
-                                             <children>
-                                                <Circle fill="WHITE" radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER" />
-                                                <Region StackPane.alignment="CENTER">
-                                                   <styleClass>
-                                                      <String fx:value="icon" />
-                                                      <String fx:value="icon-book-dead" />
-                                                   </styleClass>
-                                                </Region>
-                                                
-                                             </children>
-                                          </StackPane>
-                                       </children>
-                                    </StackPane>
-                                 </graphic>
-                                 <HBox.margin>
-                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
-                                 </HBox.margin>
-                                 <styleClass>
-                                    <String fx:value="flat-button" />
-                                    <String fx:value="top-button" />
-                                 </styleClass>
-                              </Button>
-                           </children>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </HBox>
-                        <HBox>
-                           <children>
-                              <Button fx:id="minButton" alignment="CENTER" cache="true" mnemonicParsing="false" onAction="#onMinimizeButtonAction">
-                                 <graphic>
-                                    <Line endX="5.0" startX="-4.0" styleClass="icon-shape" />
-                                 </graphic>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <styleClass>
-                                    <String fx:value="control-button" />
-                                    <String fx:value="flat-button" />
-                                 </styleClass>
-                              </Button>
-                              <Button fx:id="maxButton" alignment="CENTER" cache="true" mnemonicParsing="false" onAction="#onMaximizeButtonAction">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <styleClass>
-                                    <String fx:value="control-button" />
-                                    <String fx:value="flat-button" />
-                                 </styleClass>
-                                 <graphic>
-                                    <Rectangle fill="#2698eb00" height="8.0" strokeType="OUTSIDE" styleClass="icon-shape" width="8.0" />
-                                 </graphic>
-                              </Button>
-                              <Button fx:id="closeButton" cache="true" mnemonicParsing="false" onAction="#onCloseButtonAction">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <graphic>
-                                    <StackPane>
-                                       <children>
-                                          <Line endX="6.0" rotate="45.0" startX="-6.0">
-                                             <styleClass>
-                                                <String fx:value="control-button-close-x" />
-                                                <String fx:value="icon-shape" />
-                                             </styleClass>
-                                          </Line>
-                                          <Line endX="6.0" rotate="-45.0" startX="-6.0">
-                                             <styleClass>
-                                                <String fx:value="control-button-close-x" />
-                                                <String fx:value="icon-shape" />
-                                             </styleClass>
-                                          </Line>
-                                       </children>
-                                    </StackPane>
-                                 </graphic>
-                                 <styleClass>
-                                    <String fx:value="control-button-close" />
-                                    <String fx:value="flat-button" />
-                                    <String fx:value="control-button" />
-                                 </styleClass>
-                              </Button>
-                           </children>
-                           <HBox.margin>
-                              <Insets bottom="16.0" />
-                           </HBox.margin>
-                           <padding>
-                              <Insets left="6.0" top="-9.0" />
-                           </padding>
-                        </HBox>
-                     </children>
-                  </HBox>
-               </children>
-               <padding>
-                  <Insets bottom="9.0" top="9.0" />
-               </padding>
-            </HBox>
-         </top>
-         <bottom>
-            <HBox maxHeight="50.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" styleClass="root-bottom-hbox" BorderPane.alignment="BOTTOM_CENTER">
-               <children>
-                  <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" HBox.hgrow="NEVER">
-                     <children>
-                        <Circle id="scrape-status-circle" fx:id="scraperStatusCircle" fill="#cbcbcd" radius="5.5" stroke="TRANSPARENT" strokeType="INSIDE" HBox.hgrow="NEVER">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Circle>
-                        <VBox HBox.hgrow="NEVER">
-                           <children>
-                              <Label alignment="BOTTOM_CENTER" styleClass="bookie-scraper" text="Bookie Scraper" textFill="#202020" VBox.vgrow="NEVER">
-                                 <font>
-                                    <Font name="Roboto Regular" size="14.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets bottom="-4.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label id="bottom-hbox-scraper-status" fx:id="scraperStatusLabel" alignment="BOTTOM_LEFT" styleClass="bookie-scraper-status" text="running" textFill="#6b6b6b" VBox.vgrow="NEVER" />
-                           </children>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </VBox>
-                     </children>
-                  </HBox>
-                  <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                  <HBox fx:id="bottomButtonsHbox" alignment="CENTER_RIGHT" spacing="17.0" styleClass="bottom-buttons" HBox.hgrow="NEVER">
-                     <children>
-                        <Button fx:id="cancelButton" cache="true" mnemonicParsing="false" styleClass="blue-outline-button" text="Cancel" HBox.hgrow="NEVER">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor></Button>
-                        <Button fx:id="applyButton" cache="true" disable="true" mnemonicParsing="false" text="Apply &amp; Restart" HBox.hgrow="NEVER">
-                           <styleClass>
-                              <String fx:value="apply" />
-                              <String fx:value="blue-solid-button" />
-                           </styleClass>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
-                     </children></HBox>
-               </children>
-               <padding>
-                  <Insets bottom="8.0" left="24.0" right="24.0" top="8.0" />
-               </padding>
-            </HBox>
-         </bottom>
-         <center>
-            <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="root-middle-vbox" BorderPane.alignment="CENTER">
-               <children>
-                  <HBox maxWidth="1.7976931348623157E308" styleClass="view-title-bar" VBox.vgrow="NEVER">
-                     <children>
-                        <Label fx:id="subViewTitleLabel" styleClass="view-title" text="Settings" HBox.hgrow="NEVER" />
-                        <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                        <StackPane HBox.hgrow="NEVER">
-                           <children>
-                              <Button fx:id="closeSubViewButton" cache="true" mnemonicParsing="false" onAction="#onCloseSubViewAction">
-                                 <graphic>
-                                    <StackPane>
-                                       <children>
-                                          <Line endX="6.0" rotate="45.0" startX="-6.0" styleClass="close-view-x" StackPane.alignment="CENTER" />
-                                          <Line endX="6.0" rotate="-45.0" startX="-6.0" styleClass="close-view-x" StackPane.alignment="CENTER" />
-                                       </children>
-                                    </StackPane>
-                                 </graphic>
-                                 <styleClass>
-                                    <String fx:value="close-view" />
-                                    <String fx:value="flat-button" />
-                                 </styleClass>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </Button>
-                           </children>
-                        </StackPane>
-                     </children>
-                     <padding>
-                        <Insets bottom="14.0" left="20.0" right="20.0" top="14.0" />
-                     </padding>
-                  </HBox>
-                  <StackPane fx:id="subViewStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
-               </children>
-            </VBox>
-         </center>
-      </BorderPane>
-  
-  </children>
-   <stylesheets>
-      <URL value="@css/root.css" />
-      <URL value="@css/icons.css" />
-   </stylesheets>
+<AnchorPane id="main-anchor-pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bookiescrape.app.fx.control.RootController">
+	<children>
+		<BorderPane id="main-border-pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+			<top>
+				<HBox fx:id="mainTopHBox" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" onMouseDragged="#onMainTopHBoxMouseDragged" onMousePressed="#onMainTopHBoxMousePressed" prefHeight="58.0" styleClass="root-top-hbox" BorderPane.alignment="TOP_CENTER">
+					<children>
+						<Pane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="353.0" prefWidth="473.0" HBox.hgrow="ALWAYS" />
+						<HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="110.0" HBox.hgrow="NEVER">
+							<children>
+								<Region HBox.hgrow="NEVER">
+									<styleClass>
+										<String fx:value="logo-icon" />
+										<String fx:value="icon-user-secrets" />
+									</styleClass>
+									<HBox.margin>
+										<Insets />
+									</HBox.margin>
+								</Region>
+								<VBox alignment="CENTER" HBox.hgrow="NEVER">
+									<children>
+										<Label alignment="BOTTOM_CENTER" styleClass="logo-label-top" text="bookie" textFill="WHITE" textOverrun="CLIP" VBox.vgrow="NEVER">
+											<VBox.margin>
+												<Insets top="2.0" />
+											</VBox.margin>
+										</Label>
+										<Label styleClass="logo-label-bottom" text="scrape" textFill="WHITE" textOverrun="CLIP" VBox.vgrow="NEVER">
+											<VBox.margin>
+												<Insets top="-6.0" />
+											</VBox.margin>
+											<padding>
+												<Insets left="3.0" />
+											</padding>
+										</Label>
+									</children>
+									<padding>
+										<Insets left="2.0" />
+									</padding>
+								</VBox>
+							</children>
+						</HBox>
+						<Pane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="99.0" prefWidth="219.0" HBox.hgrow="ALWAYS" />
+						<HBox alignment="TOP_RIGHT" prefWidth="238.0" HBox.hgrow="NEVER">
+							<children>
+								<SelectHBox spacing="24.0">
+									<children>
+										<FillButton fx:id="settingsButton2" alignment="CENTER" cache="true" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onTopButtonAction">
+											<cursor>
+												<Cursor fx:constant="HAND" />
+											</cursor>
+											<SelectHBox.margin>
+											<Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
+											</SelectHBox.margin>
+<!-- 											<HBox.margin> -->
+<!-- 												<Insets bottom="10.0" left="10.0" right="5.0" top="10.0" /> -->
+<!-- 											</HBox.margin> -->
+											<graphic>
+										        <Region minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0">
+											         <styleClass>
+                                                         <String fx:value="icon" />
+                                                         <String fx:value="icon-cog" />
+                                                     </styleClass>
+                                       <padding>
+                                          <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                       </padding>
+											    </Region>
+											</graphic>
+											<styleClass>
+												<String fx:value="flat-button" />
+												<String fx:value="top-fill-button" />
+											</styleClass>
+										</FillButton>
+										<FillButton fx:id="logButton2" cache="true" mnemonicParsing="false" onAction="#onTopButtonAction">
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                            <graphic>
+	                                            <Region StackPane.alignment="CENTER">
+	                                                <styleClass>
+	                                                    <String fx:value="icon" />
+	                                                    <String fx:value="icon-book-dead" />
+	                                                </styleClass>
+	                                            </Region>
+                                            </graphic>
+                                            <HBox.margin>
+                                                <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                            </HBox.margin>
+                                            <styleClass>
+                                                <String fx:value="flat-button" />
+                                                <String fx:value="top-fill-button" />
+                                            </styleClass>
+                                        </FillButton>
+									</children>
+								</SelectHBox>
+								<HBox spacing="24.0">
+									<children>
+										<Button fx:id="settingsButton" cache="true" mnemonicParsing="false" onAction="#onTopButtonAction">
+											<cursor>
+												<Cursor fx:constant="HAND" />
+											</cursor>
+											<HBox.margin>
+												<Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
+											</HBox.margin>
+											<graphic>
+												<StackPane>
+													<children>
+														<StackPane styleClass="inactive" StackPane.alignment="CENTER">
+															<children>
+																<Circle radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER" />
+																<Region StackPane.alignment="CENTER">
+																	<styleClass>
+																		<String fx:value="icon" />
+																		<String fx:value="icon-cog" />
+																	</styleClass>
+																</Region>
+
+															</children>
+														</StackPane>
+														<StackPane styleClass="selected" visible="false" StackPane.alignment="CENTER">
+															<children>
+																<Circle fill="WHITE" radius="1.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER" />
+																<Region StackPane.alignment="CENTER">
+																	<styleClass>
+																		<String fx:value="icon" />
+																		<String fx:value="icon-cog" />
+																	</styleClass>
+																</Region>
+
+															</children>
+														</StackPane>
+													</children>
+												</StackPane>
+											</graphic>
+											<styleClass>
+												<String fx:value="flat-button" />
+												<String fx:value="top-button" />
+											</styleClass>
+										</Button>
+										<Button fx:id="logButton" cache="true" mnemonicParsing="false" onAction="#onTopButtonAction">
+											<cursor>
+												<Cursor fx:constant="HAND" />
+											</cursor>
+											<graphic>
+												<StackPane>
+													<children>
+														<StackPane styleClass="inactive" StackPane.alignment="CENTER">
+															<children>
+																<Circle radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER" />
+																<Region StackPane.alignment="CENTER">
+																	<styleClass>
+																		<String fx:value="icon" />
+																		<String fx:value="icon-book-dead" />
+																	</styleClass>
+																</Region>
+
+															</children>
+														</StackPane>
+														<StackPane styleClass="selected" visible="false" StackPane.alignment="CENTER">
+															<children>
+																<Circle fill="WHITE" radius="1.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="circle" StackPane.alignment="CENTER" />
+																<Region StackPane.alignment="CENTER">
+																	<styleClass>
+																		<String fx:value="icon" />
+																		<String fx:value="icon-book-dead" />
+																	</styleClass>
+																</Region>
+
+															</children>
+														</StackPane>
+													</children>
+												</StackPane>
+											</graphic>
+											<HBox.margin>
+												<Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+											</HBox.margin>
+											<styleClass>
+												<String fx:value="flat-button" />
+												<String fx:value="top-button" />
+											</styleClass>
+										</Button>
+									</children>
+									<HBox.margin>
+										<Insets />
+									</HBox.margin>
+								</HBox>
+								<HBox>
+									<children>
+										<Button fx:id="minButton" alignment="CENTER" cache="true" mnemonicParsing="false" onAction="#onMinimizeButtonAction">
+											<graphic>
+												<Line endX="5.0" startX="-4.0" styleClass="icon-shape" />
+											</graphic>
+											<cursor>
+												<Cursor fx:constant="HAND" />
+											</cursor>
+											<styleClass>
+												<String fx:value="control-button" />
+												<String fx:value="flat-button" />
+											</styleClass>
+										</Button>
+										<Button fx:id="maxButton" alignment="CENTER" cache="true" mnemonicParsing="false" onAction="#onMaximizeButtonAction">
+											<cursor>
+												<Cursor fx:constant="HAND" />
+											</cursor>
+											<styleClass>
+												<String fx:value="control-button" />
+												<String fx:value="flat-button" />
+											</styleClass>
+											<graphic>
+												<Rectangle fill="#2698eb00" height="8.0" strokeType="OUTSIDE" styleClass="icon-shape" width="8.0" />
+											</graphic>
+										</Button>
+										<Button fx:id="closeButton" cache="true" mnemonicParsing="false" onAction="#onCloseButtonAction">
+											<cursor>
+												<Cursor fx:constant="HAND" />
+											</cursor>
+											<graphic>
+												<StackPane>
+													<children>
+														<Line endX="6.0" rotate="45.0" startX="-6.0">
+															<styleClass>
+																<String fx:value="control-button-close-x" />
+																<String fx:value="icon-shape" />
+															</styleClass>
+														</Line>
+														<Line endX="6.0" rotate="-45.0" startX="-6.0">
+															<styleClass>
+																<String fx:value="control-button-close-x" />
+																<String fx:value="icon-shape" />
+															</styleClass>
+														</Line>
+													</children>
+												</StackPane>
+											</graphic>
+											<styleClass>
+												<String fx:value="control-button-close" />
+												<String fx:value="flat-button" />
+												<String fx:value="control-button" />
+											</styleClass>
+										</Button>
+									</children>
+									<HBox.margin>
+										<Insets bottom="16.0" />
+									</HBox.margin>
+									<padding>
+										<Insets left="6.0" top="-9.0" />
+									</padding>
+								</HBox>
+							</children>
+						</HBox>
+					</children>
+					<padding>
+						<Insets bottom="9.0" top="9.0" />
+					</padding>
+				</HBox>
+			</top>
+			<bottom>
+				<HBox maxHeight="50.0" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" styleClass="root-bottom-hbox" BorderPane.alignment="BOTTOM_CENTER">
+					<children>
+						<HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" HBox.hgrow="NEVER">
+							<children>
+								<Circle id="scrape-status-circle" fx:id="scraperStatusCircle" fill="#cbcbcd" radius="5.5" stroke="TRANSPARENT" strokeType="INSIDE" HBox.hgrow="NEVER">
+									<HBox.margin>
+										<Insets />
+									</HBox.margin>
+								</Circle>
+								<VBox HBox.hgrow="NEVER">
+									<children>
+										<Label alignment="BOTTOM_CENTER" styleClass="bookie-scraper" text="Bookie Scraper" textFill="#202020" VBox.vgrow="NEVER">
+											<font>
+												<Font name="Roboto Regular" size="14.0" />
+											</font>
+											<VBox.margin>
+												<Insets bottom="-4.0" />
+											</VBox.margin>
+										</Label>
+										<Label id="bottom-hbox-scraper-status" fx:id="scraperStatusLabel" alignment="BOTTOM_LEFT" styleClass="bookie-scraper-status" text="running" textFill="#6b6b6b" VBox.vgrow="NEVER" />
+									</children>
+									<HBox.margin>
+										<Insets />
+									</HBox.margin>
+								</VBox>
+							</children>
+						</HBox>
+						<Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+						<HBox fx:id="bottomButtonsHbox" alignment="CENTER_RIGHT" spacing="17.0" styleClass="bottom-buttons" HBox.hgrow="NEVER">
+							<children>
+								<Button fx:id="cancelButton" cache="true" mnemonicParsing="false" styleClass="blue-outline-button" text="Cancel" HBox.hgrow="NEVER">
+									<cursor>
+										<Cursor fx:constant="HAND" />
+									</cursor>
+								</Button>
+								<Button fx:id="applyButton" cache="true" disable="true" mnemonicParsing="false" text="Apply &amp; Restart" HBox.hgrow="NEVER">
+									<styleClass>
+										<String fx:value="apply" />
+										<String fx:value="blue-solid-button" />
+									</styleClass>
+									<cursor>
+										<Cursor fx:constant="HAND" />
+									</cursor>
+								</Button>
+							</children>
+						</HBox>
+					</children>
+					<padding>
+						<Insets bottom="8.0" left="24.0" right="24.0" top="8.0" />
+					</padding>
+				</HBox>
+			</bottom>
+			<center>
+				<VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="root-middle-vbox" BorderPane.alignment="CENTER">
+					<children>
+						<HBox maxWidth="1.7976931348623157E308" styleClass="view-title-bar" VBox.vgrow="NEVER">
+							<children>
+								<Label fx:id="subViewTitleLabel" styleClass="view-title" text="Settings" HBox.hgrow="NEVER" />
+								<Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+								<StackPane HBox.hgrow="NEVER">
+									<children>
+										<Button fx:id="closeSubViewButton" cache="true" mnemonicParsing="false" onAction="#onCloseSubViewAction">
+											<graphic>
+												<StackPane>
+													<children>
+														<Line endX="6.0" rotate="45.0" startX="-6.0" styleClass="close-view-x" StackPane.alignment="CENTER" />
+														<Line endX="6.0" rotate="-45.0" startX="-6.0" styleClass="close-view-x" StackPane.alignment="CENTER" />
+													</children>
+												</StackPane>
+											</graphic>
+											<styleClass>
+												<String fx:value="close-view" />
+												<String fx:value="flat-button" />
+											</styleClass>
+											<cursor>
+												<Cursor fx:constant="HAND" />
+											</cursor>
+										</Button>
+									</children>
+								</StackPane>
+							</children>
+							<padding>
+								<Insets bottom="14.0" left="20.0" right="20.0" top="14.0" />
+							</padding>
+						</HBox>
+						<StackPane fx:id="subViewStackPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
+					</children>
+				</VBox>
+			</center>
+		</BorderPane>
+
+	</children>
+	<stylesheets>
+		<URL value="@css/root.css" />
+		<URL value="@css/icons.css" />
+	</stylesheets>
 </AnchorPane>

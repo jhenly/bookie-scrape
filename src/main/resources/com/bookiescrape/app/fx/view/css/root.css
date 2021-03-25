@@ -641,6 +641,33 @@
     -fx-font-size: 1.4em;
 }
 
+.root-top-hbox .top-fill-button {
+    -fx-padding: 8;
+    -fx-background-radius: 10em;
+    -fx-background-color: -color-top-button-circle;
+    -fill-bg-to: -color-top-button-circle-hover;
+}
+
+.root-top-hbox .top-fill-button:selected {
+    -fx-background-color: -color-white;
+}
+
+.root-top-hbox .top-fill-button .icon {
+    -fx-size: 20;
+    -fx-min-width: -fx-size;
+    -fx-min-height: -fx-size;
+    -fx-max-width: -fx-size;
+    -fx-max-height: -fx-size;
+    -fx-background-color: #fff;
+}
+
+.root-top-hbox .top-fill-button:selected {
+    -fx-background-color: #fff;
+}
+
+.root-top-hbox .top-fill-button:selected .icon {
+    -fx-background-color: -color-top-blue;
+}
 
 .root-top-hbox .top-button .icon {
 	-fx-size: 20;

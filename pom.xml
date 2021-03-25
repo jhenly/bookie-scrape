@@ -44,8 +44,8 @@
     <dependency>
       <groupId>com.jhenly</groupId>
       <artifactId>jui-fx</artifactId>
-      <version>0.0.2</version>
-      <scope>compile</scope>
+      <version>0.0.3</version>
+      <!-- <scope>compile</scope> -->
     </dependency>
     <!-- End jui-fx Dependencies -->
     
