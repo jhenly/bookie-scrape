@@ -270,7 +270,6 @@
           <configuration>
           
             <!-- Used to specify absolute path to JDK's java executable,
-<<<<<<< HEAD
                  i.e. "/absolute/path/to/jdk-#.#.#/bin/java", if Maven throws errors
                  because it can't find it. -->
 	    <executable>${java.home}/bin/java</executable>           
@@ -283,8 +282,8 @@
          
         <!-- allows for 'mvn java:exec' and for 'mvn exec:exec' -->
         <!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>exec-maven-plugin</artifactId> 
-          <version>3.0.0</version> <configuration> <mainClass>com.sportsbookscraper.app.sample.Mediator</mainClass> 
-          <arguments> <argument>-jar</argument> <argument>target/sports-book-scraper-1.0-SNAPSHOT.jar</argument> 
+          <version>3.0.0</version> <configuration> <mainClass>com.bookiescrape.app.sample.Mediator</mainClass> 
+          <arguments> <argument>-jar</argument> <argument>target/bookie-scrape-1.0-SNAPSHOT.jar</argument> 
           </arguments> </configuration> </plugin> -->
 
       </plugins>
