@@ -8,6 +8,7 @@ import com.bookiescrape.app.sample.ApplicationMediator;
 import com.bookiescrape.app.util.OperatingSystemUtils;
 import com.bookiescrape.app.util.OperatingSystemUtils.OperatingSystem;
 
+
 /**
  * Bookie Scrape application launcher.
  * 
@@ -43,12 +44,18 @@ public abstract class ApplicationLauncher extends ApplicationHandler {
         LOG.info("{} operating system detected", os);
         
         switch (os) {
+            
             case WINDOWS:
                 LOG.info("launching application with the Windows launcher");
                 
                 // if OS is windows then launch with system tray support
                 (new WindowsLauncher()).launch();
                 break;
+            
+            case MAC_OS:
+            case UBUNTU:
+            case UNIX:
+            case OTHER:
             default:
                 LOG.info("launching application with the default launcher");
                 
@@ -65,11 +72,13 @@ public abstract class ApplicationLauncher extends ApplicationHandler {
      * Abstract API                                                           *
      *                                                                        *
      *************************************************************************/
-    
+//                                                                               
     /**
      * Launches the application.
      */
-    public final void launch() { implLaunch(); }
+    public final void launch() {
+        implLaunch();
+    }
     
     
     /**

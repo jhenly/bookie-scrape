@@ -66,7 +66,7 @@ public abstract class ApplicationHandler extends Application {
      *
      * @return the primary stage
      */
-    public Stage getPrimaryStage() { return primaryStage; }
+    public final Stage getPrimaryStage() { return primaryStage; }
     
     
     @Override
@@ -84,7 +84,10 @@ public abstract class ApplicationHandler extends Application {
             controllerMediator = loadFxmlAndCreateControllerMediator();
             
         } catch (Exception e) {
-            // TODO properly notify user of unrecoverable exception
+            LOG.error("unrecoverable error occurred while creating controller mediator");
+            LOG.error("{}", e.getLocalizedMessage());
+            
+            // TODO properly notify user of unrecoverable occurred exception
             System.err.println(e.getMessage());
             
             e.printStackTrace();
@@ -116,7 +119,7 @@ public abstract class ApplicationHandler extends Application {
         
         setPrimaryStageMinBounds();
         
-        LOG.info("finished application launch sequence\n");
+        LOG.info("finished application launch sequence");
     }
     
     
@@ -130,10 +133,13 @@ public abstract class ApplicationHandler extends Application {
         // load fxml references from fxml view files
         LOG.info("loading root view and controller");
         FXMLReference rootReference = loadReference(ROOT_FXML);
+        
         LOG.info("loading dashboard view and controller");
         FXMLReference dashReference = loadReference(DASHBOARD_FXML);
+        
         LOG.info("loading settings view and controller");
         FXMLReference settingsReference = loadReference(SETTINGS_FXML);
+        
         LOG.info("loading log view and controller");
         FXMLReference logReference = loadReference(LOG_FXML);
         
@@ -177,7 +183,7 @@ public abstract class ApplicationHandler extends Application {
         } catch (Exception e) {
             // TODO properly log any exception
             
-            LOG.error("system tray set up failed, {}", e);
+            LOG.error("system tray setup failed, {}", e);
             
             System.err.println(e.getMessage());
         }
@@ -293,7 +299,7 @@ public abstract class ApplicationHandler extends Application {
      * Protected API                                                          *
      *                                                                        *
      *************************************************************************/
-    
+//
     /**
      * Gets the controller mediator instance.
      * @return the controller mediator

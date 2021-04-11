@@ -1,0 +1,113 @@
+[1mdiff --git a/src/main/java/com/bookiescrape/app/launch/ApplicationLauncher.java b/src/main/java/com/bookiescrape/app/launch/ApplicationLauncher.java[m
+[1mindex 1afc8d9..7245699 100644[m
+[1m--- a/src/main/java/com/bookiescrape/app/launch/ApplicationLauncher.java[m
+[1m+++ b/src/main/java/com/bookiescrape/app/launch/ApplicationLauncher.java[m
+[36m@@ -8,6 +8,7 @@[m [mimport com.bookiescrape.app.sample.ApplicationMediator;[m
+ import com.bookiescrape.app.util.OperatingSystemUtils;[m
+ import com.bookiescrape.app.util.OperatingSystemUtils.OperatingSystem;[m
+ [m
+[32m+[m
+ /**[m
+  * Bookie Scrape application launcher.[m
+  * [m
+[36m@@ -43,12 +44,18 @@[m [mpublic abstract class ApplicationLauncher extends ApplicationHandler {[m
+         LOG.info("{} operating system detected", os);[m
+         [m
+         switch (os) {[m
+[32m+[m[41m            [m
+             case WINDOWS:[m
+                 LOG.info("launching application with the Windows launcher");[m
+                 [m
+                 // if OS is windows then launch with system tray support[m
+                 (new WindowsLauncher()).launch();[m
+                 break;[m
+[32m+[m[41m            [m
+[32m+[m[32m            case MAC_OS:[m
+[32m+[m[32m            case UBUNTU:[m
+[32m+[m[32m            case UNIX:[m
+[32m+[m[32m            case OTHER:[m
+             default:[m
+                 LOG.info("launching application with the default launcher");[m
+                 [m
+[36m@@ -65,11 +72,13 @@[m [mpublic abstract class ApplicationLauncher extends ApplicationHandler {[m
+      * Abstract API                                                           *[m
+      *                                                                        *[m
+      *************************************************************************/[m
+[31m-    [m
+[32m+[m[32m//[m[41m                                                                               [m
+     /**[m
+      * Launches the application.[m
+      */[m
+[31m-    public final void launch() { implLaunch(); }[m
+[32m+[m[32m    public final void launch() {[m
+[32m+[m[32m        implLaunch();[m
+[32m+[m[32m    }[m
+     [m
+     [m
+     /**[m
+[1mdiff --git a/src/main/java/com/bookiescrape/app/sample/ApplicationHandler.java b/src/main/java/com/bookiescrape/app/sample/ApplicationHandler.java[m
+[1mindex 0628856..1b05c70 100644[m
+[1m--- a/src/main/java/com/bookiescrape/app/sample/ApplicationHandler.java[m
+[1m+++ b/src/main/java/com/bookiescrape/app/sample/ApplicationHandler.java[m
+[36m@@ -66,7 +66,7 @@[m [mpublic abstract class ApplicationHandler extends Application {[m
+      *[m
+      * @return the primary stage[m
+      */[m
+[31m-    public Stage getPrimaryStage() { return primaryStage; }[m
+[32m+[m[32m    public final Stage getPrimaryStage() { return primaryStage; }[m
+     [m
+     [m
+     @Override[m
+[36m@@ -84,7 +84,10 @@[m [mpublic abstract class ApplicationHandler extends Application {[m
+             controllerMediator = loadFxmlAndCreateControllerMediator();[m
+             [m
+         } catch (Exception e) {[m
+[31m-            // TODO properly notify user of unrecoverable exception[m
+[32m+[m[32m            LOG.error("unrecoverable error occurred while creating controller mediator");[m
+[32m+[m[32m            LOG.error("{}", e.getLocalizedMessage());[m
+[32m+[m[41m            [m
+[32m+[m[32m            // TODO properly notify user of unrecoverable occurred exception[m
+             System.err.println(e.getMessage());[m
+             [m
+             e.printStackTrace();[m
+[36m@@ -116,7 +119,7 @@[m [mpublic abstract class ApplicationHandler extends Application {[m
+         [m
+         setPrimaryStageMinBounds();[m
+         [m
+[31m-        LOG.info("finished application launch sequence\n");[m
+[32m+[m[32m        LOG.info("finished application launch sequence");[m
+     }[m
+     [m
+     [m
+[36m@@ -130,10 +133,13 @@[m [mpublic abstract class ApplicationHandler extends Application {[m
+         // load fxml references from fxml view files[m
+         LOG.info("loading root view and controller");[m
+         FXMLReference rootReference = loadReference(ROOT_FXML);[m
+[32m+[m[41m        [m
+         LOG.info("loading dashboard view and controller");[m
+         FXMLReference dashReference = loadReference(DASHBOARD_FXML);[m
+[32m+[m[41m        [m
+         LOG.info("loading settings view and controller");[m
+         FXMLReference settingsReference = loadReference(SETTINGS_FXML);[m
+[32m+[m[41m        [m
+         LOG.info("loading log view and controller");[m
+         FXMLReference logReference = loadReference(LOG_FXML);[m
+         [m
+[36m@@ -177,7 +183,7 @@[m [mpublic abstract class ApplicationHandler extends Application {[m
+         } catch (Exception e) {[m
+             // TODO properly log any exception[m
+             [m
+[31m-            LOG.error("system tray set up failed, {}", e);[m
+[32m+[m[32m            LOG.error("system tray setup failed, {}", e);[m
+             [m
+             System.err.println(e.getMessage());[m
+         }[m
+[36m@@ -293,7 +299,7 @@[m [mpublic abstract class ApplicationHandler extends Application {[m
+      * Protected API                                                          *[m
+      *                                                                        *[m
+      *************************************************************************/[m
+[31m-    [m
+[32m+[m[32m//[m
+     /**[m
+      * Gets the controller mediator instance.[m
+      * @return the controller mediator[m
