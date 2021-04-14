@@ -266,7 +266,7 @@
         <plugin>
           <groupId>org.openjfx</groupId>
           <artifactId>javafx-maven-plugin</artifactId>
-          <version>0.0.5</version>
+          <version>0.0.6</version>
           <configuration>
           
             <!-- Used to specify absolute path to JDK's java executable,
