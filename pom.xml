@@ -165,7 +165,7 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>16</version>
+      <version>17.0.2</version>
       <scope>compile</scope>
     </dependency>
 
