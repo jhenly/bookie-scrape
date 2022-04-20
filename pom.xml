@@ -186,7 +186,7 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-media</artifactId>
-      <version>16</version>
+      <version>18.0.1</version>
       <scope>compile</scope>
     </dependency>
     <!-- End OpenJFX Dependencies -->
