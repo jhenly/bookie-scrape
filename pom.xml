@@ -158,7 +158,7 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-base</artifactId>
-      <version>16</version>
+      <version>18.0.2</version>
       <scope>compile</scope>
     </dependency>
 
